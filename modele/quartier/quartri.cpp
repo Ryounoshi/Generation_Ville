@@ -412,5 +412,10 @@ std::vector<Vector3D> QuarTri::getPoints3D() const
 
 Mesh QuarTri::generate()
 {
+    Mesh m;
+    for (Batiment& bat : batiments)
+    {
+        m.merge(bat.generate());
+    }
     return Mesh();
 }
