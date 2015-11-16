@@ -399,3 +399,18 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
     } while ((waterMark - pp2).getNorm() < (pp2 - pp1).getNorm() - MIN_DIM_BAT);
     return std::pair<Vector2D, Vector2D>(lambda, mu);
 }
+
+
+std::vector<Vector2D> QuarTri::getPoints() const
+{
+    return Polygone::getPoints();
+}
+std::vector<Vector3D> QuarTri::getPoints3D() const
+{
+    return Polygone::getPoints3D();
+}
+
+Mesh QuarTri::generate()
+{
+    return Mesh();
+}
