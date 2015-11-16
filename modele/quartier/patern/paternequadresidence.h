@@ -3,13 +3,13 @@
 
 #include "../quarquad.h"
 #include "modele/batiment/batiment.h"
-#include "modele/batiment/bat_parameter.h"
 
 class PaterneQuadResidence : public QuarQuad
 {
 public:
     float largeurBatiment;
     float largeurRoute;
+    float largeurTrotoir;
 
     PaterneQuadResidence(){}
     PaterneQuadResidence(const QuarQuad& parent, const float& _largeurBatiment, BatParameter *par) :
