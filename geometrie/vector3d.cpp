@@ -1,176 +1,141 @@
 #include "vector3d.h"
 
-float Vector3D::dotProduct(const Vector3D& vec2) const{
-    return (x*vec2.x + y*vec2.y + z*vec2.z);
+void Vector3D::set(float a, float b, float c){
+    x=a;    y=b;    z=c;
 }
 
-Vector3D Vector3D::crossProduct(const Vector3D& vec2) const{
-    return Vector3D(y*vec2.z - z*vec2.y , x*vec2.z - z*vec2.x , x*vec2.y - y*vec2.x);
+/****************************************************************************************/
+
+float Vector3D::dotProduct(const Vector3D& v) const{
+    return dot(*this, v);
 }
 
-float Vector3D::norm() const{
-    return sqrt(x*x+y*y+z*z);
+Vector3D Vector3D::crossProduct(const Vector3D& v) const{
+    return Orthogonal(*this, v);
 }
 
-float Vector3D::squareNorm() const
+Vector3D Vector3D::negate() const{
+    return -*this;
+}
+
+/****************************************************************************************/
+
+float Vector3D::getNorm() const{
+    return Norm(*this);
+}
+
+float Vector3D::getNorm2() const
 {
-    return x*x+y*y+z*z;
+    return Norm2(*this);
 }
+
+/****************************************************************************************/
 
 void Vector3D::normalize(){
-    float len=norm();
-    if(len!=0){
-        x/=len;
-        y/=len;
-        z/=len;
-    }
+    float len=getNorm();
+    #ifndef QT_NO_DEBUG
+        if(len == 0)
+            std::cerr << "erreur: normalized d'un Vector3D à 0" << std::endl;
+    #endif
+    *this/=len;
 }
 
 Vector3D Vector3D::normalized() const{
-    float len=norm();
-    if(len!=0){
-        return Vector3D(x/len, y/len, z/len);
-    }
-    return Vector3D(x, y, z);
+    float len=getNorm();
+    #ifndef QT_NO_DEBUG
+        if(len == 0)
+            std::cerr << "erreur: normalized d'un Vector3D à 0" << std::endl;
+    #endif
+    return *this/len;
 }
 
-void Vector3D::change(float a, float b, float c){
-    x=a;
-    y=b;
-    z=c;
+/****************************************************************************************/
+
+// Functions to access Vector3D class components
+float& Vector3D::operator[] (int i) {
+    if(i == 0)      return x;
+    else if(i == 2) return y;
+    else            return z;
+}
+float Vector3D::operator[] (int i) const {
+    if(i == 0)      return x;
+    else if(i == 2) return y;
+    else            return z;
 }
 
-void Vector3D::change(const Vector3D& vec2){
-    x=vec2.x;
-    y=vec2.y;
-    z=vec2.z;
-}
+/****************************************************************************************/
 
-void Vector3D::changeX(float a){
-    x=a;
-}
 
-void Vector3D::changeY(float a){
-    y=a;
+ Vector3D Vector3D::operator+() const{
+    return *this;
 }
-
-void Vector3D::changeZ(float a){
-    z=a;
-}
-
-Vector3D Vector3D::operator-() const
-{
+ Vector3D Vector3D::operator-() const{
     return Vector3D(-x,-y,-z);
 }
 
-Vector3D Vector3D::operator+(const float num) const{
-    return Vector3D(x+num,y+num,z+num);
+/****************************************************************************************/
+
+void Vector3D::operator+=(float a){
+    x+=a;    y+=a;    z+=a;
+}
+void Vector3D::operator-=(float a){
+    x-=a;    y-=a;    z-=a;
+}
+void Vector3D::operator*=(float a){
+    x*=a;    y*=a;    z*=a;
+}
+void Vector3D::operator/=(float a){
+    #ifndef QT_NO_DEBUG
+        if(a == 0)
+            std::cerr << "erreur: division d'un Vector3D avec 0" << std::endl;
+    #endif
+    x/=a;        y/=a;        z/=a;
 }
 
-Vector3D Vector3D::operator-(const float num) const{
-    return Vector3D(x-num,y-num,z-num);
+void Vector3D::operator+=(const Vector3D& v){
+    x+=v.x;    y+=v.y;    z+=v.z;
+}
+void Vector3D::operator-=(const Vector3D& v){
+    x-=v.x;    y-=v.y;    z-=v.z;
+}
+void Vector3D::operator*=(const Vector3D& v){
+    x*=v.x;    y*=v.y;    z*=v.z;
+}
+void Vector3D::operator/=(const Vector3D& v){
+    #ifndef QT_NO_DEBUG
+        if(v.x==0.0 || v.y==0.0 || v.z==0.0)
+            std::cerr << "erreur: division d'un Vector3D avec 0" << std::endl;
+    #endif
+    x/=v.x;        y/=v.y;        z/=v.z;
 }
 
-Vector3D Vector3D::operator*(const float num) const{
-    return Vector3D(x*num,y*num,z*num);
+/****************************************************************************************/
+
+inline int Vector3D::operator==(const Vector3D& v) const{
+    return(x==v.x && y==v.y && z==v.z);
+}
+inline int Vector3D::operator!=(const Vector3D& v) const{
+    return(!(*this==v));
 }
 
-Vector3D Vector3D::operator/(const float num) const{
-    if(num!=0.0)
-        return Vector3D(x/num,y/num,z/num);
-    else
-        return Vector3D();
+inline int Vector3D::operator<(const Vector3D& v) const{
+    return ((x<v.x) && (y<v.y) && (z<v.z));
+}
+inline int Vector3D::operator>(const Vector3D& v) const{
+    return ((x>v.x) && (y>v.y) && (z>v.z));
 }
 
-Vector3D Vector3D::operator+(const Vector3D& vec2) const{
-    return Vector3D(x+vec2.x,y+vec2.y,z+vec2.z);
+inline int Vector3D::operator<=(const Vector3D& v) const{
+    return ((x<=v.x) && (y<=v.y) && (z<=v.z));
+}
+inline int Vector3D::operator>=(const Vector3D& v) const{
+    return ((x>=v.x) && (y>=v.y) && (z>=v.z));
 }
 
-Vector3D Vector3D::operator-(const Vector3D& vec2) const{
-    return Vector3D(x-vec2.x,y-vec2.y,z-vec2.z);
-}
-
-Vector3D Vector3D::operator*(const Vector3D& vec2) const{
-    return Vector3D(x*vec2.x,y*vec2.y,z*vec2.z);
-}
-
-Vector3D Vector3D::operator/(const Vector3D& vec2) const{
-    if(vec2.x!=0.0 && vec2.y!=0.0 && vec2.z!=0.0)
-        return Vector3D(x*vec2.x,y*vec2.y,z*vec2.z);
-    else
-        return Vector3D();
-}
+/****************************************************************************************/
 
 
-Vector3D& Vector3D::operator+=(const float& num){
-    x+=num;
-    y+=num;
-    z+=num;
-    return *this;
-}
-
-Vector3D& Vector3D::operator-=(const float& num){
-    x-=num;
-    y-=num;
-    z-=num;
-    return *this;
-}
-
-Vector3D& Vector3D::operator*=(const float& num){
-    x*=num;
-    y*=num;
-    z*=num;
-    return *this;
-}
-
-Vector3D& Vector3D::operator/=(const float& num){
-    if(num!=0){
-        x/=num;
-        y/=num;
-        z/=num;
-    }
-    return *this;
-}
-
-Vector3D& Vector3D::operator+=(const Vector3D& vec2){
-    x+=vec2.x;
-    y+=vec2.y;
-    z+=vec2.z;
-    return *this;
-}
-
-Vector3D& Vector3D::operator-=(const Vector3D& vec2){
-    x-=vec2.x;
-    y-=vec2.y;
-    z-=vec2.z;
-    return *this;
-}
-
-Vector3D& Vector3D::operator*=(const Vector3D& vec2){
-    x*=vec2.x;
-    y*=vec2.y;
-    z*=vec2.z;
-    return *this;
-}
-
-Vector3D& Vector3D::operator/=(const Vector3D& vec2){
-    if(vec2.x!=0.0 && vec2.y!=0.0 && vec2.z!=0.0){
-        x/=vec2.x;
-        y/=vec2.y;
-        z/=vec2.z;
-    }
-    return *this;
-}
-
-bool Vector3D::operator==(const Vector3D vec2) const{
-    return(x==vec2.x && y==vec2.y && z==vec2.z);
-}
-
-bool Vector3D::operator!=(const Vector3D vec2) const{
-    return(!(*this==vec2));
-}
-
-Vector3D& Vector3D::rotateAboutX(const float& angle){
+Vector3D& Vector3D::rotateAboutX(float angle){
     float s = sinf(angle);
     float c = cosf(angle);
 
@@ -183,7 +148,7 @@ Vector3D& Vector3D::rotateAboutX(const float& angle){
     return (*this);
 }
 
-Vector3D& Vector3D::rotateAboutY(const float& angle){
+Vector3D& Vector3D::rotateAboutY(float angle){
     float s = sinf(angle);
     float c = cosf(angle);
 
@@ -196,7 +161,7 @@ Vector3D& Vector3D::rotateAboutY(const float& angle){
     return (*this);
 }
 
-Vector3D& Vector3D::rotateAboutZ(const float& angle){
+Vector3D& Vector3D::rotateAboutZ(float angle){
     float s = sinf(angle);
     float c = cosf(angle);
 
@@ -209,7 +174,7 @@ Vector3D& Vector3D::rotateAboutZ(const float& angle){
     return (*this);
 }
 
-Vector3D& Vector3D::rotateAboutAxis(const float& angle, const Vector3D& axis){
+Vector3D& Vector3D::rotateAboutAxis(float angle, const Vector3D& axis){
     float s = sinf(angle);
     float c = cosf(angle);
     float k = 1.0F - c;
@@ -228,16 +193,8 @@ Vector3D& Vector3D::rotateAboutAxis(const float& angle, const Vector3D& axis){
     return (*this);
 }
 
-float Vector3D::distance(const Vector3D &vec2) const
-{
-    return (vec2-*this).norm();
-}
+/****************************************************************************************/
 
-float Vector3D::Squaredistance(const Vector3D &vec2) const
-{
-    return (vec2-*this).squareNorm();
-}
-
-std::ostream& operator<<(std::ostream& out,const Vector3D& vec){
-    return out << "{" << vec.x << " " << vec.y << " " << vec.z << "}" <<std::endl;
+std::ostream& operator<<(std::ostream& out,const Vector3D& v){
+    return out << "{" << v.x << " " << v.y << " " << v.z << "}";
 }

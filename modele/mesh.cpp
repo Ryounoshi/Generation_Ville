@@ -113,7 +113,7 @@ void Mesh::localrescale(float scale){
         min = p.z < min ? p.z : min;
     }
     gravite /= vertex.size();
-    gravite.changeZ(min);
+    gravite.z = min;
     translation(-gravite.x,-gravite.y,-gravite.z);
     for(Vector3D& p: vertex){
         p *= scale;

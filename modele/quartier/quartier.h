@@ -8,17 +8,16 @@
 #include "modele/mesh.h"
 #include "modele/batiment/batparameter.h"
 #include "modele/batiment/batiment.h"
+#include <random>
 
-#define MIN_COTE 10
-#define AIRE_QUARTIER_MAX 1000
+#define MIN_COTE 30
+#define AIRE_QUARTIER_MAX 40000
 
 class Quartier
 {
 public:
     Quartier()  {}
-    Quartier(BatParameter* par):    _par(par)  {
-        generator = std::default_random_engine(4546);
-    }
+    Quartier(BatParameter* par);
 
     virtual ~Quartier() {}
 
@@ -29,11 +28,13 @@ public:
     virtual float area() const = 0;
     virtual float perimetre() const = 0;
 
+    virtual void split() = 0;
+
 
     virtual std::vector<Vector2D> getPoints() const = 0;
     virtual std::vector<Vector3D> getPoints3D() const = 0;
 
-    virtual Mesh generate() = 0;
+    Mesh generate();
 protected:
     BatParameter* _par;
     std::default_random_engine generator;

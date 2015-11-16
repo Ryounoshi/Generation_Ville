@@ -7,11 +7,14 @@
 class TerrainBase
 {
 public:
-    TerrainBase(float longueur, float largeur);
+    TerrainBase(float longueur, float largeur, BatParameter* par);
     ~TerrainBase();
 
     void decoupeSimple();   //ne fait que des triangles et quadrangle
     void decoupe();
+
+
+    void split();
     void shrink(float f);
         //à remettre en privé (c'est pour les tests)
     std::vector<Quartier*> quartiers;
@@ -20,6 +23,7 @@ public:
 
 protected:
     float longueur, largeur;
+    BatParameter* _par;
 
 };
 

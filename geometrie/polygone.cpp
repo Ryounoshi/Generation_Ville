@@ -13,8 +13,8 @@ void Polygone::shrinkPoly(int nb, float l)
 
     for(int i = 0;	i < nb;	i++)
     {
-        Vector2D v1 = Orthogonal(get(i)-get(i+1)).normalise();
-        Vector2D v2 = Orthogonal(get(i-1)-get(i)).normalise();
+        Vector2D v1 = Orthogonal(get(i)-get(i+1)).normalised();
+        Vector2D v2 = Orthogonal(get(i-1)-get(i)).normalised();
 
         Vector2D v = (v1+v2)/2;	//quand on augmente de 1 sur v1 ou v2, on augment de v.norm() sur le v.
 

@@ -17,46 +17,62 @@ std::pair<Quartier*,Quartier*> QuarTri::decoupeSimple()
 {
     std::pair<Quartier*,Quartier*> res;
 
-    int type = rand()%5;
-    //0 = a->milieu bc      1 = milieu ab->milieu bc    2 = milieu ab->c    3 = milieu ab->milieu ca    4 = b->milieu ca
+    int type = rand()%6;
+    //0 = a->milieu bc      1 = milieu ab->milieu bc    2 = milieu ab->c    3 = milieu ab->milieu ca    4 = b->milieu ca    5 = milieu bc->milieu ca
+    float d0 = distance(p0,p1),
+          d1 = distance(p1,p2),
+          d2 = distance(p2,p0);
+    float perim = perimetre();
+    while((d0 < perim/4 && (type == 1 || type == 2 || type == 3)) ||
+          (d1 < perim/4 && (type == 0 || type == 1 || type == 5)) ||
+          (d2 < perim/4 && (type == 3 || type == 4 || type == 5)))
+        type = rand()%6;
 
     switch(type)
     {
         case 0:
             {
                 Vector2D mbc = get(1) + (get(2)-get(1))/2;
-                res.first = new QuarTri(get(0), get(1), mbc,0);
-                res.second = new QuarTri(get(0), mbc, get(2),0);
+                res.first = new QuarTri(get(0), get(1), mbc, _par);
+                res.second = new QuarTri(get(0), mbc, get(2), _par);
             }
             break;
         case 1:
             {
                 Vector2D mab = get(0) + (get(1)-get(0))/2,
                         mbc = get(1) + (get(2)-get(1))/2;
-                res.first = new QuarTri(mab, get(1), mbc,0);
-                res.second = new QuarQuad(mab, mbc, get(2), get(0), 0);
+                res.first = new QuarTri(mab, get(1), mbc, _par);
+                res.second = new QuarQuad(mab, mbc, get(2), get(0), _par);
             }
             break;
         case 2:
             {
-                Vector2D mbc = get(1) + (get(2)-get(1))/2;
-                res.first = new QuarTri(mbc, get(1), get(2),0);
-                res.second = new QuarTri(get(0), mbc, get(2),0);
+                Vector2D mab = get(0) + (get(1)-get(0))/2;
+                res.first = new QuarTri(mab, get(1), get(2), _par);
+                res.second = new QuarTri(get(0), mab, get(2), _par);
             }
             break;
         case 3:
             {
                 Vector2D mab = get(0) + (get(1)-get(0))/2,
                         mca = get(2) + (get(0)-get(2))/2;
-                res.first = new QuarQuad(mab, get(1), get(2), mca,0);
-                res.second = new QuarTri(mab, mca, get(0),0);
+                res.first = new QuarQuad(mab, get(1), get(2), mca, _par);
+                res.second = new QuarTri(mab, mca, get(0), _par);
             }
             break;
         case 4:
             {
                 Vector2D mca = get(2) + (get(0)-get(2))/2;
                 res.first = new QuarTri(get(1), get(2), mca,0);
-                res.second = new QuarTri(get(1), mca, get(0),0);
+                res.second = new QuarTri(get(1), mca, get(0), _par);
+            }
+            break;
+        case 5:
+            {
+                Vector2D mbc = get(1) + (get(2)-get(1))/2,
+                        mca = get(2) + (get(0)-get(2))/2;
+                res.second = new QuarTri(mbc, get(2), mca, _par);
+                res.first = new QuarQuad(mbc, mca, get(0), get(1), _par);
             }
             break;
     }
@@ -81,32 +97,34 @@ std::pair<Quartier*,Quartier*> QuarTri::decoupe()
 
     Vector2D newP1 = get(id1)+ Normalized(get(id1+1)-get(id1))*t;
     Vector2D newP2 = get(id2)+ Normalized(get(id2+1)-get(id2))*t2;
-    Vector2D p = newP1, p2 = newP2;
-    if(p.x < 0 || p.x > 1000 || p.y < 0 || p.y > 1000 ||
-       p2.x < 0 || p2.x > 1000 || p2.y < 0 || p2.y > 1000)
-        std::cout << p << std::endl;
+    #ifndef QT_NO_DEBUG
+        Vector2D p = newP1, p2 = newP2;
+        if(p.x < 0 || p.x > 1000 || p.y < 0 || p.y > 1000 ||
+           p2.x < 0 || p2.x > 1000 || p2.y < 0 || p2.y > 1000)
+            std::cout << p << std::endl;
+    #endif
 
     if(id2-id1 == 1 || id2-id1 == -2)
     {
         res.first = new QuarTri(newP1,
                             get(id1+1),
-                            newP2,0);
+                            newP2, _par);
 
         res.second = new QuarQuad(newP1,
                               newP2,
                               get(id2+1),
-                              get(id2+2), 0);
+                              get(id2+2), _par);
     }
     else
     {
         res.first = new QuarQuad(newP1,
                              get(id1+1),
                              get(id1+2),
-                             newP2, 0);
+                             newP2, _par);
 
         res.second = new QuarTri(newP1,
                              newP2,
-                             get(id1),0);
+                             get(id1), _par);
     }
     return res;
 }
@@ -117,7 +135,7 @@ inline void QuarTri::decoupePoint1(float perim, int& id1, float& t, float& distS
             d1 = distance(p1,p2),
             d2 = distance(p2,p0);
 
-    float r1 = rand()/(float)RAND_MAX;
+    float r1 = (rand()%65536)/65536.0;
     r1 *= perim;    //à quel position on place le premier point de découpe. plus de chance de découper le segment le plus long.
     if(r1 < d0)
     {
@@ -157,7 +175,7 @@ inline void QuarTri::decoupePoint2(float perim2, int id1, int& id2, float& t2, f
             d1 = distance(p1,p2),
             d2 = distance(p2,p0);
 
-    float r2 = rand()/(float)RAND_MAX;
+    float r2 = (rand()%65536)/65536.0;
     r2 *= perim2;    //à quel position on place le premier point de découpe. plus de chance de découper le segment le plus long.
     switch (id1) {
     case 0:
@@ -408,9 +426,4 @@ std::vector<Vector2D> QuarTri::getPoints() const
 std::vector<Vector3D> QuarTri::getPoints3D() const
 {
     return Polygone::getPoints3D();
-}
-
-Mesh QuarTri::generate()
-{
-    return Mesh();
 }

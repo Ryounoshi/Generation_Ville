@@ -45,12 +45,14 @@ int main(int argc, char *argv[])
     PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,10), Vector2D(10,10), Vector2D(10,0), 2.5);
     m1 = p1.generate();
 */
-    myWindow glWin;
+    /*myWindow glWin;
     glWin.show();
-    return app.exec();
-    //TerrainBase base(1000,1000);
-    //base.decoupeSimple();
-    //base.shrink(1.f);
+    return app.exec();*/
+    TerrainBase base(2000,2000,new BatParameter());
+    base.decoupeSimple();
+    base.shrink(6.f);
+    Mesh m = base.generate();
+    ObjManager::writeToObj("testTerrain.obj", m.getVertex(), m.getFace());
     return 0;
 }
 

@@ -7,9 +7,19 @@ QuarPenta::QuarPenta()
 QuarPenta::QuarPenta(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, const Vector2D& p3, const Vector2D& p4, BatParameter* par):
         Quartier(par), Pentagone(p0,p1,p2,p3,p4)
 {
+    if(p1.x == p2.x && p1.y == p2.y)
+        std::cout << "test" << std::endl;
+    if(p0.x == p1.x && p0.y == p1.y)
+        std::cout << "test" << std::endl;
 
 }
 
+
+std::pair<Quartier*,Quartier*> QuarPenta::decoupeSimple()
+{
+    std::pair<Quartier*,Quartier*> res;
+    return res;
+}
 
 std::pair<Quartier*,Quartier*> QuarPenta::decoupe()
 {
@@ -32,22 +42,24 @@ std::pair<Quartier*,Quartier*> QuarPenta::decoupe()
 
     Vector2D newP1 = get(id1)+ Normalized(get(id1+1)-get(id1))*t;
     Vector2D newP2 = get(id2)+ Normalized(get(id2+1)-get(id2))*t2;
-    Vector2D p = newP1, p2 = newP2;
-    if(p.x < 0 || p.x > 1000 || p.y < 0 || p.y > 1000 ||
-       p2.x < 0 || p2.x > 1000 || p2.y < 0 || p2.y > 1000)
-        std::cout << p << std::endl;
+    #ifndef QT_NO_DEBUG
+        Vector2D p = newP1, p2 = newP2;
+        if(p.x < 0 || p.x > 1000 || p.y < 0 || p.y > 1000 ||
+           p2.x < 0 || p2.x > 1000 || p2.y < 0 || p2.y > 1000)
+            std::cout << p << std::endl;
+    #endif
     if(typeDec == 2)
     {
         res.first = new QuarQuad(newP1,
                              get(id1+1),
                              get(id1+2),
-                             newP2, 0);
+                             newP2, _par);
 
         res.second = new QuarPenta(newP1,
                               newP2,
                               get(id2+1),
                               get(id2+2),
-                              get(id2+3),0);
+                              get(id2+3), _par);
     }
     else
     {
@@ -55,12 +67,12 @@ std::pair<Quartier*,Quartier*> QuarPenta::decoupe()
                              get(id1+1),
                              get(id1+2),
                              get(id1+3),
-                             newP2,0);
+                             newP2, _par);
 
         res.second = new QuarQuad(newP1,
                               newP2,
                               get(id2+1),
-                              get(id2+2),0);
+                              get(id2+2), _par);
     }
 
     return res;
@@ -74,7 +86,7 @@ inline void QuarPenta::decoupePoint1(float perim, int& id1, float& t, float& dis
             d3 = distance(p3,p4),
             d4 = distance(p4,p0);
 
-    float r1 = rand()/(float)RAND_MAX;
+    float r1 = (rand()%65536)/65536.0;
     r1 *= perim;    //à quel position on place le premier point de découpe. plus de chance de découper le segment le plus long.
 
     if(r1 < d0)    {
@@ -104,7 +116,7 @@ inline void QuarPenta::decoupePoint1(float perim, int& id1, float& t, float& dis
     }
 
 
-    if(distSeg < MIN_COTE)
+    if(distSeg <= MIN_COTE)
         t = distSeg/2;
     else if(t < MIN_COTE)    {
         t = MIN_COTE;
@@ -124,7 +136,7 @@ inline void QuarPenta::decoupePoint2(float perim2, int id1, int& id2, float& t2,
             d3 = distance(p3,p4),
             d4 = distance(p4,p0);
 
-    float r2 = rand()/(float)RAND_MAX;
+    float r2 = (rand()%65536)/65536.0;
     r2 *= perim2;    //à quel position on place le premier point de découpe. plus de chance de découper le segment le plus long.
     switch (id1) {
     case 0:
@@ -191,7 +203,7 @@ inline void QuarPenta::decoupePoint2(float perim2, int id1, int& id2, float& t2,
         break;
     }
 
-    if(distSeg2 < MIN_COTE)
+    if(distSeg2 <= MIN_COTE)
         t2 = distSeg2/2;
     else if(t2 < MIN_COTE)    {
         t2 = MIN_COTE;
@@ -214,12 +226,11 @@ float QuarPenta::perimetre() const
     return Pentagone::perimetre();
 }
 
-std::pair<Quartier*,Quartier*> QuarPenta::decoupeSimple()
-{
-    std::pair<Quartier*,Quartier*> res;
-    return res;
-}
 
+void QuarPenta::split()
+{
+
+}
 
 
 std::vector<Vector2D> QuarPenta::getPoints() const
@@ -232,7 +243,3 @@ std::vector<Vector3D> QuarPenta::getPoints3D() const
 }
 
 
-Mesh QuarPenta::generate()
-{
-    return Mesh();
-}

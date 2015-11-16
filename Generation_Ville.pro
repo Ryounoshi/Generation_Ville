@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     modele/quartier/quartier.cpp \
     modele/quartier/quartri.cpp \
     modele/quartier/patern/paternequadresidence.cpp \
-    math/noisegenerator.cpp
+    math/noisegenerator.cpp \
+    geometrie/vector2d.cpp
 
 
 

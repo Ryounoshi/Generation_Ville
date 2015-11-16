@@ -11,8 +11,8 @@ using namespace std;
 Etage::Etage(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par, int noEtage, bool splited):_p0(p0),_p1(p1),_p2(p2),_p3(p3),_hauteur(hauteur),_par(par),_noEtage(noEtage),_splited(splited)
 {
     //cout << " E" << endl;
-    longueur = p0.distance(p1);
-    largeur = p0.distance(p3);
+    longueur = distance(p0, p1);
+    largeur = distance(p0, p3);
     ourMesh = Mesh::createQuadrangle3D(_p0,_p1,_p2,_p3,_hauteur*(1-tailleRainure));
     Mesh top = Mesh::createQuadrangle3D(Vector3D(_p0.x,_p0.y,p0.z+_hauteur*(1-tailleRainure)),
                                         Vector3D(_p1.x,_p1.y,p1.z+_hauteur*(1-tailleRainure)),

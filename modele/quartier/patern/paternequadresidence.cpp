@@ -15,7 +15,7 @@ Mesh PaterneQuadResidence::generate()
         Vector2D pIpIm1 = notreQuadrangle[(i-1)%4] - notreQuadrangle[i];
         Vector2D pIpIp1 = notreQuadrangle[(i+1)%4] - notreQuadrangle[i];
 
-        pIpIm1 = pIpIm1.normalise(); pIpIp1 = pIpIp1.normalise();
+        pIpIm1.normalise(); pIpIp1.normalise();
 
         float dpIpIm1 = shrink.scalareProduct(pIpIm1);
         float dpIpIp1 = shrink.scalareProduct(pIpIp1);

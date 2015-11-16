@@ -1,10 +1,10 @@
 #include "terrainbase.h"
 
-TerrainBase::TerrainBase(float longueur, float largeur):
-        longueur(longueur),  largeur(largeur)
+TerrainBase::TerrainBase(float longueur, float largeur, BatParameter* par):
+        longueur(longueur),  largeur(largeur),  _par(par)
 {
-    //QuarQuad* quad = new QuarQuad(Vector2D(0,0), Vector2D(0,longueur), Vector2D(largeur, longueur), Vector2D(largeur,0));
-    //quartiers.push_back(quad);
+    QuarQuad* quad = new QuarQuad(Vector2D(0,0), Vector2D(0,longueur), Vector2D(largeur, longueur), Vector2D(largeur,0), par);
+    quartiers.push_back(quad);
 }
 
 TerrainBase::~TerrainBase()
@@ -15,26 +15,29 @@ TerrainBase::~TerrainBase()
 
 void TerrainBase::decoupeSimple()
 {
-    int i2 =0;
     int i = 0;
+#ifndef QT_NO_DEBUG
+    int i2 = 0;
+#endif
     while(i < (int)quartiers.size())
     {
         Quartier* quartier = quartiers[i];
-        float aire = quartier->area();
+        float aire = quartier->area();   
+#ifndef QT_NO_DEBUG
         std::cout << aire << std::endl;
-        if(aire < AIRE_QUARTIER_MAX)    {
+#endif
+        if(aire < AIRE_QUARTIER_MAX)
             i++;
-            std::cout << std::endl;
-        }
         else
         {
             std::pair<Quartier*,Quartier*> quar2 = quartier->decoupeSimple();
 
-
             delete quartier;
             quartiers[i] = quar2.first;
             quartiers.push_back(quar2.second);
+#ifndef QT_NO_DEBUG
             i2++;
+#endif
         }
     }
 }
@@ -42,30 +45,39 @@ void TerrainBase::decoupeSimple()
 
 void TerrainBase::decoupe()
 {
-    int i2 =0;
     int i = 0;
+#ifndef QT_NO_DEBUG
+    int i2 = 0;
+#endif
     while(i < (int)quartiers.size())
     {
         Quartier* quartier = quartiers[i];
         float aire = quartier->area();
+#ifndef QT_NO_DEBUG
         std::cout << aire << std::endl;
-        if(aire < AIRE_QUARTIER_MAX)    {
+#endif
+        if(aire < AIRE_QUARTIER_MAX)
             i++;
-            std::cout << std::endl;
-        }
         else
         {
             std::pair<Quartier*,Quartier*> quar2 = quartier->decoupe();
 
-
             delete quartier;
             quartiers[i] = quar2.first;
             quartiers.push_back(quar2.second);
+#ifndef QT_NO_DEBUG
             i2++;
+#endif
         }
     }
 }
 
+/**redécoupe tous les quartiers en Bâtiments*/
+void TerrainBase::split()
+{
+    for(Quartier* q: quartiers)
+        q->split();
+}
 
 void TerrainBase::shrink(float f)
 {
