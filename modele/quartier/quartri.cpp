@@ -263,10 +263,10 @@ void QuarTri::split()
 std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vector2D& pp1, const Vector2D& pp3)
 {
     /*
-          pp3
-           |\
-           | \
-       pp2 |__\ pp1
+            pp3
+             /\
+            /  \
+       pp2 /____\ pp1
     */
     float height3 = ((pp3 - pp1) / (pp2 - pp1)).getNorm() / (pp2 - pp1).getNorm();
     if (height3 <= 2 * MIN_DIM_BAT)
@@ -276,18 +276,38 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
     auto distri_BatDepth = make_Unidistrib(MIN_DIM_BAT, hp*1.5f);
     Vector2D lambda = pp3 + (pp2 - pp3)*(height3 - hp) / height3; // parallèle à pp2-pp1 et entre pp3 et pp2
     Vector2D mu = pp3 + (pp1 - pp3)*(height3 - hp) / height3; // parallèle à pp2-pp1 et entre pp3 et pp1
-    float pp2_footLambda_norm = (lambda - pp2).scalareProduct(pp2 - pp1) / (pp2 - pp1).getNorm(); // vecteur du projeté ortho de lambda sur pp2-pp1
-    float pp3_footMu_norm = (mu - pp1).scalareProduct(pp1 - pp2) / (pp2 - pp1).getNorm(); // vecteur du projeté ortho de mu sur pp2-pp1
-    float triStartLength = (pp3 - pp2).scalareProduct(pp1 - pp2)*(lambda - pp2).getNorm() / ((pp3 - pp2).getNorm()*(pp2 - pp1).getNorm()); // longueur du projeté de lambda sur pp2-pp1
-    float triEndLength = (pp3 - pp1).scalareProduct(pp2 - pp1)*((mu - pp1).getNorm()) / ((pp3 - pp1).getNorm()*(pp2 - pp1).getNorm()); // longueur du projeté de mu sur pp2-pp1
+    float triStartLength = (lambda - pp2).scalareProduct(pp2 - pp1) / (pp2 - pp1).getNorm(); // longueur du projeté de lambda sur pp2-pp1
+    float triEndLength = (mu - pp1).scalareProduct(pp1 - pp2) / (pp2 - pp1).getNorm(); // longueur du projeté de mu sur pp2-pp1
+    /*
+                 __/_________\__
+          lambda  /|         |\ mu
+                 / |         | \
+                /  |         |  \
+               /   |         |   \
+          pp2 /____|_________|____\ pp1
+              |####|         |####|
+          triStartLength    triEndLength
+    */
     Vector2D waterMark = pp2;
     Vector2D dir_coteTraite = Normalized(pp1 - pp2);
     Vector2D dir_height = Normalized(Vector2D(pp1.y - pp2.y, pp2.x - pp1.x));
     do {
+        /*
+                     __/_________\__
+              lambda  /  |        \ mu
+                     /   |         \
+                    /    | hp       \
+                   /     |           \
+              pp2 /______|____________\ pp1
+                      |           |
+                  waterMark  wmark_candBat  (les wmark sont des points potentiels de batiment et sont éloignés de bat_length)
+        */
         distribution = make_Unidistrib(0, (waterMark - pp1).getNorm());
         float bat_length = distribution(generator);
         if (bat_length >= MIN_DIM_BAT) {
             Vector2D wmark_candBat = waterMark + bat_length*dir_coteTraite; // determinera si batiment ou rien
+            //
+            // Cas de début
             if (waterMark == pp2) {
                 if (bat_length <= triStartLength) {
                     if (height3*bat_length / triStartLength < MIN_DIM_BAT) {
@@ -321,6 +341,8 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     batiments.push_back(Batiment(to3D(point1), to3D(pp2), to3D(pp1), to3D(point4), 1.f, _par));
                 }
             }
+            //
+            // Cas où waterMark est dans le premier triangle
             else if ((waterMark - pp2).getNorm() < triStartLength)
             {
                 if ((wmark_candBat - pp2).getNorm() < triStartLength)
@@ -332,9 +354,9 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     float bat_depth = distri_BatDepth(generator);
                     if (bat_depth > hp) bat_depth = hp;
                     // pas de pentagone
-                    bat_depth = std::min(bat_depth, (wmark_candBat - pp2).getNorm() / pp2_footLambda_norm*hp);
+                    bat_depth = std::min(bat_depth, (wmark_candBat - pp2).getNorm() / triStartLength*hp);
                     Vector2D point4 = wmark_candBat + bat_depth * dir_height;
-                    bat_depth = std::min(bat_depth, (waterMark - pp2).getNorm() / pp2_footLambda_norm*hp);
+                    bat_depth = std::min(bat_depth, (waterMark - pp2).getNorm() / triStartLength*hp);
                     Vector2D point1 = waterMark + bat_depth * dir_height;
                     batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
                 }
@@ -350,6 +372,8 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     // penta
                 }
             }
+            //
+            // Cas où waterMark est dans le rectangle
             else if ((waterMark - pp2).getNorm() < (pp2 - pp1).getNorm() - triEndLength)
             {
                 if ((wmark_candBat - pp2).getNorm() < (pp2 - pp1).getNorm() - triEndLength)
@@ -373,6 +397,8 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
                 }
             }
+            //
+            // Cas où waterMark est dans le dernier triangle
             else {
                 if (wmark_candBat != pp1)
                 {
@@ -383,9 +409,9 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     float bat_depth = distri_BatDepth(generator);
                     if (bat_depth > hp) bat_depth = hp;
                     // pas de pentagone
-                    bat_depth = std::min(bat_depth, (waterMark - pp3).getNorm() / pp3_footMu_norm*hp);
+                    bat_depth = std::min(bat_depth, (waterMark - pp1).getNorm() / triEndLength*hp);
                     Vector2D point1 = wmark_candBat + bat_depth * dir_height;
-                    bat_depth = std::min(bat_depth, (wmark_candBat - pp2).getNorm() / pp3_footMu_norm*hp);
+                    bat_depth = std::min(bat_depth, (wmark_candBat - pp1).getNorm() / triEndLength*hp);
                     Vector2D point4 = waterMark + bat_depth * dir_height;
                     batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
                 }
