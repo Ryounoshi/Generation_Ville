@@ -270,7 +270,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
     */
     float height3 = ((pp3 - pp1) / (pp2 - pp1)).getNorm() / (pp2 - pp1).getNorm();
     if (height3 <= 2 * MIN_DIM_BAT)
-        return std::pair<Vector2D, Vector2D>(pp1, pp2); // ou exclure la petite bande ?
+        return std::make_pair(pp1, pp2); // ou exclure la petite bande ?
     auto distribution = make_Unidistrib(MIN_DIM_BAT, height3 - MIN_DIM_BAT);
     float hp = distribution(generator); // BatDepth max
     auto distri_BatDepth = make_Unidistrib(MIN_DIM_BAT, hp*1.5f);
@@ -296,7 +296,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                      __/_________\__
               lambda  /  |        \ mu
                      /   |         \
-                    /    | hp       \
+                    /    | hp       \         bat_depth sera < hp mais aussi être assez petit pour que le sommet du batiment soit dans le quartier
                    /     |           \
               pp2 /______|____________\ pp1
                       |           |
@@ -304,22 +304,25 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
         */
         distribution = make_Unidistrib(0, (waterMark - pp1).getNorm());
         float bat_length = distribution(generator);
+        Vector2D wmark_candBat = waterMark + bat_length*dir_coteTraite; // determinera si batiment ou rien
         if (bat_length >= MIN_DIM_BAT) {
-            Vector2D wmark_candBat = waterMark + bat_length*dir_coteTraite; // determinera si batiment ou rien
             //
             // Cas de début
             if (waterMark == pp2) {
+                // Cas où wmark_candBat est dans le premier triangle
                 if (bat_length <= triStartLength) {
                     if (height3*bat_length / triStartLength < MIN_DIM_BAT) {
                         waterMark = wmark_candBat;
                         continue;
                     }
-                    // tous les cas ne sont pas gérés ici
+                    // tous les cas ne sont pas gérés ici (pas de batiment triangles)
+                    // mais si bat_depth == height3*bat_length/triStartLength alors point1 == point4
                     float bat_depth = make_Unidistrib(MIN_DIM_BAT, height3*bat_length / triStartLength)(generator);
                     Vector2D point1 = pp3 + (pp2 - pp3)*(height3 - bat_depth) / height3;
                     Vector2D point4 = wmark_candBat + bat_depth * dir_height;
                     batiments.push_back(Batiment(to3D(point1), to3D(pp2), to3D(wmark_candBat), to3D(point4), 1.f, _par));
                 }
+                // Cas où wmark_candBat est dans le rectangle
                 else if (bat_length <= (pp2 - pp1).getNorm() - triEndLength)
                 {
                     float bat_depth = distri_BatDepth(generator);
@@ -328,10 +331,12 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     Vector2D point4 = wmark_candBat + bat_depth * dir_height;
                     batiments.push_back(Batiment(to3D(point1), to3D(pp2), to3D(wmark_candBat), to3D(point4), 1.f, _par));
                 }
+                // Cas où wmark_candBat est dans le dernier triangle
                 else if (bat_length < (pp2 - pp1).getNorm())
                 {
-                    // pentagone
+                    // potentiellemnt pentagone
                 }
+                // Cas où wmark_candBat est le sommet de fin
                 else {
                     // le batiment occupe tout le coté
                     float bat_depth = distri_BatDepth(generator);
@@ -345,6 +350,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
             // Cas où waterMark est dans le premier triangle
             else if ((waterMark - pp2).getNorm() < triStartLength)
             {
+                // Cas où wmark_candBat est dans le premier triangle
                 if ((wmark_candBat - pp2).getNorm() < triStartLength)
                 {
                     if (height3*(waterMark - pp2).getNorm() / triStartLength < MIN_DIM_BAT) {
@@ -353,29 +359,33 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     }
                     float bat_depth = distri_BatDepth(generator);
                     if (bat_depth > hp) bat_depth = hp;
-                    // pas de pentagone
+                    // pas de pentagone donc je choisis trapèze à la place
                     bat_depth = std::min(bat_depth, (wmark_candBat - pp2).getNorm() / triStartLength*hp);
                     Vector2D point4 = wmark_candBat + bat_depth * dir_height;
                     bat_depth = std::min(bat_depth, (waterMark - pp2).getNorm() / triStartLength*hp);
                     Vector2D point1 = waterMark + bat_depth * dir_height;
                     batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
                 }
+                // Cas où wmark_candBat est dans le rectangle
                 else if ((wmark_candBat - pp2).getNorm() <= (pp2 - pp1).getNorm() - triEndLength)
                 {
-                    // penta
+                    // potentiellemnt pentagone
                 }
+                // Cas où wmark_candBat est dans le dernier triangle
                 else if (wmark_candBat != pp1)
                 {
-                    // hexa
+                    // potentiellemnt hexagone
                 }
+                // Cas où wmark_candBat est le sommet de fin
                 else {
-                    // penta
+                    // potentiellemnt pentagone
                 }
             }
             //
             // Cas où waterMark est dans le rectangle
             else if ((waterMark - pp2).getNorm() < (pp2 - pp1).getNorm() - triEndLength)
             {
+                // Cas où wmark_candBat est dans le rectangle
                 if ((wmark_candBat - pp2).getNorm() < (pp2 - pp1).getNorm() - triEndLength)
                 {
                     float bat_depth = distri_BatDepth(generator);
@@ -384,10 +394,12 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     Vector2D point4 = wmark_candBat + bat_depth * dir_height;
                     batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
                 }
+                // Cas où wmark_candBat est dans le dernier triangle
                 else if (wmark_candBat != pp1)
                 {
-                    // penta
+                    // potentiellemnt pentagone
                 }
+                // Cas où wmark_candBat est le sommet de fin
                 else
                 {
                     float bat_depth = distri_BatDepth(generator);
@@ -400,6 +412,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
             //
             // Cas où waterMark est dans le dernier triangle
             else {
+                // Cas où wmark_candBat est dans le dernier triangle
                 if (wmark_candBat != pp1)
                 {
                     if (height3*(waterMark - pp3).getNorm() / triEndLength < MIN_DIM_BAT) {
@@ -408,22 +421,23 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     }
                     float bat_depth = distri_BatDepth(generator);
                     if (bat_depth > hp) bat_depth = hp;
-                    // pas de pentagone
+                    // pas de pentagone donc je choisis trapèze à la place
                     bat_depth = std::min(bat_depth, (waterMark - pp1).getNorm() / triEndLength*hp);
                     Vector2D point1 = wmark_candBat + bat_depth * dir_height;
                     bat_depth = std::min(bat_depth, (wmark_candBat - pp1).getNorm() / triEndLength*hp);
                     Vector2D point4 = waterMark + bat_depth * dir_height;
                     batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
                 }
+                // Cas où wmark_candBat est le sommet de fin
                 else
                 {
-                    // triangle
+                    // potentiellemnt triangle
                 }
             }
         }
-        waterMark = waterMark + bat_length*dir_coteTraite;
+        waterMark = wmark_candBat;
     } while ((waterMark - pp2).getNorm() < (pp2 - pp1).getNorm() - MIN_DIM_BAT);
-    return std::pair<Vector2D, Vector2D>(lambda, mu);
+    return std::make_pair(lambda, mu);
 }
 
 
