@@ -29,7 +29,7 @@ Mesh Rezdechausse::generate(){
     Vector3D newp2(_p2.x,_p2.y,_p2.z+_hauteur);
     Vector3D newp3(_p3.x,_p3.y,_p3.z+_hauteur);
     int proba = rand()%100;
-    if(proba < (90 - (dist *3)/_par->influenceCentreVille) && dist < (20*_par->influenceCentreVille)){
+    if(proba < (95) && dist < (20*_par->influenceCentreVille)){
         if(rand()%100 < 20 && _par->splitPourcent)
         {
             qDebug()<<_par->splitPourcent;
@@ -43,16 +43,18 @@ Mesh Rezdechausse::generate(){
                 mid2.y = (_p2.y+_p3.y)/2;
                 int randtmp = rand()%100;
                 if(randtmp<50 && _par->splitPourcent){
+                    int twist = rand()%3;
+                    int twist2 = rand()%3;
                     Etage etage1(Vector3D(_p0.x,_p0.y,_p0.z+_hauteur),
                                 Vector3D(mid1.x,mid1.y,_p1.z+_hauteur),
                                 Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
                                 Vector3D(_p3.x,_p3.y,_p3.z+_hauteur),
-                                _hauteur,_par,1,true);
+                                _hauteur,_par,1,true,twist);
                     Etage etage2(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                                 Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                                 Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
                                 Vector3D(mid2.x,mid2.y,_p3.z+_hauteur),
-                                _hauteur,_par,1,true);
+                                _hauteur,_par,1,true,twist2);
                     Mesh m1 = etage1.generate();
                     Mesh m2 = etage2.generate();
                     m1.localrescaleXY(0.9);
@@ -61,11 +63,12 @@ Mesh Rezdechausse::generate(){
                     ourMesh.merge(m2);
                 }else if(randtmp >= 50 && randtmp <75){
                     qDebug()<<"tutu";
+                    int twist = rand()%3;
                     Etage etage1(Vector3D(_p0.x,_p0.y,_p0.z+_hauteur),
                                 Vector3D(mid1.x,mid1.y,_p1.z+_hauteur),
                                 Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
                                 Vector3D(_p3.x,_p3.y,_p3.z+_hauteur),
-                                _hauteur,_par,1,true);
+                                _hauteur,_par,1,true,twist);
                     Toit toit1(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                                Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                                Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
@@ -77,11 +80,12 @@ Mesh Rezdechausse::generate(){
                     ourMesh.merge(m2);
                 }else{
                     qDebug()<<"tutu";
+                    int twist = rand()%3;
                     Etage etage2(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                                 Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                                 Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
                                 Vector3D(mid2.x,mid2.y,_p3.z+_hauteur),
-                                _hauteur,_par,1,true);
+                                _hauteur,_par,1,true,twist);
                     Toit toit2(Vector3D(_p0.x,_p0.y,_p0.z+_hauteur),
                                Vector3D(mid1.x,mid1.y,_p1.z+_hauteur),
                                Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
@@ -103,16 +107,18 @@ Mesh Rezdechausse::generate(){
                 mid2.y = (_p1.y+_p2.y)/2;
                 int randtmp = rand()%100;
                 if(randtmp<50 && _par->splitPourcent){
+                    int twist = rand()%3;
+                    int twist2 = rand()%3;
                     Etage etage1(Vector3D(_p0.x,_p0.y,_p0.z+_hauteur),
                                 Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                                 Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
                                 Vector3D(mid1.x,mid1.y,_p3.z+_hauteur),
-                                _hauteur,_par,1,true);
+                                _hauteur,_par,1,true,twist);
                     Etage etage2(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                                 Vector3D(mid2.x,mid2.y,_p1.z+_hauteur),
                                 Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
                                 Vector3D(_p3.x,_p3.y,_p3.z+_hauteur),
-                                _hauteur,_par,1,true);
+                                _hauteur,_par,1,true,twist2);
                     Mesh m1 = etage1.generate();
                     Mesh m2 = etage2.generate();
                     m1.localrescaleXY(0.9);
@@ -121,11 +127,12 @@ Mesh Rezdechausse::generate(){
                     ourMesh.merge(m2);
                 }else if(randtmp >=50 && randtmp <75){
                     qDebug()<<"tutu";
+                    int twist = rand()%3;
                     Etage etage1(Vector3D(_p0.x,_p0.y,_p0.z+_hauteur),
                                 Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                                 Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
                                 Vector3D(mid1.x,mid1.y,_p3.z+_hauteur),
-                                _hauteur,_par,1,true);
+                                _hauteur,_par,1,true,twist);
                     Toit toit1(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                                Vector3D(mid2.x,mid2.y,_p1.z+_hauteur),
                                Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
@@ -137,11 +144,12 @@ Mesh Rezdechausse::generate(){
                     ourMesh.merge(m2);
                 }else{
                     qDebug()<<"tutu";
+                    int twist = rand()%3;
                     Etage etage2(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                                 Vector3D(mid2.x,mid2.y,_p1.z+_hauteur),
                                 Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
                                 Vector3D(_p3.x,_p3.y,_p3.z+_hauteur),
-                                _hauteur,_par,1,true);
+                                _hauteur,_par,1,true,twist);
                     Toit toit2(Vector3D(_p0.x,_p0.y,_p0.z+_hauteur),
                                Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                                Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
@@ -156,13 +164,13 @@ Mesh Rezdechausse::generate(){
                 return ourMesh;
             }else
             {
-                Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,1,false);
+                Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,1,false,0);
                 ourMesh.merge(etage.generate());
                 return ourMesh;
             }
         }else
         {
-            Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,1,false);
+            Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,1,false,0);
             ourMesh.merge(etage.generate());
             return ourMesh;
         }

@@ -9,7 +9,7 @@
 class Etage : public Interface_Ville
 {
 public:
-    Etage(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par, int noEtage, bool splited);
+    Etage(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par, int noEtage, bool splited, int twisted);
     Mesh generate();
 private:
     Mesh ourMesh;
@@ -19,6 +19,9 @@ private:
     int _noEtage=0; //numéro de l'étage qui se construit
     float longueur,largeur;
     bool _splited;
+    int _twisted; //0: non twisté   1: twisté vers la droite    2: twisté vers la gauche
+
+    void twister(Mesh &m);
 };
 
 #endif // ETAGE_H

@@ -98,6 +98,27 @@ void Mesh::rotation(const float rX, const float rY, const float rZ){
     }
 }
 
+void Mesh::localRotation(const float rX, const float rY, const float rZ){
+    float min = 1000000;
+    Vector3D gravite;
+    for(Vector3D& p:vertex){
+        gravite = gravite + p;
+        min = p.z < min ? p.z : min;
+    }
+    gravite /= vertex.size();
+    gravite.changeZ(min);
+    translation(-gravite.x,-gravite.y,-gravite.z);
+    for(size_t i=0; i<vertex.size(); i++){
+        if(rX != 0)
+            vertex[i].rotateAboutAxis(rX, Vector3D(1,0,0) );
+        if(rY != 0)
+            vertex[i].rotateAboutAxis(rY, Vector3D(0,1,0) );
+        if(rZ != 0)
+            vertex[i].rotateAboutAxis(rZ, Vector3D(0,0,1) );
+    }
+    translation(gravite.x,gravite.y,gravite.z);
+}
+
 void Mesh::rescale(float scale)
 {
     for(Vector3D& p: vertex){

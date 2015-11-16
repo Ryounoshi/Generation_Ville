@@ -116,6 +116,13 @@ void myWindow::keyPressEvent(QKeyEvent *keyEvent)
         case Qt::Key_S:
             _dezooming = true;
         break;
+            //zoom
+        case Qt::Key_T:
+            _par.hauteurEtage += 0.1;
+        break;
+        case Qt::Key_G:
+            _par.hauteurEtage -= 0.1;
+        break;
             //rotation
         case Qt::Key_Left:
             _turningright = true;
@@ -303,18 +310,22 @@ void myWindow::paintGL()
         qDebug()<<_mesh.nbFace();
 
         Mesh m1;
-        for(float i=-largeur/2;i<largeur/2;i+=3.5){
-            for(float j=-longueur/2; j<longueur/2; j+=3.5){
+        //for(float i=-largeur/2;i<largeur/2;i+=3.5){
+            //for(float j=-longueur/2; j<longueur/2; j+=3.5){
+        for(float i=-largeur/2;i<largeur/2;i+=4){
+            for(float j=-longueur/2; j<longueur/2; j+=4){
                 int tmp = (int)rand()%4;
+                tmp = 0;
                 //qDebug()<<tmp;
                 if(tmp == 0){
-                    Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  0.2,
-                                  &_par);
-                    m1.merge(test.generate());
+                    PaterneQuadResidence p1(Vector2D(i,j), Vector2D(i,j+4), Vector2D(i+4,j+4), Vector2D(i+4,j),&_par);
+                    //Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
+                                  //Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
+                                  //Vector3D(i+1+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
+                                  //Vector3D(i+1+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
+                                  //0.2,
+                                  //&_par);
+                    m1.merge(p1.generate());
                 }else if(tmp == 1){
                     float offset = (rand()%21)*0.1;
                     Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
