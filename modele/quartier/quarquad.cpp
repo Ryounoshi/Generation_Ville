@@ -19,8 +19,8 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupeSimple()
     switch(type)
     {
         case 0:
-            res.first = new QuarTri(get(0), get(1), get(2),0);
-            res.second = new QuarTri(get(0), get(2), get(3),0);
+            res.first = new QuarTri(get(0), get(1), get(2));
+            res.second = new QuarTri(get(0), get(2), get(3));
             break;
         case 1:
             {
@@ -32,8 +32,8 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupeSimple()
             break;
 
         case 2:
-            res.first = new QuarTri(get(1), get(2), get(3),0);
-            res.second = new QuarTri(get(1), get(3), get(0),0);
+            res.first = new QuarTri(get(1), get(2), get(3));
+            res.second = new QuarTri(get(1), get(3), get(0));
             break;
         case 3:
             {
@@ -77,7 +77,7 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupe()
     {
         res.first = new QuarTri(newP1,
                             get(id1+1),
-                            newP2,0);
+                            newP2);
 
         res.second = new QuarPenta(newP1,
                               newP2,
@@ -107,7 +107,7 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupe()
 
         res.second = new QuarTri(newP1,
                              newP2,
-                             get(id1),0);
+                             get(id1));
     }
     return res;
 }
@@ -249,7 +249,7 @@ inline void QuarQuad::decoupePoint2(float perim2, int id1, int& id2, float& t2, 
 
 void QuarQuad::shrink(float l)
 {
-    return Quadrangle::shrink(l);
+    Quadrangle::shrink(l);
 }
 float QuarQuad::area() const
 {
@@ -258,4 +258,20 @@ float QuarQuad::area() const
 float QuarQuad::perimetre() const
 {
     return Quadrangle::perimetre();
+}
+
+
+std::vector<Vector2D> QuarQuad::getPoints() const
+{
+    return Polygone::getPoints();
+}
+std::vector<Vector3D> QuarQuad::getPoints3D() const
+{
+    return Polygone::getPoints3D();
+}
+
+
+Mesh QuarQuad::generate()
+{
+    return Mesh();
 }

@@ -13,13 +13,13 @@ void Mesh::merge(const Mesh &delta)
 {
     if(&delta != this){
         int taille = vertex.size();
-        vertex.reserve(taille+delta.nbvertex());
+        vertex.reserve(taille+delta.nbVertex());
 
         for(size_t i=0; i< delta.vertex.size(); i++){
             vertex.push_back(delta.vertex[i]);
         }
 
-        face.reserve(this->nbface()+delta.nbface());
+        face.reserve(this->nbFace()+delta.nbFace());
         for(size_t i=0; i< delta.face.size(); i++){
             face.push_back(delta.face[i] + taille );
         }
@@ -34,19 +34,19 @@ void Mesh::merge(const Mesh &delta)
 /* -------------------------------------------- */
 /* -------------------------------------------- */
 
-std::vector<Vector3D> Mesh::getvertex() const{
+std::vector<Vector3D> Mesh::getVertex() const{
     return vertex;
 }
 
-std::vector<unsigned int> Mesh::getface() const{
+std::vector<unsigned int> Mesh::getFace() const{
     return face;
 }
 
-Vector3D Mesh::getvertex(int at) const{
+Vector3D Mesh::getVertex(int at) const{
     return vertex.at(at);
 }
 
-unsigned int Mesh::getface(int at) const{
+unsigned int Mesh::getFace(int at) const{
     return face.at(at);
 }
 
@@ -62,12 +62,12 @@ void Mesh::addFace(const unsigned int& refPointFace1, const unsigned int& refPoi
     face.push_back(refPointFace3);
 }
 
-size_t Mesh::nbvertex() const
+size_t Mesh::nbVertex() const
 {
     return this->vertex.size();
 }
 
-size_t Mesh::nbface() const
+size_t Mesh::nbFace() const
 {
     return this->face.size();
 }
@@ -82,7 +82,7 @@ void Mesh::translation(const float x, const float y, const float z)
     }
 }
 
-void Mesh::rotation(const Vector3D T){
+void Mesh::rotation(const Vector3D& T){
     rotation(T.x, T.y, T.z);
 }
 
@@ -96,28 +96,6 @@ void Mesh::rotation(const float rX, const float rY, const float rZ){
         if(rZ != 0)
             vertex[i].rotateAboutAxis(rZ, Vector3D(0,0,1) );
     }
-}
-
-void Mesh::localrotation(const float rX, const float rY, const float rZ){
-    float min = 1000000;
-    Vector3D gravite;
-    for(Vector3D& p:vertex){
-        gravite = gravite + p;
-        min = p.z < min ? p.z : min;
-    }
-    gravite /= vertex.size();
-    gravite.changeZ(min);
-    translation(-gravite.x,-gravite.y,-gravite.z);
-
-    for(size_t i=0; i<vertex.size(); i++){
-        if(rX != 0)
-            vertex[i].rotateAboutAxis(rX, Vector3D(1,0,0) );
-        if(rY != 0)
-            vertex[i].rotateAboutAxis(rY, Vector3D(0,1,0) );
-        if(rZ != 0)
-            vertex[i].rotateAboutAxis(rZ, Vector3D(0,0,1) );
-    }
-    translation(gravite.x,gravite.y,gravite.z);
 }
 
 void Mesh::rescale(float scale)
@@ -323,4 +301,14 @@ Mesh Mesh::createPyramidQuadrangle(const Vector3D& a, const Vector3D& b, const V
     m.addFace(3,1,2);
 
     return m;
+}
+
+void Mesh::addTriangle(const Vector3D& a, const Vector3D& b, const Vector3D& c)
+{
+    int ref = nbVertex();
+    addVertex(a);
+    addVertex(b);
+    addVertex(c);
+
+    addFace(ref, ref+1, ref+2);
 }

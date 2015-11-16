@@ -15,8 +15,8 @@ private:
     Mesh ourMesh;
     Vector3D _p0,_p1,_p2,_p3;
     float _hauteur; //hauteur du bloque
-    int _noEtage=0; //numéro de l'étage qui se construit
     BatParameter *_par;
+    int _noEtage=0; //numéro de l'étage qui se construit
     float longueur,largeur;
     bool _splited;
 };

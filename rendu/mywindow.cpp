@@ -194,7 +194,7 @@ void myWindow::keyPressEvent(QKeyEvent *keyEvent)
         break;
         //sauver mesh
         case Qt::Key_B:
-            ObjManager::writeToObj("ville.obj", _mesh.getvertex(), _mesh.getface());
+            ObjManager::writeToObj("ville.obj", _mesh.getVertex(), _mesh.getFace());
         break;
 
     }
@@ -300,7 +300,7 @@ void myWindow::paintGL()
     if(!meshUpToDate){
         _par.resetEtageLePlusHaut();
 
-        qDebug()<<_mesh.getface().size();
+        qDebug()<<_mesh.nbFace();
 
         Mesh m1;
         for(float i=-largeur/2;i<largeur/2;i+=3.5){
@@ -361,13 +361,13 @@ void myWindow::paintGL()
         frame->update_values();
     }
     glEnable(GL_LIGHTING);
-    int nbfaces = _mesh.getface().size();
+    int nbfaces = _mesh.nbFace();
     for(int i=0; i<nbfaces; i+=3){
         Vector3D dir1, dir2; //pour le calcul des normals
         Vector3D normal;
-        Vector3D p1 = _mesh.getvertex(_mesh.getface(i));
-        Vector3D p2 = _mesh.getvertex(_mesh.getface(i+1));
-        Vector3D p3 = _mesh.getvertex(_mesh.getface(i+2));
+        Vector3D p1 = _mesh.getVertex(_mesh.getFace(i));
+        Vector3D p2 = _mesh.getVertex(_mesh.getFace(i+1));
+        Vector3D p3 = _mesh.getVertex(_mesh.getFace(i+2));
         dir1 = p2-p1;
         dir2 = p3-p1;
         normal = dir1.crossProduct(dir2);

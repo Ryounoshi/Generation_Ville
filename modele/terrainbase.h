@@ -14,7 +14,9 @@ public:
     void decoupe();
     void shrink(float f);
         //à remettre en privé (c'est pour les tests)
-        std::vector<Quartier*> quartiers;
+    std::vector<Quartier*> quartiers;
+
+    Mesh generate();
 
 protected:
     float longueur, largeur;
