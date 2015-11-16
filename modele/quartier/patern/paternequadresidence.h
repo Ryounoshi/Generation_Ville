@@ -3,7 +3,6 @@
 
 #include "../quarquad.h"
 #include "modele/batiment/batiment.h"
-#include "modele/batiment/batparameter.h"
 
 class PaterneQuadResidence : public QuarQuad
 {
@@ -21,6 +20,11 @@ public:
 private:
     void faireTrotoir(Mesh &m);
     void faireSol(Mesh &m);
+
+    Mesh paternQuatreBatiment();
+    Mesh paternTroisBatiment();
+    Mesh paternDeuxBatimentDiagonale();
+    Mesh paternDeuxBatimentDiametre();
 };
 
 #endif // PATERNEQUADRESIDENCE_H
