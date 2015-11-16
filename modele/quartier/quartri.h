@@ -7,10 +7,7 @@
 
 class QuarTri : public Quartier, public Triangle
 {
-private:
-    std::default_random_engine generator;
-    std::vector<Batiment> batiments;
-    BatParameter *_par;
+
 public:
     QuarTri();
     QuarTri(const Vector2D& p0, const Vector2D& p1, const Vector2D& p2,BatParameter *par);

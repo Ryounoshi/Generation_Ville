@@ -4,8 +4,8 @@ QuarQuad::QuarQuad()
 {
 }
 
-QuarQuad::QuarQuad(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, const Vector2D& p3):
-        Quadrangle(p0,p1,p2,p3)
+QuarQuad::QuarQuad(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, const Vector2D& p3, BatParameter* par):
+        Quartier(par),Quadrangle(p0,p1,p2,p3)
 {
 }
 
@@ -19,28 +19,28 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupeSimple()
     switch(type)
     {
         case 0:
-            res.first = new QuarTri(get(0), get(1), get(2));
-            res.second = new QuarTri(get(0), get(2), get(3));
+            res.first = new QuarTri(get(0), get(1), get(2), 0);
+            res.second = new QuarTri(get(0), get(2), get(3), 0);
             break;
         case 1:
             {
                 Vector2D mab = get(0) + (get(1)-get(0))/2,
                         mcd = get(2) + (get(3)-get(2))/2;
-                res.first = new QuarQuad(mab, get(1), get(2), mcd);
-                res.second = new QuarQuad(mab, mcd, get(3), get(0));
+                res.first = new QuarQuad(mab, get(1), get(2), mcd, 0);
+                res.second = new QuarQuad(mab, mcd, get(3), get(0), 0);
             }
             break;
 
         case 2:
-            res.first = new QuarTri(get(1), get(2), get(3));
-            res.second = new QuarTri(get(1), get(3), get(0));
+            res.first = new QuarTri(get(1), get(2), get(3), 0);
+            res.second = new QuarTri(get(1), get(3), get(0), 0);
             break;
         case 3:
             {
                 Vector2D mbc = get(1) + (get(2)-get(1))/2,
                         mda = get(3) + (get(0)-get(3))/2;
-                res.first = new QuarQuad(mbc, get(2), get(3), mda);
-                res.second = new QuarQuad(mbc, mda, get(0), get(1));
+                res.first = new QuarQuad(mbc, get(2), get(3), mda, 0);
+                res.second = new QuarQuad(mbc, mda, get(0), get(1), 0);
             }
             break;
     }
@@ -77,25 +77,25 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupe()
     {
         res.first = new QuarTri(newP1,
                             get(id1+1),
-                            newP2);
+                            newP2, 0);
 
         res.second = new QuarPenta(newP1,
                               newP2,
                               get(id2+1),
                               get(id2+2),
-                              get(id2+3));
+                              get(id2+3), 0);
     }
     else if(typeDec == 2)
     {
         res.first = new QuarQuad(newP1,
                              get(id1+1),
                              get(id1+2),
-                             newP2);
+                             newP2, 0);
 
         res.second = new QuarQuad(newP1,
                               newP2,
                               get(id2+1),
-                              get(id2+2));
+                              get(id2+2), 0);
     }
     else
     {
@@ -103,11 +103,11 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupe()
                               get(id1+1),
                               get(id1+2),
                               get(id1+3),
-                              newP2);
+                              newP2, 0);
 
         res.second = new QuarTri(newP1,
                              newP2,
-                             get(id1));
+                             get(id1), 0);
     }
     return res;
 }

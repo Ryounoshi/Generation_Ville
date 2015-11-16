@@ -2,12 +2,14 @@
 #define QUARQUAD_H
 
 #include "quartier.h"
+#include "modele/batiment/batparameter.h"
 
 class QuarQuad: public Quartier, public Quadrangle
 {
+
 public:
     QuarQuad();
-    QuarQuad(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, const Vector2D& p3);
+    QuarQuad(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, const Vector2D& p3, BatParameter* par);
 
 
 
@@ -26,6 +28,9 @@ public:
     std::vector<Vector3D> getPoints3D() const;
 
     Mesh generate();
+
+private:
+    BatParameter* _par;
 };
 
 #endif // QUARQUAD_H

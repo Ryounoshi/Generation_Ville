@@ -9,7 +9,7 @@ QuarTri::QuarTri()
 }
 
 QuarTri::QuarTri(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, BatParameter *par):
-        Triangle(p0,p1,p2), _par(par)
+        Quartier(par), Triangle(p0,p1,p2)
 {
 }
 
@@ -34,7 +34,7 @@ std::pair<Quartier*,Quartier*> QuarTri::decoupeSimple()
                 Vector2D mab = get(0) + (get(1)-get(0))/2,
                         mbc = get(1) + (get(2)-get(1))/2;
                 res.first = new QuarTri(mab, get(1), mbc,0);
-                res.second = new QuarQuad(mab, mbc, get(2), get(0));
+                res.second = new QuarQuad(mab, mbc, get(2), get(0), 0);
             }
             break;
         case 2:
@@ -48,7 +48,7 @@ std::pair<Quartier*,Quartier*> QuarTri::decoupeSimple()
             {
                 Vector2D mab = get(0) + (get(1)-get(0))/2,
                         mca = get(2) + (get(0)-get(2))/2;
-                res.first = new QuarQuad(mab, get(1), get(2), mca);
+                res.first = new QuarQuad(mab, get(1), get(2), mca,0);
                 res.second = new QuarTri(mab, mca, get(0),0);
             }
             break;
@@ -95,14 +95,14 @@ std::pair<Quartier*,Quartier*> QuarTri::decoupe()
         res.second = new QuarQuad(newP1,
                               newP2,
                               get(id2+1),
-                              get(id2+2));
+                              get(id2+2), 0);
     }
     else
     {
         res.first = new QuarQuad(newP1,
                              get(id1+1),
                              get(id1+2),
-                             newP2);
+                             newP2, 0);
 
         res.second = new QuarTri(newP1,
                              newP2,

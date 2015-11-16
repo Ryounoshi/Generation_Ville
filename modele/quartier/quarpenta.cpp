@@ -4,9 +4,10 @@ QuarPenta::QuarPenta()
 {
 }
 
-QuarPenta::QuarPenta(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, const Vector2D& p3, const Vector2D& p4):
-        Pentagone(p0,p1,p2,p3,p4)
+QuarPenta::QuarPenta(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, const Vector2D& p3, const Vector2D& p4, BatParameter* par):
+        Quartier(par), Pentagone(p0,p1,p2,p3,p4)
 {
+
 }
 
 
@@ -40,13 +41,13 @@ std::pair<Quartier*,Quartier*> QuarPenta::decoupe()
         res.first = new QuarQuad(newP1,
                              get(id1+1),
                              get(id1+2),
-                             newP2);
+                             newP2, 0);
 
         res.second = new QuarPenta(newP1,
                               newP2,
                               get(id2+1),
                               get(id2+2),
-                              get(id2+3));
+                              get(id2+3),0);
     }
     else
     {
@@ -54,12 +55,12 @@ std::pair<Quartier*,Quartier*> QuarPenta::decoupe()
                              get(id1+1),
                              get(id1+2),
                              get(id1+3),
-                             newP2);
+                             newP2,0);
 
         res.second = new QuarQuad(newP1,
                               newP2,
                               get(id2+1),
-                              get(id2+2));
+                              get(id2+2),0);
     }
 
     return res;

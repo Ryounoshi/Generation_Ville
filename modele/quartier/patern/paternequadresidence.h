@@ -13,7 +13,7 @@ public:
     PaterneQuadResidence(const QuarQuad& parent, BatParameter *par) :
             QuarQuad(parent), _par(par){}
     PaterneQuadResidence(const Vector2D& p0, const Vector2D& p1, const Vector2D& p2, const Vector2D& p3, BatParameter *par) :
-            QuarQuad(p0,p1,p2,p3), _par(par){}
+            QuarQuad(p0,p1,p2,p3, par), _par(par){}
 
     BatParameter *_par;
     Mesh generate();

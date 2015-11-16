@@ -8,7 +8,7 @@ class QuarPenta: public Quartier, public Pentagone
 public:
 
     QuarPenta();
-    QuarPenta(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, const Vector2D& p3, const Vector2D& p4);
+    QuarPenta(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, const Vector2D& p3, const Vector2D& p4, BatParameter* par);
 
 
     std::pair<Quartier*,Quartier*> decoupeSimple();
