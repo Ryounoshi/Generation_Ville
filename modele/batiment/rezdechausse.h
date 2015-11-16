@@ -11,7 +11,7 @@
 class Rezdechausse : public Interface_Ville
 {
 public:
-    Rezdechausse(Vector3D p0, Vector3D p1, Vector3D p2, Vector3D p3, float hauteur, BatParameter *par);
+    Rezdechausse(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par);
     Mesh generate();
 private:
     Mesh ourMesh;

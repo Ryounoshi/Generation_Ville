@@ -8,7 +8,7 @@ using namespace std;
 #define pReduction 40
 #define tailleRainure 0.01
 
-Etage::Etage(Vector3D p0, Vector3D p1, Vector3D p2, Vector3D p3, float hauteur, BatParameter *par, int noEtage, bool splited):_p0(p0),_p1(p1),_p2(p2),_p3(p3),_hauteur(hauteur),_par(par),_noEtage(noEtage),_splited(splited)
+Etage::Etage(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par, int noEtage, bool splited):_p0(p0),_p1(p1),_p2(p2),_p3(p3),_hauteur(hauteur),_par(par),_noEtage(noEtage),_splited(splited)
 {
     //cout << " E" << endl;
     longueur = p0.distance(p1);
