@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <iostream>
 
+#define XY(p)   p.x, p.y
+
 //! \class Vector2D Vector2D.h
 //! \brief Cette classe définit des vecteurs et des sommets dans l'espace.
 class Vector2D

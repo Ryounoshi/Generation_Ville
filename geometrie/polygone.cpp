@@ -38,6 +38,26 @@ void Polygone::set(int i, const Vector2D& p)
     (*this)[i] = p;
 }
 
+std::vector<Vector2D> Polygone::getPoints() const
+{
+    std::vector<Vector2D> res;
+    int taille = nbPoints();
+    res.reserve(taille);
+    for(int i = 0;  i < taille; i++)
+        res.push_back(get(i));
+    return res;
+}
+
+std::vector<Vector3D> Polygone::getPoints3D() const
+{
+    std::vector<Vector3D> res;
+    int taille = nbPoints();
+    res.reserve(taille);
+    for(int i = 0;  i < taille; i++)
+        res.push_back(Vector3D(XY(get(i)),0));
+    return res;
+}
+
 /*********************************************************************************************/
 
 //préfère le mettre dans un fichier de calcul à part.

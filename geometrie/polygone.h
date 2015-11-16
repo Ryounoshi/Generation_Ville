@@ -2,9 +2,11 @@
 #define POLYGONE_H
 
 #include "vector2d.h"
+#include "vector3d.h"
 #include <iostream>
 #include <stdlib.h>     /* srand, rand */
 #include <cstdlib>      //RAND_MAX
+#include <vector>
 
 class Polygone
 {
@@ -25,7 +27,8 @@ public:
 
     virtual int nbPoints() const = 0;
 
-
+    std::vector<Vector2D> getPoints() const;
+    std::vector<Vector3D> getPoints3D() const;
 
 protected:
     void shrinkPoly(int nb, float l);

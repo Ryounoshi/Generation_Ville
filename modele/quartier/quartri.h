@@ -24,15 +24,15 @@ public:
     void split();
     std::pair<Vector2D, Vector2D> traiteCote(const Vector2D&, const Vector2D&, const Vector2D&);
 
+    void shrink(float f);
+    float area() const;
+    float perimetre() const;
+
 
     std::vector<Vector2D> getPoints() const;
     std::vector<Vector3D> getPoints3D() const;
 
-
-
-    void shrink(float f);
-    float area() const;
-    float perimetre() const;
+    Mesh generate();
 };
 
 #endif // QUARTRI_H

@@ -22,31 +22,33 @@ protected:
 public :
 
     Mesh(){}
-    Mesh(std::vector<Vector3D> listvertex, std::vector<unsigned int> listface): vertex(listvertex), face(listface)  {}
+    Mesh(const std::vector<Vector3D>& listvertex, const std::vector<unsigned int>& listface): vertex(listvertex), face(listface)  {}
 
     ~Mesh(){}
 
     void merge(const Mesh &delta);
 
-    std::vector<Vector3D> getvertex() const;
-    std::vector<unsigned int> getface() const;
-    Vector3D getvertex(int at) const;
-    unsigned int getface(int at) const;
+    std::vector<Vector3D> getVertex() const;
+    std::vector<unsigned int> getFace() const;
+    Vector3D getVertex(int at) const;
+    unsigned int getFace(int at) const;
     void setVertex(const std::vector<Vector3D> &vertex){this->vertex = vertex;}
     void setFace(const std::vector<unsigned int> &face){this->face = face;}
     void addVertex(const Vector3D& _vertex);
     void addFace(const unsigned int& refPointFace1, const unsigned int& refPointFace2, const unsigned int& refPointFace3);
-    size_t nbvertex() const;
-    size_t nbface() const;
+    size_t nbVertex() const;
+    size_t nbFace() const;
 
 	void translation(const float x, const float y, const float z);
-    void rotation(const Vector3D T);
+    void rotation(const Vector3D& T);
     void rotation(const float rX, const float rY, const float rZ);
-    void localrotation(const float rX, const float rY, const float rZ);
 
     void localrescale(float scale);
     void localrescaleXY(float scale);
     void rescale(float scale);
+
+
+    void addTriangle(const Vector3D& a, const Vector3D& b, const Vector3D& c);
 
     //********* Génération Primitive ***********//
     #define DEFAULT_RESOLUTION 32

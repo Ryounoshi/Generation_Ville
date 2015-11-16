@@ -72,3 +72,14 @@ void TerrainBase::shrink(float f)
     for(Quartier* q: quartiers)
         q->shrink(f);
 }
+
+Mesh TerrainBase::generate()
+{
+    if(quartiers.empty())
+        return Mesh();
+
+    Mesh m = quartiers[0]->generate();
+    for(size_t i = 1;  i < quartiers.size();   i++)
+        m.merge(quartiers[i]->generate());
+    return m;
+}

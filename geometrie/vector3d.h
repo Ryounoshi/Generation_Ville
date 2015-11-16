@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cmath>
 
+#define XYZ(p)   p.x, p.y, p.z
 
 class Vector3D
 {

@@ -202,7 +202,7 @@ inline void QuarPenta::decoupePoint2(float perim2, int id1, int& id2, float& t2,
 
 void QuarPenta::shrink(float l)
 {
-    //return Pentagone::shrink(l);
+    Pentagone::shrink(l);
 }
 float QuarPenta::area() const
 {
@@ -217,4 +217,21 @@ std::pair<Quartier*,Quartier*> QuarPenta::decoupeSimple()
 {
     std::pair<Quartier*,Quartier*> res;
     return res;
+}
+
+
+
+std::vector<Vector2D> QuarPenta::getPoints() const
+{
+    return Polygone::getPoints();
+}
+std::vector<Vector3D> QuarPenta::getPoints3D() const
+{
+    return Polygone::getPoints3D();
+}
+
+
+Mesh QuarPenta::generate()
+{
+    return Mesh();
 }

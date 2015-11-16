@@ -20,6 +20,12 @@ public:
     void shrink(float f);
     float area() const;
     float perimetre() const;
+
+
+    std::vector<Vector2D> getPoints() const;
+    std::vector<Vector3D> getPoints3D() const;
+
+    Mesh generate();
 };
 
 #endif // QUARQUAD_H
