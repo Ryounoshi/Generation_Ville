@@ -4,12 +4,11 @@ Mesh PaterneQuadResidence::generate()
 {
 
     Mesh m1;
-
     faireTrotoir(m1);
     faireSol(m1);
 
     Quadrangle centre = *this, notreQuadrangle = *this;
-    centre.shrink(largeurBatiment);
+    centre.shrink(_par->largeurBatiment);
 
     for(int i=0; i<4; i++){
         Vector2D shrink = centre[i] - notreQuadrangle[i];
