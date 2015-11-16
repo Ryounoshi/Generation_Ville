@@ -63,7 +63,8 @@ Mesh PaterneQuadResidence::paternQuatreBatiment(){
     Mesh retour;
 
     Quadrangle centre = *this, notreQuadrangle = *this;
-    centre.shrink(_par->largeurBatiment);
+
+    centre.shrink( (cotePlusCourt()/2)-_par->largeurRuelle );
 
     for(int i=0; i<4; i++){
         Vector2D shrink = centre[i] - notreQuadrangle[i];
@@ -94,7 +95,8 @@ Mesh PaterneQuadResidence::paternTroisBatiment(){
     Mesh retour;
 
     Quadrangle centre = *this, notreQuadrangle = *this;
-    centre.shrink(_par->largeurBatiment);
+
+    centre.shrink( (cotePlusCourt()/2)-_par->largeurRuelle );
 
     Vector2D p0p3 = notreQuadrangle[3] - notreQuadrangle[0];
     Vector2D p1p2 = notreQuadrangle[2] - notreQuadrangle[1];
@@ -154,11 +156,11 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
     Mesh retour;
 
     Quadrangle centre = *this, notreQuadrangle = *this;
-    centre.shrink(_par->largeurBatiment);
+
+    centre.shrink( (cotePlusCourt()/3) );
 
     Vector2D p1p0 = notreQuadrangle[0] - notreQuadrangle[1];
-
-    Vector2D p3p2 = notreQuadrangle[2] - notreQuadrangle[3];
+    Vector2D p3p2 = notreQuadrangle[2] - notreQuadrangle[3];    
 
     p1p0 = p1p0.normalise();
     p3p2 = p3p2.normalise();
@@ -166,17 +168,23 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
     float dp1p0 = (centre[1]-notreQuadrangle[1]).scalareProduct(p1p0);
     float dp3p2 = (centre[3]-notreQuadrangle[3]).scalareProduct(p3p2);
 
+
+
+    Vector2D p2p1 = notreQuadrangle[1] - notreQuadrangle[2];
+    p2p1 = p2p1.normalise();
+
     Vector2D p2B1 = notreQuadrangle[1] + p1p0*dp1p0;
-    Batiment b = Batiment(Vector3D(notreQuadrangle[0].x, notreQuadrangle[0].y, 0),
-            Vector3D(p2B1.x, p2B1.y, 0),
-            Vector3D(centre[1].x, centre[1].y, 0),
-            Vector3D(centre[0].x, centre[0].y, 0),
-            0.7,
-            _par);
+    Batiment b = Batiment(
+                Vector3D(notreQuadrangle[0].x + (-p1p0.x*(_par->largeurRuelle/2)) , notreQuadrangle[0].y + (-p1p0.y*(_par->largeurRuelle/2)), 0),
+                Vector3D(p2B1.x, p2B1.y, 0),
+                Vector3D(centre[1].x, centre[1].y , 0),
+                Vector3D(centre[0].x + (-p1p0.x*(_par->largeurRuelle/2)), centre[0].y + (-p1p0.y*(_par->largeurRuelle/2)), 0),
+                0.7,
+                _par);
     retour.merge( b.generate() );
 
-    b = Batiment(Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, 0),
-            Vector3D(notreQuadrangle[2].x, notreQuadrangle[2].y, 0),
+    b = Batiment(Vector3D(notreQuadrangle[1].x + (p2p1.x*(_par->largeurRuelle/2)), notreQuadrangle[1].y + (p2p1.y*(_par->largeurRuelle/2)), 0),
+            Vector3D(notreQuadrangle[2].x + (p2p1.x*(_par->largeurRuelle/2)), notreQuadrangle[2].y + (p2p1.y*(_par->largeurRuelle/2)), 0),
             Vector3D(centre[2].x, centre[2].y, 0),
             Vector3D(p2B1.x, p2B1.y, 0),
             0.7,
@@ -184,18 +192,20 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
     retour.merge( b.generate() );
 
 
+    Vector2D p0p3 = notreQuadrangle[3] - notreQuadrangle[0];
+    p0p3 = p0p3.normalise();
 
     Vector2D p2B3 = notreQuadrangle[3] + p3p2*dp3p2;
-    b = Batiment(Vector3D(notreQuadrangle[2].x, notreQuadrangle[2].y, 0),
+    b = Batiment(Vector3D(notreQuadrangle[2].x + (-p3p2.x*(_par->largeurRuelle/2)), notreQuadrangle[2].y + (-p3p2.y*(_par->largeurRuelle/2)), 0),
             Vector3D(p2B3.x, p2B3.y, 0),
             Vector3D(centre[3].x, centre[3].y, 0),
-            Vector3D(centre[2].x, centre[2].y, 0),
+            Vector3D(centre[2].x + (-p3p2.x*(_par->largeurRuelle/2)), centre[2].y + (-p3p2.y*(_par->largeurRuelle/2)), 0),
             0.7,
             _par);
     retour.merge( b.generate() );
 
-    b = Batiment(Vector3D(notreQuadrangle[3].x, notreQuadrangle[3].y, 0),
-            Vector3D(notreQuadrangle[0].x, notreQuadrangle[0].y, 0),
+    b = Batiment(Vector3D(notreQuadrangle[3].x + (p0p3.x*(_par->largeurRuelle/2)), notreQuadrangle[3].y + (p0p3.x*(_par->largeurRuelle/2)), 0),
+            Vector3D(notreQuadrangle[0].x + (p0p3.x*(_par->largeurRuelle/2)), notreQuadrangle[0].y + (p0p3.x*(_par->largeurRuelle/2)), 0),
             Vector3D(centre[0].x, centre[0].y, 0),
             Vector3D(p2B3.x, p2B3.y, 0),
             0.7,
@@ -239,3 +249,16 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiametre(){
     return retour;
 }
 
+float PaterneQuadResidence::cotePlusCourt() const
+{
+    float retour = FLT_MAX;
+
+    for(int i=0; i<4; i++){
+        float d = ( (*this)[i]-(*this)[(i+1)%4] ).getNorm();
+        if(d < retour){
+            retour = d;
+        }
+    }
+
+    return retour;
+}

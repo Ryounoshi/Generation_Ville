@@ -3,8 +3,9 @@
 #include "geometrie/vector3d.h"
 #define DEFAULT_MAX_ETAGE 12
 #define DEFAULT_INFLUENCE_CENTREVILLE 1
-#define DEFAULT_LARGEUR_TROTOIR 2
-#define DEFAULT_LARGEUR_BATIMENT 5
+#define DEFAULT_LARGEUR_TROTOIR 1
+#define DEFAULT_LARGEUR_BATIMENT 3
+#define DEFAULT_LARGEUR_RUELLE 1
 
 
 class BatParameter
@@ -19,6 +20,7 @@ public:
 
     float largeurTrotoir = DEFAULT_LARGEUR_TROTOIR;
     float largeurBatiment = DEFAULT_LARGEUR_BATIMENT;
+    float largeurRuelle = DEFAULT_LARGEUR_RUELLE;
 
     //à changer de place !!! très moche ici !!!
     Vector3D hauteurEtageLePlusHaut;
