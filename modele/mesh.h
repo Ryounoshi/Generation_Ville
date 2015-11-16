@@ -42,6 +42,7 @@ public :
 	void translation(const float x, const float y, const float z);
     void rotation(const Vector3D& T);
     void rotation(const float rX, const float rY, const float rZ);
+    void localRotation(const float rX, const float rY, const float rZ);
 
     void localrescale(float scale);
     void localrescaleXY(float scale);

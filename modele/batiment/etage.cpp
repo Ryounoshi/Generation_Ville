@@ -4,11 +4,12 @@
 using namespace std;
 #include "toit.h"
 #define scaletop 0.9
-#define pToit 80
+#define pToit 90
 #define pReduction 40
 #define tailleRainure 0.01
+#define rotation 0.05
 
-Etage::Etage(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par, int noEtage, bool splited):_p0(p0),_p1(p1),_p2(p2),_p3(p3),_hauteur(hauteur),_par(par),_noEtage(noEtage),_splited(splited)
+Etage::Etage(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par, int noEtage, bool splited, int twisted):_p0(p0),_p1(p1),_p2(p2),_p3(p3),_hauteur(hauteur),_par(par),_noEtage(noEtage),_splited(splited),_twisted(twisted)
 {
     //cout << " E" << endl;
     longueur = distance(p0, p1);
@@ -32,14 +33,20 @@ Mesh Etage::generate(){
     Vector3D newp2(_p2.x,_p2.y,_p2.z+_hauteur);
     Vector3D newp3(_p3.x,_p3.y,_p3.z+_hauteur);
     int proba = rand()%100;
-    if(_noEtage > (_par->maxEtage - (dist*_par->influenceCentreVille)/(_par->influenceCentreVille*_par->influenceCentreVille))){
+    //if(_noEtage > (_par->maxEtage - (dist*_par->influenceCentreVille)/(_par->influenceCentreVille*_par->influenceCentreVille))){
+    float bornemax = _par->maxEtage;
+    float tmp = dist / ((_par->influenceCentreVille*20)/_par->maxEtage);
+    bornemax -= tmp;
+    if(_noEtage > bornemax){
         Toit toit(newp0,newp1,newp2,newp3, _hauteur, _par);
         _par->updateEtageLePlusHaut(Vector3D(),_noEtage);
-        ourMesh.merge(toit.generate());
+        Mesh m = toit.generate();
+        ourMesh.merge(m);
         return ourMesh;
     }else if(proba<=pReduction){
         if((rand()%100 < _par->splitPourcent) && !_splited){
             if(longueur>largeur*1.5){
+                int twist = rand()%3;
                 Vector3D mid1;
                 mid1.x = (_p0.x+_p1.x)/2;
                 mid1.y = (_p0.y+_p1.y)/2;
@@ -51,22 +58,24 @@ Mesh Etage::generate(){
                             Vector3D(mid1.x,mid1.y,_p1.z+_hauteur),
                             Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
                             Vector3D(_p3.x,_p3.y,_p3.z+_hauteur),
-                            _hauteur,_par,_noEtage+1,true);
+                            _hauteur,_par,_noEtage+1,true,twist);
                 Etage etage2(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                             Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                             Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
                             Vector3D(mid2.x,mid2.y,_p3.z+_hauteur),
-                            _hauteur,_par,_noEtage+1,true);
+                            _hauteur,_par,_noEtage+1,true,twist);
                 Mesh m1 = etage1.generate();
                 Mesh m2 = etage2.generate();
                 m1.localrescaleXY(0.9);
                 m2.localrescaleXY(0.9);
+                twister(m1);
+                twister(m2);
                 ourMesh.merge(m1);
                 ourMesh.merge(m2);
-
                 return ourMesh;
 
             }else if(largeur>longueur*1.5){
+                int twist = rand()%3;
                 Vector3D mid1;
                 mid1.x = (_p0.x+_p3.x)/2;
                 mid1.y = (_p0.y+_p3.y)/2;
@@ -78,41 +87,57 @@ Mesh Etage::generate(){
                             Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                             Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
                             Vector3D(mid1.x,mid1.y,_p3.z+_hauteur),
-                            _hauteur,_par,_noEtage+1,true);
+                            _hauteur,_par,_noEtage+1,true,twist);
                 Etage etage2(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                             Vector3D(mid2.x,mid2.y,_p1.z+_hauteur),
                             Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
                             Vector3D(_p3.x,_p3.y,_p3.z+_hauteur),
-                            _hauteur,_par,_noEtage+1,true);
+                            _hauteur,_par,_noEtage+1,true,twist);
                 Mesh m1 = etage1.generate();
                 Mesh m2 = etage2.generate();
                 m1.localrescaleXY(0.9);
                 m2.localrescaleXY(0.9);
+                twister(m1);
+                twister(m2);
                 ourMesh.merge(m1);
                 ourMesh.merge(m2);
-
                 return ourMesh;
 
             }else{
-                Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,_noEtage+1,_splited);
-                ourMesh.merge(etage.generate());
+                Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,_noEtage+1,_splited,_twisted);
+                Mesh m = etage.generate();
+                twister(m);
+                ourMesh.merge(m);
                 return ourMesh;
             }
         }else{
-            Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,_noEtage+1,_splited);
-            ourMesh.merge(etage.generate());
+            Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,_noEtage+1,_splited,_twisted);
+            Mesh m = etage.generate();
+            twister(m);
+            ourMesh.merge(m);
+
             return ourMesh;
         }
     }else if(proba>pReduction && proba<=pToit){ //on fait un etage plus petit
-        Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,_noEtage+1,_splited);
+        Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,_noEtage+1,_splited,_twisted);
         Mesh m = etage.generate();
         m.localrescaleXY(0.9);
+        twister(m);
         ourMesh.merge(m);
         return ourMesh;
     }else{
         _par->updateEtageLePlusHaut(Vector3D(),_noEtage);
         Toit toit(newp0,newp1,newp2,newp3, _hauteur, _par);
-        ourMesh.merge(toit.generate());
+        Mesh m = toit.generate();
+        ourMesh.merge(m);
         return ourMesh;
+    }
+}
+
+void Etage::twister(Mesh &m){
+    if(_twisted == 1){
+        m.localRotation(0,0,rotation);
+    }else if(_twisted == 2){
+        m.localRotation(0,0,-rotation);
     }
 }
