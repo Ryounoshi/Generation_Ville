@@ -309,6 +309,7 @@ void myWindow::paintGL()
 
         qDebug()<<_mesh.nbFace();
 
+        /*
         Mesh m1;
         //for(float i=-largeur/2;i<largeur/2;i+=3.5){
             //for(float j=-longueur/2; j<longueur/2; j+=3.5){
@@ -357,6 +358,7 @@ void myWindow::paintGL()
             }
         }        
         _mesh = m1;
+        */
 
         /*
         TerrainBase base(1000,1000);
@@ -365,8 +367,8 @@ void myWindow::paintGL()
 
         }*/
 
-        //PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,10), Vector2D(10,10), Vector2D(10,0), 2.5, &_par);
-        //_mesh = p1.generate();
+        PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,15), Vector2D(15,15), Vector2D(15,0), &_par);
+        _mesh = p1.generate();
         //ObjManager::writeToObj("test1.obj", m1.getvertex(), m1.getface());
         meshUpToDate = true;
         frame->update_values();
