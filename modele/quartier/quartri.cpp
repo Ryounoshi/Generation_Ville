@@ -239,12 +239,12 @@ void QuarTri::split()
 {
     std::array<Vector2D, 3> pts = { p0, p1, p2 };
     shuffle(pts.begin(), pts.end(), generator); // je ne sais pas si les points d'origine ont un pattern
-    //
-    //        pts[2]
-    //         |\
-    //         | \
-    //  pts[1] |__\ pts[0]
-    //
+    /*
+          pp3
+           |\
+           | \
+       pp2 |__\ pp1
+    */
 
     //traite le coté pts[1]-pts[0]
     std::pair<Vector2D, Vector2D> tronq = traiteCote(pts[1], pts[0], pts[2]);
@@ -262,12 +262,12 @@ void QuarTri::split()
  */
 std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vector2D& pp1, const Vector2D& pp3)
 {
-    //
-    //     pp3
-    //      |\
-    //      | \
-    //  pp2 |__\ pp1
-    //
+    /*
+          pp3
+           |\
+           | \
+       pp2 |__\ pp1
+    */
     float height3 = ((pp3 - pp1) / (pp2 - pp1)).getNorm() / (pp2 - pp1).getNorm();
     if (height3 <= 2 * MIN_DIM_BAT)
         return std::pair<Vector2D, Vector2D>(pp1, pp2); // ou exclure la petite bande ?
