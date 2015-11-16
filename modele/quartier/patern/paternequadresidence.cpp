@@ -4,6 +4,10 @@ Mesh PaterneQuadResidence::generate()
 {
 
     Mesh m1;
+
+    faireTrotoir(m1);
+    faireSol(m1);
+
     Quadrangle centre = *this, notreQuadrangle = *this;
     centre.shrink(largeurBatiment);
 
@@ -30,5 +34,36 @@ Mesh PaterneQuadResidence::generate()
 
     return m1;
 
+}
+
+void PaterneQuadResidence::faireTrotoir(Mesh& m){
+
+    Quadrangle centre = *this, notreQuadrangle = *this;
+    centre.shrink(_par->largeurTrotoir);
+
+    for(int i=0; i<4; i++){
+        m.addTriangle( Vector3D(notreQuadrangle[i].x, notreQuadrangle[i].y, 0),
+                            Vector3D(notreQuadrangle[(i-1)%4].x, notreQuadrangle[(i-1)%4].y, 0),
+                            Vector3D(centre[i].x, centre[i].y, 0) );
+
+        m.addTriangle( Vector3D(centre[i].x, centre[i].y, 0),
+                            Vector3D(notreQuadrangle[(i-1)%4].x, notreQuadrangle[(i-1)%4].y, 0),
+                            Vector3D(centre[(i-1)%4].x, centre[(i-1)%4].y, 0) );
+    }
+
+    this->shrink(_par->largeurTrotoir);
+}
+
+void PaterneQuadResidence::faireSol(Mesh &m){
+
+    Quadrangle notreQuadrangle = *this;
+
+    m.addTriangle( Vector3D(notreQuadrangle[0].x, notreQuadrangle[0].y, 0),
+                        Vector3D(notreQuadrangle[3].x, notreQuadrangle[3].y, 0),
+                        Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, 0) );
+
+    m.addTriangle( Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, 0),
+                        Vector3D(notreQuadrangle[3].x, notreQuadrangle[3].y, 0),
+                        Vector3D(notreQuadrangle[2].x, notreQuadrangle[2].y, 0) );
 }
 
