@@ -9,7 +9,7 @@
 class Etage : public Interface_Ville
 {
 public:
-    Etage(Vector3D p0, Vector3D p1, Vector3D p2, Vector3D p3, float hauteur, BatParameter *par, int noEtage, bool splited);
+    Etage(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par, int noEtage, bool splited);
     Mesh generate();
 private:
     Mesh ourMesh;

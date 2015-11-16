@@ -6,7 +6,7 @@ using namespace std;
 #define scaletop 0.9
 #define tailleRainure 0.01
 
-Rezdechausse::Rezdechausse(Vector3D p0, Vector3D p1, Vector3D p2, Vector3D p3, float hauteur, BatParameter *par):_p0(p0),_p1(p1),_p2(p2),_p3(p3),_hauteur(hauteur),_par(par)
+Rezdechausse::Rezdechausse(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par):_p0(p0),_p1(p1),_p2(p2),_p3(p3),_hauteur(hauteur),_par(par)
 {
     longueur = p0.distance(p1);
     largeur = p0.distance(p3);
