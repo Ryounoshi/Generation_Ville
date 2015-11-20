@@ -8,8 +8,8 @@ using namespace std;
 
 Rezdechausse::Rezdechausse(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par):_p0(p0),_p1(p1),_p2(p2),_p3(p3),_hauteur(hauteur),_par(par)
 {
-    longueur = p0.distance(p1);
-    largeur = p0.distance(p3);
+    longueur = distance(p0,p1);
+    largeur = distance(p0,p3);
     //cout << " R" << endl;
     ourMesh = Mesh::createQuadrangle3D(_p0,_p1,_p2,_p3,_hauteur*(1-tailleRainure));
     Mesh top = Mesh::createQuadrangle3D(Vector3D(_p0.x,_p0.y,p0.z+_hauteur*(1-tailleRainure)),

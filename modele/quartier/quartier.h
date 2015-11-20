@@ -10,7 +10,7 @@
 #include "modele/batiment/batiment.h"
 
 #define MIN_COTE 10
-#define AIRE_QUARTIER_MAX 1000
+#define AIRE_QUARTIER_MAX 20000
 
 class Quartier
 {

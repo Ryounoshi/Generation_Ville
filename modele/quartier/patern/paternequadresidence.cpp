@@ -71,7 +71,7 @@ Mesh PaterneQuadResidence::paternQuatreBatiment(){
         Vector2D pIpIm1 = notreQuadrangle[(i-1)%4] - notreQuadrangle[i];
         Vector2D pIpIp1 = notreQuadrangle[(i+1)%4] - notreQuadrangle[i];
 
-        pIpIm1 = pIpIm1.normalise(); pIpIp1 = pIpIp1.normalise();
+        pIpIm1.normalise(); pIpIp1.normalise();
 
         float dpIpIm1 = shrink.scalareProduct(pIpIm1);
         float dpIpIp1 = shrink.scalareProduct(pIpIp1);
@@ -107,9 +107,9 @@ Mesh PaterneQuadResidence::paternTroisBatiment(){
     Vector2D p3p2 = notreQuadrangle[2] - notreQuadrangle[3];
     Vector2D p3p0 = notreQuadrangle[0] - notreQuadrangle[3];
 
-    p0p3 = p0p3.normalise(); p1p2 = p1p2.normalise();
-    p2p1 = p2p1.normalise(); p2p3 = p2p3.normalise();
-    p3p2 = p3p2.normalise(); p3p0 = p3p0.normalise();
+    p0p3.normalise(); p1p2.normalise();
+    p2p1.normalise(); p2p3.normalise();
+    p3p2.normalise(); p3p0.normalise();
 
     float dp0p3 = (centre[0]-notreQuadrangle[0]).scalareProduct(p0p3);
     float dp1p2 = (centre[1]-notreQuadrangle[1]).scalareProduct(p1p2);
@@ -162,8 +162,8 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
     Vector2D p1p0 = notreQuadrangle[0] - notreQuadrangle[1];
     Vector2D p3p2 = notreQuadrangle[2] - notreQuadrangle[3];    
 
-    p1p0 = p1p0.normalise();
-    p3p2 = p3p2.normalise();
+    p1p0.normalise();
+    p3p2.normalise();
 
     float dp1p0 = (centre[1]-notreQuadrangle[1]).scalareProduct(p1p0);
     float dp3p2 = (centre[3]-notreQuadrangle[3]).scalareProduct(p3p2);
@@ -171,7 +171,7 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
 
 
     Vector2D p2p1 = notreQuadrangle[1] - notreQuadrangle[2];
-    p2p1 = p2p1.normalise();
+    p2p1.normalise();
 
     Vector2D p2B1 = notreQuadrangle[1] + p1p0*dp1p0;
     Batiment b = Batiment(
@@ -193,7 +193,7 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
 
 
     Vector2D p0p3 = notreQuadrangle[3] - notreQuadrangle[0];
-    p0p3 = p0p3.normalise();
+    p0p3.normalise();
 
     Vector2D p2B3 = notreQuadrangle[3] + p3p2*dp3p2;
     b = Batiment(Vector3D(notreQuadrangle[2].x + (-p3p2.x*(_par->largeurRuelle/2)), notreQuadrangle[2].y + (-p3p2.y*(_par->largeurRuelle/2)), 0),

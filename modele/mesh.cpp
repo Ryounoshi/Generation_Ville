@@ -106,7 +106,7 @@ void Mesh::localRotation(const float rX, const float rY, const float rZ){
         min = p.z < min ? p.z : min;
     }
     gravite /= vertex.size();
-    gravite.changeZ(min);
+    gravite.z = min;
     translation(-gravite.x,-gravite.y,-gravite.z);
     for(size_t i=0; i<vertex.size(); i++){
         if(rX != 0)
@@ -134,7 +134,7 @@ void Mesh::localrescale(float scale){
         min = p.z < min ? p.z : min;
     }
     gravite /= vertex.size();
-    gravite.changeZ(min);
+    gravite.z = min;
     translation(-gravite.x,-gravite.y,-gravite.z);
     for(Vector3D& p: vertex){
         p *= scale;

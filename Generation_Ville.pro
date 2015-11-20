@@ -8,6 +8,7 @@ QT += opengl
 LIBS += -lopengl32 -lglu32
 
 SOURCES += main.cpp \
+    geometrie/vector2d.cpp \
     geometrie/vector3d.cpp \
     geometrie/box.cpp \
     import_export/objmanager.cpp \

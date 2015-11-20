@@ -184,7 +184,7 @@ void myWindow::keyPressEvent(QKeyEvent *keyEvent)
         //reset params
         case Qt::Key_N:
             _par.influenceCentreVille = DEFAULT_INFLUENCE_CENTREVILLE;
-            _par._centreVille.change(0,0,0);
+            _par._centreVille.set(0,0,0);
             _par.maxEtage = DEFAULT_MAX_ETAGE;
             meshUpToDate = false;
         break;

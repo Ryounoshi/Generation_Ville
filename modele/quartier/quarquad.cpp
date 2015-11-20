@@ -13,34 +13,47 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupeSimple()
 {
     std::pair<Quartier*,Quartier*> res;
 
-    int type = rand()%4;
+    int type;
     //0 = a->c      1 = milieu ab->milieu cd    2 = b->d    3 = milieu bc->milieu da
+
+    //0 = a->milieu bc      1 = milieu ab->milieu bc    2 = milieu ab->c    3 = milieu ab->milieu ca    4 = b->milieu ca    5 = milieu bc->milieu ca
+    float   ab = distance(get(0),get(1)),
+            bc = distance(get(1),get(2)),
+            cd = distance(get(2),get(3)),
+            da = distance(get(3),get(0));
+    float perim5 = (ab+bc+cd+da)/5;
+    do    {
+        type = rand()%4;
+    }
+    while(( (ab < perim5 || cd < perim5) && (type == 1) ) ||
+          ( (bc < perim5 || da < perim5) && (type == 3) )
+    );
 
     switch(type)
     {
         case 0:
-            res.first = new QuarTri(get(0), get(1), get(2), 0);
-            res.second = new QuarTri(get(0), get(2), get(3), 0);
+            res.first = new QuarTri(get(0), get(1), get(2), _par);
+            res.second = new QuarTri(get(0), get(2), get(3), _par);
             break;
         case 1:
             {
                 Vector2D mab = get(0) + (get(1)-get(0))/2,
                         mcd = get(2) + (get(3)-get(2))/2;
-                res.first = new QuarQuad(mab, get(1), get(2), mcd, 0);
-                res.second = new QuarQuad(mab, mcd, get(3), get(0), 0);
+                res.first = new QuarQuad(mab, get(1), get(2), mcd, _par);
+                res.second = new QuarQuad(mab, mcd, get(3), get(0), _par);
             }
             break;
 
         case 2:
-            res.first = new QuarTri(get(1), get(2), get(3), 0);
-            res.second = new QuarTri(get(1), get(3), get(0), 0);
+            res.first = new QuarTri(get(1), get(2), get(3), _par);
+            res.second = new QuarTri(get(1), get(3), get(0), _par);
             break;
         case 3:
             {
                 Vector2D mbc = get(1) + (get(2)-get(1))/2,
                         mda = get(3) + (get(0)-get(3))/2;
-                res.first = new QuarQuad(mbc, get(2), get(3), mda, 0);
-                res.second = new QuarQuad(mbc, mda, get(0), get(1), 0);
+                res.first = new QuarQuad(mbc, get(2), get(3), mda, _par);
+                res.second = new QuarQuad(mbc, mda, get(0), get(1), _par);
             }
             break;
     }
@@ -77,25 +90,25 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupe()
     {
         res.first = new QuarTri(newP1,
                             get(id1+1),
-                            newP2, 0);
+                            newP2, _par);
 
         res.second = new QuarPenta(newP1,
                               newP2,
                               get(id2+1),
                               get(id2+2),
-                              get(id2+3), 0);
+                              get(id2+3), _par);
     }
     else if(typeDec == 2)
     {
         res.first = new QuarQuad(newP1,
                              get(id1+1),
                              get(id1+2),
-                             newP2, 0);
+                             newP2, _par);
 
         res.second = new QuarQuad(newP1,
                               newP2,
                               get(id2+1),
-                              get(id2+2), 0);
+                              get(id2+2), _par);
     }
     else
     {
@@ -103,11 +116,11 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupe()
                               get(id1+1),
                               get(id1+2),
                               get(id1+3),
-                              newP2, 0);
+                              newP2, _par);
 
         res.second = new QuarTri(newP1,
                              newP2,
-                             get(id1), 0);
+                             get(id1), _par);
     }
     return res;
 }
@@ -273,5 +286,13 @@ std::vector<Vector3D> QuarQuad::getPoints3D() const
 
 Mesh QuarQuad::generate()
 {
-    return Mesh();
+    std::vector<Vector3D> v = getPoints3D();
+    Mesh m;
+    m.addTriangle(v[0],v[1],v[2]);
+    m.addVertex(v[3]);
+    m.addFace(0,2,3);
+    for (Batiment& bat : batiments)
+        m.merge(bat.generate());
+
+    return m;
 }

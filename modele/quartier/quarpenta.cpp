@@ -41,13 +41,13 @@ std::pair<Quartier*,Quartier*> QuarPenta::decoupe()
         res.first = new QuarQuad(newP1,
                              get(id1+1),
                              get(id1+2),
-                             newP2, 0);
+                             newP2, _par);
 
         res.second = new QuarPenta(newP1,
                               newP2,
                               get(id2+1),
                               get(id2+2),
-                              get(id2+3),0);
+                              get(id2+3),_par);
     }
     else
     {
@@ -55,12 +55,12 @@ std::pair<Quartier*,Quartier*> QuarPenta::decoupe()
                              get(id1+1),
                              get(id1+2),
                              get(id1+3),
-                             newP2,0);
+                             newP2,_par);
 
         res.second = new QuarQuad(newP1,
                               newP2,
                               get(id2+1),
-                              get(id2+2),0);
+                              get(id2+2),_par);
     }
 
     return res;

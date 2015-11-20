@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     /*
-    Mesh m1;ss
+    Mesh m1;
     int largeur,longueur;
     largeur = 40;
     longueur = 40;
@@ -45,12 +45,16 @@ int main(int argc, char *argv[])
     PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,10), Vector2D(10,10), Vector2D(10,0), 2.5);
     m1 = p1.generate();
 */
-    myWindow glWin;
+    /*myWindow glWin;
     glWin.show();
-    return app.exec();
-    //TerrainBase base(1000,1000);
-    //base.decoupeSimple();
-    //base.shrink(1.f);
+    return app.exec();*/
+    TerrainBase base(4000,4000, 0);
+    base.decoupeSimple();
+    base.shrink(0.f);
+    base.supprPetitQuartier(100);
+    Mesh m = base.generate();
+    ObjManager::writeToObj("testTerrain.obj", m.getVertex(), m.getFace());
+
     return 0;
 }
 

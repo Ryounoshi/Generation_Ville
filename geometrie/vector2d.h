@@ -1,292 +1,268 @@
-#ifndef VEC2_H
-#define VEC2_H
-
+#ifndef VECTOR2D_H
+#define VECTOR2D_H
 #include <math.h>
-#include <stdlib.h>
 #include <iostream>
 
-#define XY(p)   p.x, p.y
+
+#define XY(p)  p.x, p.y
 
 //! \class Vector2D Vector2D.h
 //! \brief Cette classe définit des vecteurs et des sommets dans l'espace.
 class Vector2D
 {
 public:
-      float x,y; //!< Coordinates
+    float x,y; //!< Coordinates
 
-      Vector2D(): x(0), y(0) { } //! Empty
-      Vector2D(float a, float b) { x=a; y=b; }
-      Vector2D( Vector2D const& v){x = v.x; y = v.y;}
+    Vector2D(): Vector2D(0,0) { } //! Empty
+    Vector2D(float a, float b): x(a), y(b)  {}
+    Vector2D(const Vector2D& v): x(v.x), y(v.y)  {}
+    Vector2D(Vector2D&& v): x(v.x), y(v.y)  {}
 
-      float scalareProduct(const Vector2D & v) const{
-          return x*v.x+y*v.y;
-      }
+    void operator=(const Vector2D& v) {     x=v.x;  y=v.y;    }
+    void operator=(Vector2D&& v) {          x=v.x;  y=v.y;    }
 
-      /*c'est l'orthogonal
-       * Vector2D vectorProduct(){
-          return Vector2D(y, -x);
-      }*/
+    void set(float a, float b);
 
-      Vector2D negate(){
-          return Vector2D(-x, -y);
-      }
+    float scalareProduct(const Vector2D & v) const;
+    float dotProduct(const Vector2D& v) const;
 
-      Vector2D& normalise(){
-          float norme = getNorm();
-          if(norme == 0)
-          {
-              x = 1000; y = 1000;
-              return *this;  //////////////////////////////////////////////////////////////////////////
-          }
-          *this/=norme;
-          return *this;
-      }
+    //c'est l'orthogonal
+    Vector2D vectorProduct() const;
+    Vector2D crossProduct() const;
 
-      float getNorm() const{
-          return sqrt(x*x+y*y);
-      }
-      float getNorm2() const{
-          return x*x+y*y;
-      }
+    Vector2D negate() const;
 
-      // Functions to access Vector2D class components
-      float& operator[] (int i) {
-        if (i == 0)    return x;
-        else            return y;
-      }
+    float getNorm() const;
+    float getNorm2() const;
 
-      float operator[] (int i) const {
-        if (i == 0)    return x;
-        else            return y;
-      }
+    void normalise();
+    Vector2D normalised() const;
 
-      // Unary operators
-      Vector2D operator+ () const;
-      Vector2D operator- () const;
+    // Functions to access Vector2D class components
+    float& operator[] (int i);
+    float operator[] (int i) const;
 
-      // Assignment operators
-      Vector2D& operator+= (const Vector2D&);
-      Vector2D& operator-= (const Vector2D&);
-      Vector2D& operator*= (const Vector2D&);
-      Vector2D& operator/= (const Vector2D&);
-      Vector2D& operator*= (float);
-      Vector2D& operator/= (float);
+    // Unary operators
+    Vector2D operator+ () const;
+    Vector2D operator- () const;
 
-      // Binary operators
-      friend Vector2D operator+ (const Vector2D&, const Vector2D&);
-      friend Vector2D operator- (const Vector2D&, const Vector2D&);
+    // Boolean functions
+    int operator==(const Vector2D&) const;
+    int operator!=(const Vector2D&) const;
+    int operator<(const Vector2D&) const;
+    int operator>(const Vector2D&) const;
+    int operator<=(const Vector2D&) const;
+    int operator>=(const Vector2D&) const;
 
-      // Produit scalaire
-      friend Vector2D operator* (const Vector2D&, const Vector2D&);
+    // Assignment operators
+    void operator+= (const Vector2D&);
+    void operator+= (float);
+    void operator-= (const Vector2D&);
+    void operator-= (float);
+    void operator*= (const Vector2D&);
+    void operator*= (float);
+    void operator/= (const Vector2D&);
+    void operator/= (float);
 
-      friend Vector2D operator* (const Vector2D&, float);
-      friend Vector2D operator* (float, const Vector2D&);
-      friend Vector2D operator/ (const Vector2D&, float);
 
-      // Produit Vectortiel
-      friend Vector2D operator/ (const Vector2D&, const Vector2D&);
+    // Binary operators
+    friend Vector2D operator+ (const Vector2D&, const Vector2D&);
+    friend Vector2D operator+ (const Vector2D&, float);
+    friend Vector2D operator+ (float, const Vector2D&);
+    friend Vector2D operator- (const Vector2D&, const Vector2D&);
+    friend Vector2D operator- (const Vector2D&, float);
+    friend Vector2D operator- (float, const Vector2D&);
 
-      // Boolean functions
-      friend int operator==(const Vector2D&,const Vector2D&);
-      friend int operator!=(const Vector2D&,const Vector2D&);
-      friend int operator<(const Vector2D&,const Vector2D&);
-      friend int operator>(const Vector2D&,const Vector2D&);
-      //friend Vector2D min(const Vector2D&,const Vector2D&);
-      //friend Vector2D max(const Vector2D&,const Vector2D&);
+    friend Vector2D operator* (const Vector2D&, const Vector2D&);
+    friend Vector2D operator* (const Vector2D&, float);
+    friend Vector2D operator* (float, const Vector2D&);
+    friend Vector2D operator/ (const Vector2D&, const Vector2D&);
+    friend Vector2D operator/ (const Vector2D&, float);
+    friend Vector2D operator/ (float, const Vector2D&);
 
-      friend std::ostream& operator<<(std::ostream&,const Vector2D&);
 
-      friend Vector2D Orthogonal(const Vector2D&);
+    friend Vector2D min(const Vector2D&,const Vector2D&);
+    friend Vector2D max(const Vector2D&,const Vector2D&);
 
-      // Norm
-      friend float Norm(const Vector2D&);
-      friend float Norm2(const Vector2D&);
-      friend Vector2D Normalized(const Vector2D&);
 
-      friend float distance(const Vector2D& u, const Vector2D& v);
-      friend float distance2(const Vector2D& u, const Vector2D& v);
+    friend float dot(const Vector2D& u, const Vector2D& v);
+    friend Vector2D Orthogonal(const Vector2D&);
+
+    // Norm
+    friend float Norm(const Vector2D&);
+    friend float Norm2(const Vector2D&);
+    friend Vector2D Normalized(const Vector2D&);
+
+    friend float distance(const Vector2D& u, const Vector2D& v);
+    friend float distance2(const Vector2D& u, const Vector2D& v);
+
+    friend Vector2D Random2D();
+
+    friend std::ostream& operator<<(std::ostream& out, const Vector2D& v);
 };
 
-
-// Unary operators
-inline Vector2D Vector2D::operator+ () const
-{
-  return *this;
-}
-
-inline Vector2D Vector2D::operator- () const
-{
-    return Vector2D(-x,-y);
-}
-
-// Assignment unary operators
-inline Vector2D& Vector2D::operator+= (const Vector2D& u)
-{
-  x+=u.x; y+=u.y;
-  return *this;
-}
-
-inline Vector2D& Vector2D::operator-= (const Vector2D& u)
-{
-  x-=u.x; y-=u.y;
-  return *this;
-}
-
-inline Vector2D& Vector2D::operator*= (float a)
-{
-  x*=a; y*=a;
-  return *this;
-}
-
-inline Vector2D& Vector2D::operator/= (float a)
-{
-  x/=a; y/=a;
-  return *this;
-}
-
-inline Vector2D& Vector2D::operator*= (const Vector2D& u)
-{
-  x*=u.x; y*=u.y;
-  return *this;
-}
-
-inline Vector2D& Vector2D::operator/= (const Vector2D& u)
-{
-  x/=u.x; y/=u.y;
-  return *this;
-}
+/****************************************************************************************/
+/****************************************************************************************/
+/****************************************************************************************/
 
 // Binary operators
-inline Vector2D operator+ (const Vector2D& u, const Vector2D& v)
-{
-  return Vector2D(u.x+v.x,u.y+v.y);
-}
-
-inline Vector2D operator- (const Vector2D& u, const Vector2D& v)
-{
-  return Vector2D(u.x-v.x,u.y-v.y);
-}
-
-// Scalar product
-inline Vector2D operator* (const Vector2D& u, const Vector2D& v)
-{
-  return Vector2D(u.x*v.x,u.y*v.y);
-}
-
-inline Vector2D operator* (const Vector2D& u,float a)
-{
-  return Vector2D(u.x*a,u.y*a);
-}
-
-inline Vector2D operator* (float a, const Vector2D& v)
-{
-  return v*a;
-}
-
-// Cross product
-inline Vector2D operator/ (const Vector2D& u, const Vector2D& v)
-{
-    return Vector2D(u.x/v.x, u.y/v.y);
-    //????????????????????????????????
-    //return Vector2D(u.y*v.y-u.y*v.y,u.y*v.x-u.x*v.y,u.x*v.y-u.y*v.x);
-}
-
-inline Vector2D operator/ (const Vector2D& u, float a)
-{
-  return Vector2D(u.x/a,u.y/a);
-}
+/*Vector2D operator+ (const Vector2D& u, const Vector2D& v);
+Vector2D operator- (const Vector2D& u, const Vector2D& v);
+Vector2D operator* (const Vector2D& u, const Vector2D& v);
+Vector2D operator* (const Vector2D& u,float a);
+Vector2D operator* (float a, const Vector2D& v);
+Vector2D operator/ (const Vector2D& u, const Vector2D& v);
+Vector2D operator/ (const Vector2D& u, float a);
 
 // Boolean functions
-inline int operator== (const Vector2D& u,const Vector2D& v)
-{
-  return ((u.x==v.x)&&(u.y==v.y));
+int operator== (const Vector2D& u,const Vector2D& v);
+int operator!= (const Vector2D& u,const Vector2D& v);
+
+float Norm(const Vector2D& u);
+Vector2D Normalized(const Vector2D& u);
+
+int operator<(const Vector2D& a,const Vector2D& b);
+int operator>(const Vector2D& a,const Vector2D& b);
+
+Vector2D min(const Vector2D& a,const Vector2D& b);
+Vector2D max(const Vector2D& a,const Vector2D& b);
+
+float distance(const Vector2D& u, const Vector2D& v);
+float distance2(const Vector2D& u, const Vector2D& v);
+
+Vector2D Random();*/
+
+
+
+// Binary operators
+inline Vector2D operator+ (const Vector2D& u, const Vector2D& v){
+    return Vector2D(u.x+v.x, u.y+v.y);
+}
+inline Vector2D operator+ (const Vector2D& u,float a){
+    return Vector2D(u.x+a, u.y+a);
+}
+inline Vector2D operator+ (float a, const Vector2D& v){
+    return v+a;
 }
 
-inline int operator!= (const Vector2D& u,const Vector2D& v)
-{
-  return (!(u==v));
+inline Vector2D operator- (const Vector2D& u, const Vector2D& v){
+    return Vector2D(u.x-v.x, u.y-v.y);
 }
+inline Vector2D operator- (const Vector2D& u,float a){
+    return Vector2D(u.x-a, u.y-a);
+}
+inline Vector2D operator- (float a, const Vector2D& v){
+    return Vector2D(a-v.x, a-v.y);
+}
+
+inline Vector2D operator* (const Vector2D& u, const Vector2D& v){
+    return Vector2D(u.x*v.x, u.y*v.y);
+}
+inline Vector2D operator* (const Vector2D& u,float a){
+    return Vector2D(u.x*a, u.y*a);
+}
+inline Vector2D operator* (float a, const Vector2D& v){
+    return v*a;
+}
+
+inline Vector2D operator/ (const Vector2D& u, const Vector2D& v){
+    #ifndef QT_NO_DEBUG
+        if(v.x==0.0 || v.y==0.0)
+            std::cerr << "erreur: division d'un Vector2D avec 0" << std::endl;
+    #endif
+    return Vector2D(u.x/v.x, u.y/v.y);
+}
+inline Vector2D operator/ (const Vector2D& u, float a){
+    #ifndef QT_NO_DEBUG
+        if(a == 0)
+            std::cerr << "erreur: division d'un Vector2D avec 0" << std::endl;
+    #endif
+    return Vector2D(u.x/a, u.y/a);
+}
+inline Vector2D operator/ (float a, const Vector2D& v){
+    #ifndef QT_NO_DEBUG
+        if(v.x==0.0 || v.y==0.0)
+            std::cerr << "erreur: division d'un Vector2D avec 0" << std::endl;
+    #endif
+    return Vector2D(a/v.x, a/v.y);
+}
+
+/****************************************************************************************/
 
 /*!
 \brief Compute the Euclidean norm of a Vector2D.
 */
-inline float Norm(const Vector2D& u)
-{
-  return sqrt(u.x*u.x+u.y*u.y);
+inline float Norm(const Vector2D& u){
+    return sqrt(Norm2(u));
 }
-inline float Norm2(const Vector2D& u)
-{
-  return u.x*u.x+u.y*u.y;
+/*!
+\brief Compute the Euclidean square norm of a Vector2D.
+*/
+inline float Norm2(const Vector2D& u){
+    return u.x*u.x + u.y*u.y;
 }
+
+
 /*!
 \brief Compute the normalized Vector2D.
 */
 inline Vector2D Normalized(const Vector2D& u)
 {
-    float norme = Norm(u);
-    if(norme == 0)
-        return Vector2D(1000,1000);  //////////////////////////////////////////////////////////////////////////
-    return u/norme;
+    float len = Norm(u);
+    #ifndef QT_NO_DEBUG
+        if(len == 0)
+            std::cerr << "erreur: normalisation d'un Vector2D de longueur 0" << std::endl;
+    #endif
+    return u/len;
 }
 
-inline int operator<(const Vector2D& a,const Vector2D& b)
-{
-  return ((a.x<b.x)&&(a.y<b.y));
-}
-
-inline int operator>(const Vector2D& a,const Vector2D& b)
-{
-  return ((a.x>b.x)&&(a.y>b.y));
-}
-
-inline std::ostream& operator<<(std::ostream& stream, const Vector2D& vec)
-{
-    stream << "(" << vec.x << "," << vec.y << ")";
-
-    return stream;
-}
+/****************************************************************************************/
 
 /*!
 \brief Return a new Vector2D with coordinates set to the minimum coordinates
 of the two argument Vec2s.
 */
-inline Vector2D min(const Vector2D& a,const Vector2D& b)
-{
-  return Vector2D(a[0]<b[0]?a[0]:b[0],a[1]<b[1]?a[1]:b[1]);
+inline Vector2D min(const Vector2D& a,const Vector2D& b){
+    return Vector2D(a[0]<b[0] ? a[0]:b[0] , a[1]<b[1] ? a[1]:b[1]);
 }
 
 /*!
 \brief Return a new Vector2D with coordinates set to the maximum coordinates
 of the two argument Vec2s.
 */
-inline Vector2D max(const Vector2D& a,const Vector2D& b)
-{
-  return Vector2D(a[0]>b[0]?a[0]:b[0],a[1]>b[1]?a[1]:b[1]);
+inline Vector2D max(const Vector2D& a,const Vector2D& b){
+    return Vector2D(a[0]>b[0] ? a[0]:b[0] , a[1]>b[1] ? a[1]:b[1]);
 }
 
+/****************************************************************************************/
+
+inline float dot(const Vector2D& u, const Vector2D& v){
+    return u.x*v.x + u.y*v.y;
+}
 /*!
 \brief Returns a new Vector2D orthogonal to the argument Vector2D.
 */
-inline Vector2D Orthogonal(const Vector2D& u)
-{
-  return Vector2D(-u.y, u.x);
+inline Vector2D Orthogonal(const Vector2D& u){
+    return Vector2D(-u.y, u.x);
 }
 
-inline float distance(const Vector2D& u, const Vector2D& v)
-{
+/****************************************************************************************/
+
+inline float distance(const Vector2D& u, const Vector2D& v){
     return (v-u).getNorm();
 }
-inline float distance2(const Vector2D& u, const Vector2D& v)
-{
+inline float distance2(const Vector2D& u, const Vector2D& v){
     return (v-u).getNorm2();
 }
 
+/****************************************************************************************/
+
 //! Generates a random Vector2D with precision 1e-3 within [0,1] interval
-inline Vector2D Random()
+inline Vector2D Random2D()
 {
-  float x=rand()%1001/1000.0f;
-  float y=rand()%1001/1000.0f;
-  return Vector2D(x,y);
+    float x=rand()%1001/1000.0;
+    float y=rand()%1001/1000.0;
+    return Vector2D(x,y);
 }
 
-#endif // VEC2_H
+#endif // VECTOR2D_H
