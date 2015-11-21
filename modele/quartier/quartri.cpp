@@ -341,7 +341,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     float bat_depth = make_Unidistrib(MIN_DIM_BAT, height3*bat_length / triStartLength)(generator);
                     Vector2D point1 = pp3 + (pp2 - pp3)*(height3 - bat_depth) / height3;
                     Vector2D point4 = wmark_candBat + bat_depth * dir_height;
-                    batiments.push_back(Batiment(to3D(point1), to3D(pp2), to3D(wmark_candBat), to3D(point4), 1.f, _par));
+                    batiments.push_back(Batiment(to3D(point1), to3D(pp2), to3D(wmark_candBat), to3D(point4), _par));
                 }
                 // Cas où wmark_candBat est dans le rectangle
                 else if (bat_length <= (pp2 - pp1).getNorm() - triEndLength)
@@ -350,7 +350,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     if (bat_depth > hp) bat_depth = hp;
                     Vector2D point1 = pp3 + (pp2 - pp3)*(height3 - bat_depth) / height3;
                     Vector2D point4 = wmark_candBat + bat_depth * dir_height;
-                    batiments.push_back(Batiment(to3D(point1), to3D(pp2), to3D(wmark_candBat), to3D(point4), 1.f, _par));
+                    batiments.push_back(Batiment(to3D(point1), to3D(pp2), to3D(wmark_candBat), to3D(point4), _par));
                 }
                 // Cas où wmark_candBat est dans le dernier triangle
                 else if (bat_length < (pp2 - pp1).getNorm())
@@ -364,7 +364,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     if (bat_depth > hp) bat_depth = hp;
                     Vector2D point1 = pp3 + (pp2 - pp3)*(height3 - bat_depth) / height3;
                     Vector2D point4 = pp3 + (pp1 - pp3)*(height3 - bat_depth) / height3;
-                    batiments.push_back(Batiment(to3D(point1), to3D(pp2), to3D(pp1), to3D(point4), 1.f, _par));
+                    batiments.push_back(Batiment(to3D(point1), to3D(pp2), to3D(pp1), to3D(point4), _par));
                 }
             }
             //
@@ -385,7 +385,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     Vector2D point4 = wmark_candBat + bat_depth * dir_height;
                     bat_depth = std::min(bat_depth, (waterMark - pp2).getNorm() / triStartLength*hp);
                     Vector2D point1 = waterMark + bat_depth * dir_height;
-                    batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
+                    batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), _par));
                 }
                 // Cas où wmark_candBat est dans le rectangle
                 else if ((wmark_candBat - pp2).getNorm() <= (pp2 - pp1).getNorm() - triEndLength)
@@ -413,7 +413,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     if (bat_depth > hp) bat_depth = hp;
                     Vector2D point1 = waterMark + bat_depth * dir_height;
                     Vector2D point4 = wmark_candBat + bat_depth * dir_height;
-                    batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
+                    batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), _par));
                 }
                 // Cas où wmark_candBat est dans le dernier triangle
                 else if (wmark_candBat != pp1)
@@ -427,7 +427,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     if (bat_depth > hp) bat_depth = hp;
                     Vector2D point1 = waterMark + bat_depth * dir_height;
                     Vector2D point4 = pp3 + (pp1 - pp3)*(height3 - bat_depth) / height3;
-                    batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
+                    batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), _par));
                 }
             }
             //
@@ -447,7 +447,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
                     Vector2D point1 = wmark_candBat + bat_depth * dir_height;
                     bat_depth = std::min(bat_depth, (wmark_candBat - pp1).getNorm() / triEndLength*hp);
                     Vector2D point4 = waterMark + bat_depth * dir_height;
-                    batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), 1.f, _par));
+                    batiments.push_back(Batiment(to3D(point1), to3D(waterMark), to3D(wmark_candBat), to3D(point4), _par));
                 }
                 // Cas où wmark_candBat est le sommet de fin
                 else

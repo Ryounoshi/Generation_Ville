@@ -4,7 +4,7 @@
 #include "modele/mesh.h"
 #include "import_export/objmanager.h"
 #include "modele/batiment/batparameter.h"
-#include "modele/quartier/patern/paternequadresidence.h"
+#include "modele/quartier/patern/paternequad.h"
 #include "paramwindow.h"
 #define MYWINDOW_H
 

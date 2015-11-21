@@ -1,6 +1,6 @@
-#include "paternequadresidence.h"
+#include "paternequad.h"
 
-Mesh PaterneQuadResidence::generate()
+Mesh PaterneQuad::generate()
 {
 
     Mesh m1;
@@ -8,6 +8,7 @@ Mesh PaterneQuadResidence::generate()
     faireSol(m1);
 
     int aleatoire = rand()%100;
+
 
     if(aleatoire < 33){
         m1.merge(paternQuatreBatiment());
@@ -23,7 +24,7 @@ Mesh PaterneQuadResidence::generate()
 
 }
 
-void PaterneQuadResidence::faireTrotoir(Mesh& m){
+void PaterneQuad::faireTrotoir(Mesh& m){
 
     Quadrangle centre = *this, notreQuadrangle = *this;
     centre.shrink(_par->largeurTrotoir);
@@ -41,7 +42,7 @@ void PaterneQuadResidence::faireTrotoir(Mesh& m){
     this->shrink(_par->largeurTrotoir);
 }
 
-void PaterneQuadResidence::faireSol(Mesh &m){
+void PaterneQuad::faireSol(Mesh &m){
 
     Quadrangle notreQuadrangle = *this;
 
@@ -58,7 +59,7 @@ void PaterneQuadResidence::faireSol(Mesh &m){
 //****** Paterns ********//
 //***********************//
 
-Mesh PaterneQuadResidence::paternQuatreBatiment(){
+Mesh PaterneQuad::paternQuatreBatiment(){
 
     Mesh retour;
 
@@ -82,7 +83,6 @@ Mesh PaterneQuadResidence::paternQuatreBatiment(){
                               Vector3D(p2.x, p2.y, 0),
                               Vector3D(centre[i].x, centre[i].y, 0),
                               Vector3D(p4.x, p4.y, 0),
-                              0.7,
                               _par);
         retour.merge( b.generate() );
     }
@@ -90,7 +90,7 @@ Mesh PaterneQuadResidence::paternQuatreBatiment(){
     return retour;
 }
 
-Mesh PaterneQuadResidence::paternTroisBatiment(){
+Mesh PaterneQuad::paternTroisBatiment(){
 
     Mesh retour;
 
@@ -124,7 +124,6 @@ Mesh PaterneQuadResidence::paternTroisBatiment(){
             Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, 0),
             Vector3D(p3B1.x, p3B1.y, 0),
             Vector3D(p4B1.x, p4B1.y, 0),
-            0.7,
             _par);
     retour.merge( b.generate() );
 
@@ -134,7 +133,6 @@ Mesh PaterneQuadResidence::paternTroisBatiment(){
             Vector3D(p2B2.x, p2B2.y, 0),
             Vector3D(centre[2].x, centre[2].y, 0),
             Vector3D(p4B2.x, p4B2.y, 0),
-            0.7,
             _par);
     retour.merge( b.generate() );
 
@@ -144,14 +142,13 @@ Mesh PaterneQuadResidence::paternTroisBatiment(){
             Vector3D(p2B3.x, p2B3.y, 0),
             Vector3D(centre[3].x, centre[3].y, 0),
             Vector3D(p4B3.x, p4B3.y, 0),
-            0.7,
             _par);
     retour.merge( b.generate() );
 
     return retour;
 }
 
-Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
+Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
 
     Mesh retour;
 
@@ -179,7 +176,6 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
                 Vector3D(p2B1.x, p2B1.y, 0),
                 Vector3D(centre[1].x, centre[1].y , 0),
                 Vector3D(centre[0].x + (-p1p0.x*(_par->largeurRuelle/2)), centre[0].y + (-p1p0.y*(_par->largeurRuelle/2)), 0),
-                0.7,
                 _par);
     retour.merge( b.generate() );
 
@@ -187,7 +183,6 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
             Vector3D(notreQuadrangle[2].x + (p2p1.x*(_par->largeurRuelle/2)), notreQuadrangle[2].y + (p2p1.y*(_par->largeurRuelle/2)), 0),
             Vector3D(centre[2].x, centre[2].y, 0),
             Vector3D(p2B1.x, p2B1.y, 0),
-            0.7,
             _par);
     retour.merge( b.generate() );
 
@@ -200,7 +195,6 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
             Vector3D(p2B3.x, p2B3.y, 0),
             Vector3D(centre[3].x, centre[3].y, 0),
             Vector3D(centre[2].x + (-p3p2.x*(_par->largeurRuelle/2)), centre[2].y + (-p3p2.y*(_par->largeurRuelle/2)), 0),
-            0.7,
             _par);
     retour.merge( b.generate() );
 
@@ -208,7 +202,6 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
             Vector3D(notreQuadrangle[0].x + (p0p3.x*(_par->largeurRuelle/2)), notreQuadrangle[0].y + (p0p3.x*(_par->largeurRuelle/2)), 0),
             Vector3D(centre[0].x, centre[0].y, 0),
             Vector3D(p2B3.x, p2B3.y, 0),
-            0.7,
             _par);
     retour.merge( b.generate() );
 
@@ -216,7 +209,7 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiagonale(){
 
 }
 
-Mesh PaterneQuadResidence::paternDeuxBatimentDiametre(){
+Mesh PaterneQuad::paternDeuxBatimentDiametre(){
 
     Mesh retour;
 
@@ -249,7 +242,7 @@ Mesh PaterneQuadResidence::paternDeuxBatimentDiametre(){
     return retour;
 }
 
-float PaterneQuadResidence::cotePlusCourt() const
+float PaterneQuad::cotePlusCourt() const
 {
     float retour = FLT_MAX;
 

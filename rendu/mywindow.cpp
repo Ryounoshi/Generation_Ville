@@ -319,7 +319,7 @@ void myWindow::paintGL()
                 tmp = 0;
                 //qDebug()<<tmp;
                 if(tmp == 0){
-                    PaterneQuadResidence p1(Vector2D(i,j), Vector2D(i,j+7), Vector2D(i+7,j+7), Vector2D(i+7,j),&_par);
+                    PaterneQuad p1(Vector2D(i,j), Vector2D(i,j+7), Vector2D(i+7,j+7), Vector2D(i+7,j),&_par);
                      m1.merge(p1.generate());
                     /*Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
                                   Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
@@ -334,7 +334,6 @@ void myWindow::paintGL()
                                   Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
                                   Vector3D(i+1+offset+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
                                   Vector3D(i+1+offset+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  0.2,
                                   &_par);
                     m1.merge(test.generate());
                 }else if(tmp == 2){
@@ -343,7 +342,6 @@ void myWindow::paintGL()
                                   Vector3D(i+(rand()%100)*0.001,j+1+offset+(rand()%100)*0.001,0),
                                   Vector3D(i+1+(rand()%100)*0.001,j+1+offset+(rand()%100)*0.001,0),
                                   Vector3D(i+1+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  0.2,
                                   &_par);
                     m1.merge(test.generate());
                 }else{
@@ -352,7 +350,6 @@ void myWindow::paintGL()
                                   Vector3D(i+(rand()%100)*0.001,j+1+offset+(rand()%100)*0.001,0),
                                   Vector3D(i+1+offset+(rand()%100)*0.001,j+1+offset+(rand()%100)*0.001,0),
                                   Vector3D(i+1+offset+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  0.2,
                                   &_par);
                     m1.merge(test.generate());
                 }

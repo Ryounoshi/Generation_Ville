@@ -34,6 +34,9 @@ public:
     virtual std::vector<Vector3D> getPoints3D() const = 0;
 
     virtual Mesh generate() = 0;
+
+    void setPar(BatParameter* par);
+
 protected:
     BatParameter* _par;
     std::default_random_engine generator;
