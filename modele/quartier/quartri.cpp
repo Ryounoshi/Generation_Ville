@@ -5,7 +5,7 @@
 
 QuarTri::QuarTri()
 {
-    generator = std::default_random_engine(4546);
+    generator = std::default_random_engine();
 }
 
 QuarTri::QuarTri(const Vector2D &p0, const Vector2D &p1, const Vector2D &p2, BatParameter *par):
@@ -452,6 +452,7 @@ std::vector<Vector3D> QuarTri::getPoints3D() const
 
 Mesh QuarTri::generate()
 {
+    split();
     Mesh m;
     for (Batiment& bat : batiments)
     {

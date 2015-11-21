@@ -27,8 +27,8 @@ void myWindow::initializeGL()
     _speed =0.1;
     _angle = -50.0;
     _hauteurcam = -2.0;
-    largeur = 100;
-    longueur = 100;
+    largeur = 50;
+    longueur = 50;
 
     //loadTexture(":/textures/herbe");
     //glEnable(GL_TEXTURE_2D);
@@ -232,7 +232,7 @@ void myWindow::resizeGL(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    perspectiveGL(90.0f, (GLfloat)width/(GLfloat)height, 0.1f, 200.0f);
+    perspectiveGL(90.0f, (GLfloat)width/(GLfloat)height, 0.1f, 100.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -313,20 +313,21 @@ void myWindow::paintGL()
         Mesh m1;
         //for(float i=-largeur/2;i<largeur/2;i+=3.5){
             //for(float j=-longueur/2; j<longueur/2; j+=3.5){
-        for(float i=-largeur/2;i<largeur/2;i+=8.1){
-            for(float j=-longueur/2; j<longueur/2; j+=8.1){
+        for(float i=-largeur/2;i<largeur/2;i+=8){
+            for(float j=-longueur/2; j<longueur/2; j+=8){
                 int tmp = (int)rand()%4;
                 tmp = 0;
                 //qDebug()<<tmp;
                 if(tmp == 0){
-                    PaterneQuadResidence p1(Vector2D(i,j), Vector2D(i,j+8), Vector2D(i+8,j+8), Vector2D(i+8,j),&_par);
+                    PaterneQuadResidence p1(Vector2D(i,j), Vector2D(i,j+7), Vector2D(i+7,j+7), Vector2D(i+7,j),&_par);
+                     m1.merge(p1.generate());
                     /*Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
                                   Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
                                   Vector3D(i+1+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
                                   Vector3D(i+1+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
                                   0.2,
-                                  &_par);*/
-                    m1.merge(p1.generate());
+                                  &_par);
+                    m1.merge(test.generate());*/
                 }else if(tmp == 1){
                     float offset = (rand()%21)*0.1;
                     Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
@@ -366,10 +367,6 @@ void myWindow::paintGL()
         for(Quartier* q : base.quartiers){
 
         }*/
-
-        //PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,15), Vector2D(15,15), Vector2D(15,0), &_par);
-        //_mesh = p1.generate();
-        //ObjManager::writeToObj("test1.obj", m1.getvertex(), m1.getface());
         meshUpToDate = true;
         frame->update_values();
     }
