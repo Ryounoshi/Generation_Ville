@@ -30,6 +30,7 @@ public:
 
     Mesh generate();
 
+    bool quartierCorrect() const;
 };
 
 #endif // QUARQUAD_H

@@ -37,6 +37,8 @@ public:
 
     void setPar(BatParameter* par);
 
+    virtual bool quartierCorrect() const = 0;
+
 protected:
     BatParameter* _par;
     std::default_random_engine generator;

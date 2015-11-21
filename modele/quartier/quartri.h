@@ -30,6 +30,8 @@ public:
     std::vector<Vector3D> getPoints3D() const;
 
     Mesh generate();
+
+    bool quartierCorrect() const;
 };
 
 #endif // QUARTRI_H

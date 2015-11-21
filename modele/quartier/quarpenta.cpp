@@ -236,3 +236,12 @@ Mesh QuarPenta::generate()
 {
     return Mesh();
 }
+
+bool QuarPenta::quartierCorrect() const
+{
+    return  orientation(get(0),get(1),get(2)) > 0 &&
+            orientation(get(1),get(2),get(3)) > 0 &&
+            orientation(get(2),get(3),get(4)) > 0 &&
+            orientation(get(3),get(4),get(0)) > 0 &&
+            orientation(get(4),get(0),get(1)) > 0;
+}

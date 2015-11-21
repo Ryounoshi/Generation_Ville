@@ -482,3 +482,9 @@ Mesh QuarTri::generate()
 
     return m;
 }
+
+
+bool QuarTri::quartierCorrect() const
+{
+    return orientation(get(0),get(1),get(2)) > 0;
+}

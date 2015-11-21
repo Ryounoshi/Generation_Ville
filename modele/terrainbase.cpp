@@ -86,7 +86,7 @@ void TerrainBase::supprPetitQuartier(float f)
     std::vector<Quartier*> quartiers2;
     quartiers2.reserve(quartiers.size());
     for(Quartier* q: quartiers){
-        if(q->area() >= f)
+        if(q->quartierCorrect() || q->area() >= f)
             quartiers2.push_back(q);
         else
             delete q;

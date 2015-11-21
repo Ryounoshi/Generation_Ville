@@ -289,3 +289,12 @@ Mesh QuarQuad::generate()
     PaterneQuad pQR = PaterneQuad( this->get(0), this->get(1), this->get(2), this->get(3), _par);
     return pQR.generate();
 }
+
+
+bool QuarQuad::quartierCorrect() const
+{
+    return  orientation(get(0),get(1),get(2)) > 0 &&
+            orientation(get(1),get(2),get(3)) > 0 &&
+            orientation(get(2),get(3),get(0)) > 0 &&
+            orientation(get(3),get(0),get(1)) > 0;
+}
