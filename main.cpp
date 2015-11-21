@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     /*myWindow glWin;
     glWin.show();
     return app.exec();*/
-    TerrainBase base(4000,4000, 0);
+    TerrainBase base(4000,4000, new BatParameter());
     base.decoupeSimple();
     base.shrink(5.f);
     base.supprPetitQuartier(100);

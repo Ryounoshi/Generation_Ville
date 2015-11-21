@@ -30,7 +30,6 @@ public:
     Mesh generate();
 
 private:
-    BatParameter* _par;
 };
 
 #endif // QUARQUAD_H

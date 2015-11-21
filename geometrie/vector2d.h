@@ -97,6 +97,8 @@ public:
     friend float distance2(const Vector2D& u, const Vector2D& v);
 
     friend Vector2D Random2D();
+    friend float orientation(const Vector2D& a, const Vector2D& b, const Vector2D& c);
+
 
     friend std::ostream& operator<<(std::ostream& out, const Vector2D& v);
 };
@@ -263,6 +265,13 @@ inline Vector2D Random2D()
     float x=rand()%1001/1000.0;
     float y=rand()%1001/1000.0;
     return Vector2D(x,y);
+}
+
+/**calcul l'orientation de bâc*/
+inline float orientation(const Vector2D& a, const Vector2D& b, const Vector2D& c)
+{
+    return (a.y - b.y) * (c.x - a.x) + (b.x - a.x) * (c.y - a.y);
+    //if <0 : vers la gauche, if > 0: vers la droite, if == 0: aligné
 }
 
 #endif // VECTOR2D_H
