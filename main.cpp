@@ -56,10 +56,10 @@ int main(int argc, char *argv[])
     par.largeurTrotoir = 4;
     par.largeurRuelle = 3;
 
-    TerrainBase base(1000,1000, &par);
+    TerrainBase base(2000,2000, &par);
     base.decoupeSimple();
-    base.shrink(5.f);
-    base.supprPetitQuartier(100);
+    base.shrink(10.f);
+    base.supprPetitQuartier(1000);
     Mesh m = base.generate();
 
     ObjManager::writeToObj("testTerrain.obj", m.getVertex(), m.getFace());

@@ -16,18 +16,45 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupeSimple()
     int type;
     //0 = a->c      1 = milieu ab->milieu cd    2 = b->d    3 = milieu bc->milieu da
 
-    //0 = a->milieu bc      1 = milieu ab->milieu bc    2 = milieu ab->c    3 = milieu ab->milieu ca    4 = b->milieu ca    5 = milieu bc->milieu ca
-    float   ab = distance(get(0),get(1)),
-            bc = distance(get(1),get(2)),
-            cd = distance(get(2),get(3)),
-            da = distance(get(3),get(0));
-    float perim5 = (ab+bc+cd+da)/5;
-    do    {
-        type = rand()%4;
-    }
-    while(( (ab < perim5 || cd < perim5) && (type == 1) ) ||
-          ( (bc < perim5 || da < perim5) && (type == 3) )
-    );
+    Vector2D    sab = (get(1)-get(0)),
+                sbc = (get(2)-get(1)),
+                scd = (get(3)-get(2)),
+                sda = (get(0)-get(3));
+
+    float   ab = sab.getNorm(),
+            bc = sbc.getNorm(),
+            cd = scd.getNorm(),
+            da = sda.getNorm();
+    float perim = (ab+bc+cd+da);
+    float   c1 = (ab+cd)/perim,
+            c2 = (bc+da)/perim;
+
+    sab/=ab;
+    sbc/=bc;
+    scd/=cd;
+    sda/=da;
+
+    float   dab = 1+dot(sda,sab),
+            abc = 1+dot(sab,sbc),
+            bcd = 1+dot(sbc,scd),
+            cda = 1+dot(scd,sda);
+    float   a1 = (dab+bcd)/4,
+            a2 = (abc+cda)/4;
+
+    c1*=rand();
+    c2*=rand();
+    a1*=rand();
+    a2*=rand();
+
+    if(a1>=a2 && a1>=c1 && a1>=c2)
+        type = 0;
+    else if(a2>=a1 && a2>=c1 && a2>=c2)
+        type = 2;
+    else if(c1>=a1 && c1>=a2 && c1>=c2)
+        type = 1;
+    else
+        type = 3;
+
 
     switch(type)
     {

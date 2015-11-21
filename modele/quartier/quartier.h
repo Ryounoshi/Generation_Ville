@@ -35,8 +35,6 @@ public:
 
     virtual Mesh generate() = 0;
 
-    void setPar(BatParameter* par);
-
     virtual bool quartierCorrect() const = 0;
 
 protected:

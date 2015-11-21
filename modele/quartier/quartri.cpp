@@ -19,17 +19,54 @@ std::pair<Quartier*,Quartier*> QuarTri::decoupeSimple()
 
     int type;
     //0 = a->milieu bc      1 = milieu ab->milieu bc    2 = milieu ab->c    3 = milieu ab->milieu ca    4 = b->milieu ca    5 = milieu bc->milieu ca
-    float   ab = distance(get(0),get(1)),
-            bc = distance(get(1),get(2)),
-            ca = distance(get(2),get(0));
-    float perim4 = (ab+bc+ca)/4;
-    do    {
-        type = rand()%6;
-    }
-    while(( ab < perim4 && (type == 1 || type == 2 || type == 3)) ||
-          ( bc < perim4 && (type == 0 || type == 1 || type == 5)) ||
-          ( ca < perim4 && (type == 3 || type == 4 || type == 5))
-    );
+
+
+    Vector2D    sab = (get(1)-get(0)),
+                sbc = (get(2)-get(1)),
+                sca = (get(0)-get(2));
+
+    float   ab = sab.getNorm(),
+            bc = sbc.getNorm(),
+            ca = sca.getNorm();
+    float perim = (ab+bc+ca);
+    float   c1 = 4*ab/perim,
+            c2 = 4*bc/perim,
+            c3 = 4*ca/perim;
+
+    sab/=ab;
+    sbc/=bc;
+    sca/=ca;
+
+    float   cab = 1+dot(sca,sab),
+            abc = 1+dot(sab,sbc),
+            bca = 1+dot(sbc,sca);
+
+    c1*=rand();
+    c2*=rand();
+    c3*=rand();
+    cab*=rand();
+    abc*=rand();
+    bca*=rand();
+
+    float   t0 = (cab+c2)/4,
+            t1 = (c1+c2)/4,
+            t2 = (c1+bca)/4,
+            t3 = (c1+c3)/4,
+            t4 = (abc+c3)/4,
+            t5 = (c2+c3)/4;
+
+    if(t0>=t1 && t0>=t2 && t0>=t3 && t0>=t4 && t0>=t5)
+        type = 0;
+    if(t1>=t0 && t1>=t2 && t1>=t3 && t1>=t4 && t1>=t5)
+        type = 1;
+    if(t2>=t0 && t2>=t1 && t2>=t3 && t2>=t4 && t2>=t5)
+        type = 2;
+    if(t3>=t0 && t3>=t1 && t3>=t2 && t3>=t4 && t3>=t5)
+        type = 3;
+    if(t4>=t0 && t4>=t1 && t4>=t2 && t4>=t3 && t4>=t5)
+        type = 4;
+    else
+        type = 5;
 
 
     switch(type)
