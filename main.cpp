@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     return app.exec();*/
     TerrainBase base(4000,4000, 0);
     base.decoupeSimple();
-    base.shrink(0.f);
+    base.shrink(5.f);
     base.supprPetitQuartier(100);
     Mesh m = base.generate();
     ObjManager::writeToObj("testTerrain.obj", m.getVertex(), m.getFace());
