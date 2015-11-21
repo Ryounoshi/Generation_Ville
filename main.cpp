@@ -10,7 +10,7 @@
 #include "geometrie/vector3d.h"
 #include "import_export/objmanager.h"
 #include "rendu/mywindow.h"
-#include "modele/quartier/patern/paternequadresidence.h"
+#include "modele/quartier/patern/paternequad.h"
 #include "QDebug"
 
 #include "modele/terrainbase.h"
@@ -48,7 +48,13 @@ int main(int argc, char *argv[])
     /*myWindow glWin;
     glWin.show();
     return app.exec();*/
-    TerrainBase base(4000,4000, 0);
+    BatParameter par(Vector3D(0,0,0));
+    par.etageLePlusHaut = 20;
+    par.hauteurEtage = 5;
+    par.influenceCentreVille = 100;
+    par.largeurTrotoir = 4;
+    par.largeurRuelle = 3;
+    TerrainBase base(1000,1000, &par);
     base.decoupeSimple();
     base.shrink(5.f);
     base.supprPetitQuartier(100);
