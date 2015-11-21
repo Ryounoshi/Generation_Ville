@@ -20,7 +20,7 @@ public:
         generator = std::default_random_engine(4546);
     }
 
-    virtual ~Quartier() {}
+    virtual ~Quartier() { delete _par;}
 
     virtual std::pair<Quartier*,Quartier*> decoupeSimple() = 0;
     virtual std::pair<Quartier*,Quartier*> decoupe() = 0;
@@ -34,6 +34,9 @@ public:
     virtual std::vector<Vector3D> getPoints3D() const = 0;
 
     virtual Mesh generate() = 0;
+
+    void setPar(BatParameter* par);
+
 protected:
     BatParameter* _par;
     std::default_random_engine generator;

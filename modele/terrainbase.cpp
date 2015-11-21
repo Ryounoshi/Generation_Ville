@@ -100,8 +100,11 @@ Mesh TerrainBase::generate()
     if(quartiers.empty())
         return Mesh();
 
+    quartiers[0]->setPar(_par);
     Mesh m = quartiers[0]->generate();
-    for(size_t i = 1;  i < quartiers.size();   i++)
+    for(size_t i = 1;  i < quartiers.size();   i++){
+        quartiers[i]->setPar(_par);
         m.merge(quartiers[i]->generate());
+    }
     return m;
 }

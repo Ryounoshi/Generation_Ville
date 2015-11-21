@@ -29,9 +29,6 @@ public:
     std::vector<Vector3D> getPoints3D() const;
 
     Mesh generate();
-
-private:
-    BatParameter* _par;
 };
 
 #endif // QUARQUAD_H
