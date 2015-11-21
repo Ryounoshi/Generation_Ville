@@ -3,6 +3,7 @@
 
 #include "quartier.h"
 #include "modele/batiment/batparameter.h"
+#include "patern/paternequad.h"
 
 class QuarQuad: public Quartier, public Quadrangle
 {

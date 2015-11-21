@@ -286,13 +286,6 @@ std::vector<Vector3D> QuarQuad::getPoints3D() const
 
 Mesh QuarQuad::generate()
 {
-    std::vector<Vector3D> v = getPoints3D();
-    Mesh m;
-    m.addTriangle(v[0],v[1],v[2]);
-    m.addVertex(v[3]);
-    m.addFace(0,2,3);
-    for (Batiment& bat : batiments)
-        m.merge(bat.generate());
-
-    return m;
+    PaterneQuad pQR = PaterneQuad( this->get(0), this->get(1), this->get(2), this->get(3), _par);
+    return pQR.generate();
 }
