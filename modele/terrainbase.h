@@ -10,8 +10,8 @@ public:
     TerrainBase(float longueur, float largeur, BatParameter* par);
     ~TerrainBase();
 
-    void decoupeSimple();   //ne fait que des triangles et quadrangle
-    void decoupe();
+    void decoupeSimple(float aireMax);   //ne fait que des triangles et quadrangle
+    void decoupe(float aireMax);
     void shrink(float f);
 
     void supprPetitQuartier(float f);

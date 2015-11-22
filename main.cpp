@@ -56,12 +56,14 @@ int main(int argc, char *argv[])
     par.largeurTrotoir = 4;
     par.largeurRuelle = 3;
 
-    TerrainBase base(2000,2000, &par);
-    base.decoupeSimple();
-    base.shrink(10.f);
-    base.supprPetitQuartier(1000);
+    TerrainBase base(1000,1000, &par);
+    base.decoupeSimple(2500);
+    base.supprPetitQuartier(200);
+    base.shrink(4.f);
+    base.supprPetitQuartier(200);
     Mesh m = base.generate();
 
+    std::cout << "fin de la création du mesh" << std::endl;
     ObjManager::writeToObj("testTerrain.obj", m.getVertex(), m.getFace());
 */
     //return 0;
