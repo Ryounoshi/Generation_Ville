@@ -22,8 +22,10 @@ private:
     Mesh paternTroisBatiment();
     Mesh paternDeuxBatimentDiagonale();
     Mesh paternDeuxBatimentDiametre();
+    Mesh paternQuartierPlein();
 
-    float cotePlusCourt() const;
+    float coeffShrinkMax() const;
+    float ratioDiametre() const;
 };
 
 #endif // PATERNEQUADRESIDENCE_H

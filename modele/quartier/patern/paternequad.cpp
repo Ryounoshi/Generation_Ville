@@ -7,17 +7,33 @@ Mesh PaterneQuad::generate()
     faireTrotoir(m1);
     faireSol(m1);
 
+
     int aleatoire = rand()%100;
 
-
-    if(aleatoire < 33){
-        m1.merge(paternQuatreBatiment());
+    //détermination si le quartier est assez grand pour contenir des batiments avec ruelle
+    if(_par->minLargeurBatiment < coeffShrinkMax() && ratioDiametre() < 3 ){
+        if(_par->minLargeurBatiment > coeffShrinkMax()/3 ){
+            if(aleatoire < 33){
+                m1.merge(paternQuatreBatiment());
+            }
+            else if(aleatoire <= 66){
+                m1.merge(paternTroisBatiment());
+            }
+            else{
+                m1.merge(paternDeuxBatimentDiagonale());
+            }
+        }
+        else{
+            if(aleatoire < 50){
+                m1.merge(paternQuatreBatiment());
+            }
+            else{
+                m1.merge(paternTroisBatiment());
+            }
+        }
     }
-    else if(aleatoire <= 66){
-        m1.merge(paternTroisBatiment());
-    }
-    else{
-        m1.merge(paternDeuxBatimentDiagonale());
+    else if(_par->minLargeurBatiment/2 < coeffShrinkMax()){
+        m1.merge(paternQuartierPlein());
     }
 
     return m1;
@@ -65,7 +81,7 @@ Mesh PaterneQuad::paternQuatreBatiment(){
 
     Quadrangle centre = *this, notreQuadrangle = *this;
 
-    centre.shrink( (cotePlusCourt()/2)-_par->largeurRuelle );
+    centre.shrink( (coeffShrinkMax()/2)-_par->largeurRuelle );
 
     for(int i=0; i<4; i++){
         Vector2D shrink = centre[i] - notreQuadrangle[i];
@@ -96,7 +112,7 @@ Mesh PaterneQuad::paternTroisBatiment(){
 
     Quadrangle centre = *this, notreQuadrangle = *this;
 
-    centre.shrink( (cotePlusCourt()/2)-_par->largeurRuelle );
+    centre.shrink( (coeffShrinkMax()/2)-_par->largeurRuelle );
 
     Vector2D p0p3 = notreQuadrangle[3] - notreQuadrangle[0];
     Vector2D p1p2 = notreQuadrangle[2] - notreQuadrangle[1];
@@ -154,10 +170,12 @@ Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
 
     Quadrangle centre = *this, notreQuadrangle = *this;
 
-    centre.shrink( (cotePlusCourt()/3) );
+    float coeffShrink = (coeffShrinkMax()/3);
+
+    centre.shrink( coeffShrink );
 
     Vector2D p1p0 = notreQuadrangle[0] - notreQuadrangle[1];
-    Vector2D p3p2 = notreQuadrangle[2] - notreQuadrangle[3];    
+    Vector2D p3p2 = notreQuadrangle[2] - notreQuadrangle[3];
 
     p1p0.normalise();
     p3p2.normalise();
@@ -171,17 +189,20 @@ Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
     p2p1.normalise();
 
     Vector2D p2B1 = notreQuadrangle[1] + p1p0*dp1p0;
+    Vector2D centre2Bis = centre[2] + (p2p1*(_par->largeurRuelle/2));
+
     Batiment b = Batiment(
                 Vector3D(notreQuadrangle[0].x + (-p1p0.x*(_par->largeurRuelle/2)) , notreQuadrangle[0].y + (-p1p0.y*(_par->largeurRuelle/2)), 0),
-                Vector3D(p2B1.x, p2B1.y, 0),
-                Vector3D(centre[1].x, centre[1].y , 0),
-                Vector3D(centre[0].x + (-p1p0.x*(_par->largeurRuelle/2)), centre[0].y + (-p1p0.y*(_par->largeurRuelle/2)), 0),
-                _par);
+            Vector3D(p2B1.x, p2B1.y, 0),
+            Vector3D(p2B1.x+((centre2Bis-p2B1).normalised()*coeffShrink).x, p2B1.y+((centre2Bis-p2B1).normalised()*coeffShrink).y, 0),
+            Vector3D(centre[0].x + (-p1p0.x*(_par->largeurRuelle/2)), centre[0].y + (-p1p0.y*(_par->largeurRuelle/2)), 0),
+            _par);
     retour.merge( b.generate() );
 
-    b = Batiment(Vector3D(notreQuadrangle[1].x + (p2p1.x*(_par->largeurRuelle/2)), notreQuadrangle[1].y + (p2p1.y*(_par->largeurRuelle/2)), 0),
+
+    b = Batiment(Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, 0),
             Vector3D(notreQuadrangle[2].x + (p2p1.x*(_par->largeurRuelle/2)), notreQuadrangle[2].y + (p2p1.y*(_par->largeurRuelle/2)), 0),
-            Vector3D(centre[2].x, centre[2].y, 0),
+            Vector3D(centre2Bis.x, centre2Bis.y, 0),
             Vector3D(p2B1.x, p2B1.y, 0),
             _par);
     retour.merge( b.generate() );
@@ -191,16 +212,18 @@ Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
     p0p3.normalise();
 
     Vector2D p2B3 = notreQuadrangle[3] + p3p2*dp3p2;
+    Vector2D centre0Bis = centre[0] + (p0p3*(_par->largeurRuelle/2));
+
     b = Batiment(Vector3D(notreQuadrangle[2].x + (-p3p2.x*(_par->largeurRuelle/2)), notreQuadrangle[2].y + (-p3p2.y*(_par->largeurRuelle/2)), 0),
             Vector3D(p2B3.x, p2B3.y, 0),
-            Vector3D(centre[3].x, centre[3].y, 0),
+            Vector3D(p2B3.x+((centre0Bis-p2B3).normalised()*coeffShrink).x, p2B3.y+((centre0Bis-p2B3).normalised()*coeffShrink).y, 0),
             Vector3D(centre[2].x + (-p3p2.x*(_par->largeurRuelle/2)), centre[2].y + (-p3p2.y*(_par->largeurRuelle/2)), 0),
             _par);
     retour.merge( b.generate() );
 
-    b = Batiment(Vector3D(notreQuadrangle[3].x + (p0p3.x*(_par->largeurRuelle/2)), notreQuadrangle[3].y + (p0p3.x*(_par->largeurRuelle/2)), 0),
-            Vector3D(notreQuadrangle[0].x + (p0p3.x*(_par->largeurRuelle/2)), notreQuadrangle[0].y + (p0p3.x*(_par->largeurRuelle/2)), 0),
-            Vector3D(centre[0].x, centre[0].y, 0),
+    b = Batiment(Vector3D(notreQuadrangle[3].x, notreQuadrangle[3].y, 0),
+            Vector3D(notreQuadrangle[0].x + (p0p3*(_par->largeurRuelle/2)).x, notreQuadrangle[0].y + (p0p3*(_par->largeurRuelle/2)).y, 0),
+            Vector3D(centre0Bis.x, centre0Bis.y, 0),
             Vector3D(p2B3.x, p2B3.y, 0),
             _par);
     retour.merge( b.generate() );
@@ -242,9 +265,93 @@ Mesh PaterneQuad::paternDeuxBatimentDiametre(){
     return retour;
 }
 
-float PaterneQuad::cotePlusCourt() const
+Mesh PaterneQuad::paternQuartierPlein()
+{
+    Mesh retour;
+
+    /*
+    point1  X----X  point2
+            |    |
+            |    |
+            |    |
+   milieu2  X    X  milieu3
+            |    |
+   milieu1  X    X  milieu4
+            |    |
+            |    |
+            |    |
+    point0  X----X  point3
+
+
+    */
+
+    Vector2D cote1, cote2;
+
+    if( ((*this)[1] - (*this)[0]).getNorm2() >= ((*this)[2] - (*this)[1]).getNorm2() ){
+        Vector2D cote1 = ((*this)[1] - (*this)[0]),
+        cote2 = ((*this)[2] - (*this)[3]);
+
+        Vector2D    milieu1 = (*this)[0] + cote1 * (0.5 - ( _par->largeurRuelle / cote1.getNorm() )),
+                milieu2 = (*this)[0] + cote1 * (0.5 + ( _par->largeurRuelle / cote1.getNorm() )),
+                milieu3 = (*this)[3] + cote1 * (0.5 + ( _par->largeurRuelle / cote2.getNorm() )),
+                milieu4 = (*this)[3] + cote1 * (0.5 - ( _par->largeurRuelle / cote2.getNorm() ));
+
+
+        Batiment b = Batiment(Vector3D( (*this)[0].x, (*this)[0].y, 0),
+                Vector3D( milieu1.x, milieu1.y, 0),
+                Vector3D( milieu4.x, milieu4.y, 0),
+                Vector3D( (*this)[3].x, (*this)[3].y, 0 ),
+                _par);
+        retour.merge( b.generate() );
+
+        b = Batiment(Vector3D( milieu2.x, milieu2.y, 0),
+                     Vector3D( (*this)[1].x, (*this)[1].y, 0),
+                Vector3D( (*this)[2].x, (*this)[2].y, 0 ),
+                Vector3D( milieu3.x, milieu3.y, 0),
+                _par);
+        retour.merge( b.generate() );
+
+    }
+    else{
+        Vector2D cote1 = ((*this)[2] - (*this)[1]),
+        cote2 = ((*this)[3] - (*this)[0]);
+
+        Vector2D    milieu1 = (*this)[1] + cote1 * (0.5 - ( _par->largeurRuelle / cote1.getNorm() )),
+                milieu2 = (*this)[1] + cote1 * (0.5 + ( _par->largeurRuelle / cote1.getNorm() )),
+                milieu3 = (*this)[0] + cote1 * (0.5 + ( _par->largeurRuelle / cote2.getNorm() )),
+                milieu4 = (*this)[0] + cote1 * (0.5 - ( _par->largeurRuelle / cote2.getNorm() ));
+
+
+        Batiment b = Batiment(Vector3D( (*this)[1].x, (*this)[1].y, 0),
+                Vector3D( milieu1.x, milieu1.y, 0),
+                Vector3D( milieu4.x, milieu4.y, 0),
+                Vector3D( (*this)[0].x, (*this)[0].y, 0 ),
+                _par);
+        retour.merge( b.generate() );
+
+        b = Batiment(Vector3D( milieu2.x, milieu2.y, 0),
+                     Vector3D( (*this)[2].x, (*this)[2].y, 0),
+                Vector3D( (*this)[3].x, (*this)[3].y, 0 ),
+                Vector3D( milieu3.x, milieu3.y, 0),
+                _par);
+        retour.merge( b.generate() );
+    }
+
+    return retour;
+}
+
+float PaterneQuad::coeffShrinkMax() const
 {
     float retour = FLT_MAX;
+
+    /*
+    if( ( (*this)[2]-(*this)[0] ).getNorm2() >= ( (*this)[1]-(*this)[3] ).getNorm2() ){
+        retour = ( (*this)[2]-(*this)[0] ).getNorm() / (1.4*2);
+    }
+    else{
+        retour = ( (*this)[1]-(*this)[3] ).getNorm() / (1.4*2);
+    }
+    */
 
     for(int i=0; i<4; i++){
         float d = ( (*this)[i]-(*this)[(i+1)%4] ).getNorm();
@@ -252,6 +359,16 @@ float PaterneQuad::cotePlusCourt() const
             retour = d;
         }
     }
+
+    return retour;
+}
+
+float PaterneQuad::ratioDiametre() const
+{
+    float retour = ( (*this)[2]-(*this)[0] ).getNorm() / ( (*this)[1]-(*this)[3] ).getNorm();
+
+    if(retour < 1)
+        retour = 1/retour;
 
     return retour;
 }

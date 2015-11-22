@@ -4,7 +4,6 @@
 #define DEFAULT_MAX_ETAGE 12
 #define DEFAULT_INFLUENCE_CENTREVILLE 1
 #define DEFAULT_LARGEUR_TROTOIR 1
-#define DEFAULT_LARGEUR_BATIMENT 3
 #define DEFAULT_LARGEUR_RUELLE 1
 #define DEFAULT_HAUTEUR_ETAGE 3
 
@@ -19,11 +18,11 @@ public:
     int maxEtage = DEFAULT_MAX_ETAGE;
     int splitPourcent = 50;
 
-    float largeurTrotoir = DEFAULT_LARGEUR_TROTOIR;
-    float largeurBatiment = DEFAULT_LARGEUR_BATIMENT;
+    float largeurTrotoir = DEFAULT_LARGEUR_TROTOIR;    
     float largeurRuelle = DEFAULT_LARGEUR_RUELLE;
 
     float hauteurEtage = DEFAULT_HAUTEUR_ETAGE;
+    float minLargeurBatiment = hauteurEtage*3;
 
     //à changer de place !!! très moche ici !!!
     Vector3D hauteurEtageLePlusHaut;
