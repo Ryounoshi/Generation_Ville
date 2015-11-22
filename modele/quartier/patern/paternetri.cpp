@@ -41,7 +41,7 @@ Mesh PaterneTri::paternConstruction() const{
 
     Mesh retour;
 
-    float larg = _par->largeurBatiment;
+    float larg = _par->minLargeurBatiment;
 
     Vector2D v1 = get(1)-get(0),
             v2 = get(2)-get(1),
@@ -75,7 +75,7 @@ Mesh PaterneTri::paternAngle(const Triangle& centre, int i, const Vector2D& v1, 
 {
     //Mesh retour;
 
-    //float larg = _par->largeurBatiment;
+    //float larg = _par->minLargeurBatiment;
 
     Vector2D shrink = centre[i] - get(i);
 

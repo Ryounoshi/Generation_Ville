@@ -12,23 +12,29 @@ Mesh PaterneQuad::generate()
 
     //détermination si le quartier est assez grand pour contenir des batiments avec ruelle
     if(_par->minLargeurBatiment < coeffShrinkMax() && ratioDiametre() < 3 ){
-        if(_par->minLargeurBatiment > coeffShrinkMax()/3 ){
-            if(aleatoire < 33){
+        if(_par->minLargeurBatiment < coeffShrinkMax()/2 ){
+            if(aleatoire < 29){
                 m1.merge(paternQuatreBatiment());
             }
-            else if(aleatoire <= 66){
+            else if(aleatoire <= 54){
                 m1.merge(paternTroisBatiment());
             }
-            else{
+            else if(aleatoire <= 87){
                 m1.merge(paternDeuxBatimentDiagonale());
+            }
+            else{
+                m1.merge(paternQuartierPlein());
             }
         }
         else{
-            if(aleatoire < 50){
+            if(aleatoire < 40){
                 m1.merge(paternQuatreBatiment());
             }
-            else{
+            else if(aleatoire < 80){
                 m1.merge(paternTroisBatiment());
+            }            
+            else{
+                m1.merge(paternQuartierPlein());
             }
         }
     }
@@ -81,7 +87,7 @@ Mesh PaterneQuad::paternQuatreBatiment(){
 
     Quadrangle centre = *this, notreQuadrangle = *this;
 
-    centre.shrink( (coeffShrinkMax()/2)-_par->largeurRuelle );
+    centre.shrink( coeffShrinkMax()-_par->largeurRuelle );
 
     for(int i=0; i<4; i++){
         Vector2D shrink = centre[i] - notreQuadrangle[i];
@@ -91,7 +97,16 @@ Mesh PaterneQuad::paternQuatreBatiment(){
         pIpIm1.normalise(); pIpIp1.normalise();
 
         float dpIpIm1 = shrink.scalareProduct(pIpIm1);
+        dpIpIm1 = shrink.getNorm()*shrink.getNorm() / (dpIpIm1*2);
+
+        if(dpIpIm1 >= (notreQuadrangle[(i-1)%4] - notreQuadrangle[i]).getNorm()/2)
+            dpIpIm1 = (notreQuadrangle[(i-1)%4] - notreQuadrangle[i]).getNorm()/2 - _par->largeurRuelle/2;
+
         float dpIpIp1 = shrink.scalareProduct(pIpIp1);
+        dpIpIp1 = shrink.getNorm()*shrink.getNorm() / (dpIpIp1*2);
+
+        if(dpIpIp1 >= (notreQuadrangle[(i+1)%4] - notreQuadrangle[i]).getNorm()/2)
+            dpIpIp1 = (notreQuadrangle[(i+1)%4] - notreQuadrangle[i]).getNorm()/2 - _par->largeurRuelle/2;
 
         Vector2D p2 = notreQuadrangle[i] + pIpIp1*dpIpIp1;
         Vector2D p4 = notreQuadrangle[i] + pIpIm1*dpIpIm1;
@@ -112,7 +127,7 @@ Mesh PaterneQuad::paternTroisBatiment(){
 
     Quadrangle centre = *this, notreQuadrangle = *this;
 
-    centre.shrink( (coeffShrinkMax()/2)-_par->largeurRuelle );
+    centre.shrink( (coeffShrinkMax())-_par->largeurRuelle );
 
     Vector2D p0p3 = notreQuadrangle[3] - notreQuadrangle[0];
     Vector2D p1p2 = notreQuadrangle[2] - notreQuadrangle[1];
@@ -128,11 +143,40 @@ Mesh PaterneQuad::paternTroisBatiment(){
     p3p2.normalise(); p3p0.normalise();
 
     float dp0p3 = (centre[0]-notreQuadrangle[0]).scalareProduct(p0p3);
+    dp0p3 = (centre[0]-notreQuadrangle[0]).getNorm()*(centre[0]-notreQuadrangle[0]).getNorm() / (dp0p3*2);
+
+    if(dp0p3 >= (notreQuadrangle[3]-notreQuadrangle[0]).getNorm()/2)
+        dp0p3 = (notreQuadrangle[3]-notreQuadrangle[0]).getNorm()/2 - _par->largeurRuelle/2;
+
     float dp1p2 = (centre[1]-notreQuadrangle[1]).scalareProduct(p1p2);
+    dp1p2 = (centre[1]-notreQuadrangle[1]).getNorm()*(centre[1]-notreQuadrangle[1]).getNorm() / (dp1p2*2);
+
+    if(dp1p2 >= (notreQuadrangle[2]-notreQuadrangle[1]).getNorm()/2)
+        dp1p2 = (notreQuadrangle[2]-notreQuadrangle[1]).getNorm()/2 - _par->largeurRuelle/2;
+
     float dp2p1 = (centre[2]-notreQuadrangle[2]).scalareProduct(p2p1);
+    dp2p1 = (centre[2]-notreQuadrangle[2]).getNorm()*(centre[2]-notreQuadrangle[2]).getNorm() / (dp2p1*2);
+
+    if(dp2p1 >= (notreQuadrangle[1] - notreQuadrangle[2]).getNorm()/2)
+        dp2p1 = (notreQuadrangle[1] - notreQuadrangle[2]).getNorm()/2 - _par->largeurRuelle/2;
+
     float dp2p3 = (centre[2]-notreQuadrangle[2]).scalareProduct(p2p3);
+    dp2p3 = (centre[2]-notreQuadrangle[2]).getNorm()*(centre[2]-notreQuadrangle[2]).getNorm() / (dp2p3*2);
+
+    if(dp2p3 >= (notreQuadrangle[3] - notreQuadrangle[2]).getNorm()/2)
+        dp2p3 = (notreQuadrangle[3] - notreQuadrangle[2]).getNorm()/2 - _par->largeurRuelle/2;
+
     float dp3p2 = (centre[3]-notreQuadrangle[3]).scalareProduct(p3p2);
+    dp3p2 = (centre[3]-notreQuadrangle[3]).getNorm()*(centre[3]-notreQuadrangle[3]).getNorm() / (dp3p2*2);
+
+    if(dp3p2 >= (notreQuadrangle[2] - notreQuadrangle[3]).getNorm()/2)
+        dp3p2 = (notreQuadrangle[2] - notreQuadrangle[3]).getNorm()/2 - _par->largeurRuelle/2;
+
     float dp3p0 = (centre[3]-notreQuadrangle[3]).scalareProduct(p3p0);
+    dp3p0 = (centre[3]-notreQuadrangle[3]).getNorm()*(centre[3]-notreQuadrangle[3]).getNorm() / (dp3p0*2);
+
+    if(dp3p0 >= (notreQuadrangle[0] - notreQuadrangle[3]).getNorm()/2)
+        dp3p0 = (notreQuadrangle[0] - notreQuadrangle[3]).getNorm()/2 - _par->largeurRuelle/2;
 
     Vector2D p3B1 = notreQuadrangle[1] + p1p2*dp1p2;
     Vector2D p4B1 = notreQuadrangle[0] + p0p3*dp0p3;
@@ -170,7 +214,7 @@ Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
 
     Quadrangle centre = *this, notreQuadrangle = *this;
 
-    float coeffShrink = (coeffShrinkMax()/3);
+    float coeffShrink = (coeffShrinkMax()/2);
 
     centre.shrink( coeffShrink );
 
@@ -232,39 +276,6 @@ Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
 
 }
 
-Mesh PaterneQuad::paternDeuxBatimentDiametre(){
-
-    Mesh retour;
-
-    /*
-    Quadrangle centre = *this, notreQuadrangle = *this;
-    centre.shrink(_par->largeurBatiment);
-
-    for(int i=0; i<4; i++){
-        Vector2D shrink = centre[i] - notreQuadrangle[i];
-        Vector2D pIpIm1 = notreQuadrangle[(i-1)%4] - notreQuadrangle[i];
-        Vector2D pIpIp1 = notreQuadrangle[(i+1)%4] - notreQuadrangle[i];
-
-        pIpIm1 = pIpIm1.normalise(); pIpIp1 = pIpIp1.normalise();
-
-        float dpIpIm1 = shrink.scalareProduct(pIpIm1);
-        float dpIpIp1 = shrink.scalareProduct(pIpIp1);
-
-        Vector2D p2 = notreQuadrangle[i] + pIpIp1*dpIpIp1;
-        Vector2D p4 = notreQuadrangle[i] + pIpIm1*dpIpIm1;
-        Batiment b = Batiment(Vector3D(notreQuadrangle[i].x, notreQuadrangle[i].y, 0),
-                              Vector3D(p2.x, p2.y, 0),
-                              Vector3D(centre[i].x, centre[i].y, 0),
-                              Vector3D(p4.x, p4.y, 0),
-                              0.7,
-                              _par);
-        m1.merge( b.generate() );
-    }
-    */
-
-    return retour;
-}
-
 Mesh PaterneQuad::paternQuartierPlein()
 {
     Mesh retour;
@@ -293,8 +304,8 @@ Mesh PaterneQuad::paternQuartierPlein()
 
         Vector2D    milieu1 = (*this)[0] + cote1 * (0.5 - ( _par->largeurRuelle / cote1.getNorm() )),
                 milieu2 = (*this)[0] + cote1 * (0.5 + ( _par->largeurRuelle / cote1.getNorm() )),
-                milieu3 = (*this)[3] + cote1 * (0.5 + ( _par->largeurRuelle / cote2.getNorm() )),
-                milieu4 = (*this)[3] + cote1 * (0.5 - ( _par->largeurRuelle / cote2.getNorm() ));
+                milieu3 = (*this)[3] + cote2 * (0.5 + ( _par->largeurRuelle / cote2.getNorm() )),
+                milieu4 = (*this)[3] + cote2 * (0.5 - ( _par->largeurRuelle / cote2.getNorm() ));
 
 
         Batiment b = Batiment(Vector3D( (*this)[0].x, (*this)[0].y, 0),
@@ -318,8 +329,8 @@ Mesh PaterneQuad::paternQuartierPlein()
 
         Vector2D    milieu1 = (*this)[1] + cote1 * (0.5 - ( _par->largeurRuelle / cote1.getNorm() )),
                 milieu2 = (*this)[1] + cote1 * (0.5 + ( _par->largeurRuelle / cote1.getNorm() )),
-                milieu3 = (*this)[0] + cote1 * (0.5 + ( _par->largeurRuelle / cote2.getNorm() )),
-                milieu4 = (*this)[0] + cote1 * (0.5 - ( _par->largeurRuelle / cote2.getNorm() ));
+                milieu3 = (*this)[0] + cote2 * (0.5 + ( _par->largeurRuelle / cote2.getNorm() )),
+                milieu4 = (*this)[0] + cote2 * (0.5 - ( _par->largeurRuelle / cote2.getNorm() ));
 
 
         Batiment b = Batiment(Vector3D( (*this)[1].x, (*this)[1].y, 0),
@@ -344,15 +355,6 @@ float PaterneQuad::coeffShrinkMax() const
 {
     float retour = FLT_MAX;
 
-    /*
-    if( ( (*this)[2]-(*this)[0] ).getNorm2() >= ( (*this)[1]-(*this)[3] ).getNorm2() ){
-        retour = ( (*this)[2]-(*this)[0] ).getNorm() / (1.4*2);
-    }
-    else{
-        retour = ( (*this)[1]-(*this)[3] ).getNorm() / (1.4*2);
-    }
-    */
-
     for(int i=0; i<4; i++){
         float d = ( (*this)[i]-(*this)[(i+1)%4] ).getNorm();
         if(d < retour){
@@ -360,7 +362,7 @@ float PaterneQuad::coeffShrinkMax() const
         }
     }
 
-    return retour;
+    return retour/2;
 }
 
 float PaterneQuad::ratioDiametre() const
