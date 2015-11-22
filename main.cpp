@@ -45,11 +45,11 @@ int main(int argc, char *argv[])
     PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,10), Vector2D(10,10), Vector2D(10,0), 2.5);
     m1 = p1.generate();
 */
-    /*myWindow glWin;
+    myWindow glWin;
     glWin.show();
-    return app.exec();*/
+    return app.exec();
 
-    BatParameter par(Vector3D(0,0,0));
+    /*BatParameter par(Vector3D(0,0,0));
     par.etageLePlusHaut = 20;
     par.hauteurEtage = 5;
     par.influenceCentreVille = 100;
@@ -60,13 +60,12 @@ int main(int argc, char *argv[])
 
     TerrainBase base(1000,1000, &par);
     base.decoupeSimple(4000);
-    base.supprPetitQuartier(200);
     base.shrink(4.f);
     base.supprPetitQuartier(200);
     Mesh m = base.generate();
 
     std::cout << "fin de la création du mesh" << std::endl;
-    ObjManager::writeToObj("testTerrain.obj", m.getVertex(), m.getFace());
+    ObjManager::writeToObj("testTerrain.obj", m.getVertex(), m.getFace());*/
 
     //return 0;
 }
