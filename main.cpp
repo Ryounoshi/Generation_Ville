@@ -55,7 +55,8 @@ int main(int argc, char *argv[])
     par.influenceCentreVille = 100;
     par.largeurTrotoir = 3;
     par.largeurRuelle = 2;
-    par.minLargeurBatiment = 10;
+    par.minLargeurBatiment = 6;
+    par.maxLargeurBatiment = 10;
 
     TerrainBase base(1000,1000, &par);
     base.decoupeSimple(4000);

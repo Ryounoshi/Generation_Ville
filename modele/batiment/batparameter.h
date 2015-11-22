@@ -23,6 +23,7 @@ public:
 
     float hauteurEtage = DEFAULT_HAUTEUR_ETAGE;
     float minLargeurBatiment = hauteurEtage*3;
+    float maxLargeurBatiment = hauteurEtage*5;
 
     //à changer de place !!! très moche ici !!!
     Vector3D hauteurEtageLePlusHaut;

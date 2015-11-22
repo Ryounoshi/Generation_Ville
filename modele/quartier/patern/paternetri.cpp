@@ -102,7 +102,7 @@ Mesh PaterneTri::paternAngleCarre2(const Triangle& centre, int i, const Vector2D
 {
     //Mesh retour;
 
-    float larg = _par->minLargeurBatiment;
+    float larg = _par->minLargeurBatiment+(_par->maxLargeurBatiment-_par->minLargeurBatiment)*((rand()&0xFF)/0xFF);
 
     Vector2D shrink = centre[i] - get(i);
 
@@ -126,7 +126,7 @@ Mesh PaterneTri::paternAngleCarre(int i, const Vector2D& v1, const Vector2D& v2)
 {
     //Mesh retour;
 
-    float larg = _par->minLargeurBatiment;
+    float larg = _par->minLargeurBatiment+(_par->maxLargeurBatiment-_par->minLargeurBatiment)*((rand()&0xFF)/0xFF);
 
     Vector2D v1o = -v1.vectorProduct();
     float sc2 = (1/dot(v1o, v2))*larg;
@@ -149,7 +149,7 @@ Mesh PaterneTri::paternAngleCarre(int i, const Vector2D& v1, const Vector2D& v2)
 
 Mesh PaterneTri::paternRebordAngle(int i, const Vector2D& v1, const Vector2D& v2, Vector2D& p2, Vector2D& p3, Vector2D& p4) const
 {
-    float larg = _par->minLargeurBatiment;
+    float larg = _par->minLargeurBatiment+(_par->maxLargeurBatiment-_par->minLargeurBatiment)*((rand()&0xFF)/(float)0xFF);
 
     Vector2D v1o = -v1.vectorProduct();
     float sc2 = (1/dot(v1o, v2))*larg;
@@ -172,8 +172,8 @@ Mesh PaterneTri::paternRebordAngle(int i, const Vector2D& v1, const Vector2D& v2
 Mesh PaterneTri::paternRebord(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3, const Vector2D& p4, const Vector2D& v1) const
 {
     Mesh retour;
-    float larg = _par->minLargeurBatiment;
-    float rue = _par->largeurRuelle;
+    float larg = _par->minLargeurBatiment+(_par->maxLargeurBatiment-_par->minLargeurBatiment)*(((rand()&0xFF)/(float)0xFF));
+    float rue = _par->largeurRuelle*(rand()&0x1);
 
 
     Vector2D p11 = p1+v1*rue;
