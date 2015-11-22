@@ -238,7 +238,7 @@ Mesh PaterneQuad::paternDeuxBatimentDiametre(){
 
     /*
     Quadrangle centre = *this, notreQuadrangle = *this;
-    centre.shrink(_par->largeurBatiment);
+    centre.shrink(_par->minLargeurBatiment);
 
     for(int i=0; i<4; i++){
         Vector2D shrink = centre[i] - notreQuadrangle[i];

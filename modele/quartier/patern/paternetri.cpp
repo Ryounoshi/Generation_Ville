@@ -41,7 +41,7 @@ Mesh PaterneTri::paternConstruction() const{
 
     Mesh retour;
 
-    float larg = _par->largeurBatiment;
+    float larg = _par->minLargeurBatiment;
 
     Vector2D v1 = get(1)-get(0),
             v2 = get(2)-get(1),
@@ -81,7 +81,7 @@ Mesh PaterneTri::paternAngleTotal(const Triangle& centre, int i, const Vector2D&
 {
     //Mesh retour;
 
-    //float larg = _par->largeurBatiment;
+    //float larg = _par->minLargeurBatiment;
 
     Vector2D shrink = centre[i] - get(i);
 
@@ -102,7 +102,7 @@ Mesh PaterneTri::paternAngleCarre2(const Triangle& centre, int i, const Vector2D
 {
     //Mesh retour;
 
-    float larg = _par->largeurBatiment;
+    float larg = _par->minLargeurBatiment;
 
     Vector2D shrink = centre[i] - get(i);
 
@@ -126,7 +126,7 @@ Mesh PaterneTri::paternAngleCarre(int i, const Vector2D& v1, const Vector2D& v2)
 {
     //Mesh retour;
 
-    float larg = _par->largeurBatiment;
+    float larg = _par->minLargeurBatiment;
 
     Vector2D v1o = -v1.vectorProduct();
     float sc2 = (1/dot(v1o, v2))*larg;
@@ -149,7 +149,7 @@ Mesh PaterneTri::paternAngleCarre(int i, const Vector2D& v1, const Vector2D& v2)
 
 Mesh PaterneTri::paternRebordAngle(int i, const Vector2D& v1, const Vector2D& v2, Vector2D& p2, Vector2D& p3, Vector2D& p4) const
 {
-    float larg = _par->largeurBatiment;
+    float larg = _par->minLargeurBatiment;
 
     Vector2D v1o = -v1.vectorProduct();
     float sc2 = (1/dot(v1o, v2))*larg;
@@ -172,7 +172,7 @@ Mesh PaterneTri::paternRebordAngle(int i, const Vector2D& v1, const Vector2D& v2
 Mesh PaterneTri::paternRebord(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3, const Vector2D& p4, const Vector2D& v1) const
 {
     Mesh retour;
-    float larg = _par->largeurBatiment;
+    float larg = _par->minLargeurBatiment;
     float rue = _par->largeurRuelle;
 
 
