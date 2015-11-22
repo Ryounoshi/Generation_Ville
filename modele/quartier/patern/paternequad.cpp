@@ -85,11 +85,18 @@ Mesh PaterneQuad::paternQuatreBatiment(){
 
     Mesh retour;
 
-    Quadrangle centre = *this, notreQuadrangle = *this;
-
-    centre.shrink( coeffShrinkMax()-_par->largeurRuelle );
+    Quadrangle notreQuadrangle = *this;
 
     for(int i=0; i<4; i++){
+
+        // Taille aléatoire
+        float aleatoire = (rand()%100) / 100.0;
+
+        Quadrangle centre = *this;
+        centre.shrink( (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->largeurRuelle) );
+
+        //
+
         Vector2D shrink = centre[i] - notreQuadrangle[i];
         Vector2D pIpIm1 = notreQuadrangle[(i-1)%4] - notreQuadrangle[i];
         Vector2D pIpIp1 = notreQuadrangle[(i+1)%4] - notreQuadrangle[i];
@@ -127,8 +134,6 @@ Mesh PaterneQuad::paternTroisBatiment(){
 
     Quadrangle centre = *this, notreQuadrangle = *this;
 
-    centre.shrink( (coeffShrinkMax())-_par->largeurRuelle );
-
     Vector2D p0p3 = notreQuadrangle[3] - notreQuadrangle[0];
     Vector2D p1p2 = notreQuadrangle[2] - notreQuadrangle[1];
 
@@ -142,6 +147,11 @@ Mesh PaterneQuad::paternTroisBatiment(){
     p2p1.normalise(); p2p3.normalise();
     p3p2.normalise(); p3p0.normalise();
 
+    // Taille aléatoire
+    float aleatoire = (rand()%100) / 100.0;
+    centre.shrink( (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->largeurRuelle) );
+    //
+
     float dp0p3 = (centre[0]-notreQuadrangle[0]).scalareProduct(p0p3);
     dp0p3 = (centre[0]-notreQuadrangle[0]).getNorm()*(centre[0]-notreQuadrangle[0]).getNorm() / (dp0p3*2);
 
@@ -154,6 +164,12 @@ Mesh PaterneQuad::paternTroisBatiment(){
     if(dp1p2 >= (notreQuadrangle[2]-notreQuadrangle[1]).getNorm()/2)
         dp1p2 = (notreQuadrangle[2]-notreQuadrangle[1]).getNorm()/2 - _par->largeurRuelle/2;
 
+    // Taille aléatoire
+    aleatoire = (rand()%100) / 100.0;
+    centre = *this;
+    centre.shrink( (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->largeurRuelle) );
+    //
+
     float dp2p1 = (centre[2]-notreQuadrangle[2]).scalareProduct(p2p1);
     dp2p1 = (centre[2]-notreQuadrangle[2]).getNorm()*(centre[2]-notreQuadrangle[2]).getNorm() / (dp2p1*2);
 
@@ -165,6 +181,12 @@ Mesh PaterneQuad::paternTroisBatiment(){
 
     if(dp2p3 >= (notreQuadrangle[3] - notreQuadrangle[2]).getNorm()/2)
         dp2p3 = (notreQuadrangle[3] - notreQuadrangle[2]).getNorm()/2 - _par->largeurRuelle/2;
+
+    // Taille aléatoire
+    aleatoire = (rand()%100) / 100.0;
+    centre = *this;
+    centre.shrink( (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->largeurRuelle) );
+    //
 
     float dp3p2 = (centre[3]-notreQuadrangle[3]).scalareProduct(p3p2);
     dp3p2 = (centre[3]-notreQuadrangle[3]).getNorm()*(centre[3]-notreQuadrangle[3]).getNorm() / (dp3p2*2);
@@ -214,7 +236,10 @@ Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
 
     Quadrangle centre = *this, notreQuadrangle = *this;
 
-    float coeffShrink = (coeffShrinkMax()/2);
+    // Taille aléatoire
+    float aleatoire = (rand()%100) / 100.0;
+    float coeffShrink = (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->largeurRuelle);
+    //
 
     centre.shrink( coeffShrink );
 
@@ -297,16 +322,17 @@ Mesh PaterneQuad::paternQuartierPlein()
 
     */
 
-    Vector2D cote1, cote2;
+    float aleatoire1 = 0.3 + (rand()%20) / 100.0;
+    float aleatoire2 = 0.3 + (rand()%20) / 100.0;
 
     if( ((*this)[1] - (*this)[0]).getNorm2() >= ((*this)[2] - (*this)[1]).getNorm2() ){
         Vector2D cote1 = ((*this)[1] - (*this)[0]),
         cote2 = ((*this)[2] - (*this)[3]);
 
-        Vector2D    milieu1 = (*this)[0] + cote1 * (0.5 - ( _par->largeurRuelle / cote1.getNorm() )),
-                milieu2 = (*this)[0] + cote1 * (0.5 + ( _par->largeurRuelle / cote1.getNorm() )),
-                milieu3 = (*this)[3] + cote2 * (0.5 + ( _par->largeurRuelle / cote2.getNorm() )),
-                milieu4 = (*this)[3] + cote2 * (0.5 - ( _par->largeurRuelle / cote2.getNorm() ));
+        Vector2D    milieu1 = (*this)[0] + cote1 * (aleatoire1 - ( _par->largeurRuelle / cote1.getNorm() )),
+                milieu2 = (*this)[0] + cote1 * (aleatoire1 + ( _par->largeurRuelle / cote1.getNorm() )),
+                milieu3 = (*this)[3] + cote2 * (aleatoire2 + ( _par->largeurRuelle / cote2.getNorm() )),
+                milieu4 = (*this)[3] + cote2 * (aleatoire2 - ( _par->largeurRuelle / cote2.getNorm() ));
 
 
         Batiment b = Batiment(Vector3D( (*this)[0].x, (*this)[0].y, 0),
