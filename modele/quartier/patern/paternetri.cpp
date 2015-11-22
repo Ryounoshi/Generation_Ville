@@ -63,15 +63,21 @@ Mesh PaterneTri::paternConstruction() const{
     v2/=tv2;
     v3/=tv3;
 
-    retour =        paternAngle(centre, 0, v1,-v3, tv1,tv3);
-    retour.merge(   paternAngle(centre, 1, v2,-v1, tv2,tv1));
-    retour.merge(   paternAngle(centre, 2, v3,-v2, tv3,tv2));
+    Vector2D p11,p12,p13,p21,p22,p23,p31,p32,p33;
+
+    retour =        paternRebordAngle(0, v1,-v3,p11,p12,p13);
+    retour.merge(   paternRebordAngle(1, v2,-v1,p21,p22,p23));
+    retour.merge(   paternRebordAngle(2, v3,-v2,p31,p32,p33));
+
+    retour.merge(   paternRebord(p11,p23,p22,p12,v1));
+    retour.merge(   paternRebord(p21,p33,p32,p22,v2));
+    retour.merge(   paternRebord(p31,p13,p12,p32,v3));
 
 
     return retour;
 }
 
-Mesh PaterneTri::paternAngle(const Triangle& centre, int i, const Vector2D& v1, const Vector2D& v2, float tv1, float tv2) const
+Mesh PaterneTri::paternAngleTotal(const Triangle& centre, int i, const Vector2D& v1, const Vector2D& v2) const
 {
     //Mesh retour;
 
@@ -90,4 +96,130 @@ Mesh PaterneTri::paternAngle(const Triangle& centre, int i, const Vector2D& v1, 
                           Vector3D(XY((get(i)+v2*sc2))),
                           _par);
     return b.generate();
+}
+
+Mesh PaterneTri::paternAngleCarre2(const Triangle& centre, int i, const Vector2D& v1, const Vector2D& v2) const
+{
+    //Mesh retour;
+
+    float larg = _par->minLargeurBatiment+(_par->maxLargeurBatiment-_par->minLargeurBatiment)*((rand()&0xFF)/0xFF);
+
+    Vector2D shrink = centre[i] - get(i);
+
+    float sc1 = dot(v1, shrink);
+    Vector2D v1o = -v1.vectorProduct();
+    float sc2 = (1/dot(v1o, v2))*larg;
+
+
+
+    //if(sc1 > tv1-sc3)   //si l'on essaye de construire les bâtiments dans les angles mais qu'ils vont se supperposer
+
+    Batiment b = Batiment(Vector3D(XY(get(i))),
+                          Vector3D(XY((get(i)+v1*sc1))),
+                          Vector3D(XY(centre[i])),
+                          Vector3D(XY((get(i)+v2*sc2))),
+                          _par);
+    return b.generate();
+}
+
+Mesh PaterneTri::paternAngleCarre(int i, const Vector2D& v1, const Vector2D& v2) const
+{
+    //Mesh retour;
+
+    float larg = _par->minLargeurBatiment+(_par->maxLargeurBatiment-_par->minLargeurBatiment)*((rand()&0xFF)/0xFF);
+
+    Vector2D v1o = -v1.vectorProduct();
+    float sc2 = (1/dot(v1o, v2))*larg;
+
+    Vector2D p = get(i)+v2*sc2+v1*larg;
+
+
+    float sc1 = dot(v1, p-get(i));
+
+
+    //if(sc1 > tv1-sc3)   //si l'on essaye de construire les bâtiments dans les angles mais qu'ils vont se supperposer
+
+    Batiment b = Batiment(Vector3D(XY(get(i))),
+                          Vector3D(XY((get(i)+v1*sc1))),
+                          Vector3D(XY(p)),
+                          Vector3D(XY((get(i)+v2*sc2))),
+                          _par);
+    return b.generate();
+}
+
+Mesh PaterneTri::paternRebordAngle(int i, const Vector2D& v1, const Vector2D& v2, Vector2D& p2, Vector2D& p3, Vector2D& p4) const
+{
+    float larg = _par->minLargeurBatiment+(_par->maxLargeurBatiment-_par->minLargeurBatiment)*((rand()&0xFF)/(float)0xFF);
+
+    Vector2D v1o = -v1.vectorProduct();
+    float sc2 = (1/dot(v1o, v2))*larg;
+
+    p4 = get(i)+v2*sc2;
+    p3 = p4+v1*larg;
+
+    float sc1 = dot(v1, p3-get(i));
+    p2 = get(i)+v1*sc1;
+
+    Batiment b = Batiment(Vector3D(XY(get(i))),
+                          Vector3D(XY(p2)),
+                          Vector3D(XY(p3)),
+                          Vector3D(XY(p4)),
+                          _par);
+    return b.generate();
+}
+
+
+Mesh PaterneTri::paternRebord(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3, const Vector2D& p4, const Vector2D& v1) const
+{
+    Mesh retour;
+    float larg = _par->minLargeurBatiment+(_par->maxLargeurBatiment-_par->minLargeurBatiment)*(((rand()&0xFF)/(float)0xFF));
+    float rue = _par->largeurRuelle*(rand()&0x1);
+
+
+    Vector2D p11 = p1+v1*rue;
+    Vector2D p44 = p4+v1*rue;
+
+    float dist = distance(p11,p2);
+    float dist2 = distance(p44, p3);
+
+    if(dist < larg+2*rue || dist2 < larg+rue)
+    {
+        Vector2D p22 = p2-v1*rue;
+        Vector2D p33 = p3-v1*rue;
+        if(orientation(p44,p22,p33) >= 0)
+            return retour;
+
+        Batiment b = Batiment(Vector3D(XY(p11)),
+                              Vector3D(XY(p22)),
+                              Vector3D(XY(p33)),
+                              Vector3D(XY(p44)),
+                              _par);
+        return b.generate();
+    }
+    else
+    {
+        Vector2D p22 = p11+v1*larg;
+        Vector2D p33 = p44+v1*larg;
+        if(orientation(p33,p2,p3) > 0)
+        {
+            p22 = p2-v1*rue;
+            p33 = p3-v1*rue;
+            Batiment b = Batiment(Vector3D(XY(p11)),
+                                  Vector3D(XY(p22)),
+                                  Vector3D(XY(p33)),
+                                  Vector3D(XY(p44)),
+                                  _par);
+            return b.generate();
+        }
+
+        Batiment b = Batiment(Vector3D(XY(p11)),
+                              Vector3D(XY(p22)),
+                              Vector3D(XY(p33)),
+                              Vector3D(XY(p44)),
+                              _par);
+        retour = b.generate();
+        retour.merge(paternRebord(p22, p2, p3, p33, v1));
+        return retour;
+    }
+
 }

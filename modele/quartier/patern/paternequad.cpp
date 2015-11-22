@@ -276,6 +276,7 @@ Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
 
 }
 
+
 Mesh PaterneQuad::paternQuartierPlein()
 {
     Mesh retour;

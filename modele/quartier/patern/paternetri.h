@@ -18,7 +18,13 @@ private:
     void faireTrotoir(Mesh &m);
     void faireSol(Mesh &m);
     Mesh paternConstruction() const;
-    Mesh paternAngle(const Triangle& centre, int i, const Vector2D& v1, const Vector2D& v2, float tv1, float tv2) const;
+
+    Mesh paternAngleTotal(const Triangle& centre, int i, const Vector2D& v1, const Vector2D& v2) const;
+    Mesh paternAngleCarre(int i, const Vector2D& v1, const Vector2D& v2) const;
+    Mesh paternAngleCarre2(const Triangle& centre, int i, const Vector2D& v1, const Vector2D& v2) const;
+
+    Mesh paternRebordAngle(int i, const Vector2D& v1, const Vector2D& v2, Vector2D& p2, Vector2D& p3, Vector2D& p4) const;
+    Mesh paternRebord(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3, const Vector2D& p4, const Vector2D& v1) const;
 };
 
 #endif // PATERNETRI_H

@@ -54,11 +54,12 @@ int main(int argc, char *argv[])
     par.hauteurEtage = 5;
     par.influenceCentreVille = 100;
     par.largeurTrotoir = 3;
-    par.largeurRuelle = 3;
-    par.largeurBatiment = 10;
+    par.largeurRuelle = 2;
+    par.minLargeurBatiment = 6;
+    par.maxLargeurBatiment = 10;
 
     TerrainBase base(1000,1000, &par);
-    base.decoupeSimple(2500);
+    base.decoupeSimple(4000);
     base.supprPetitQuartier(200);
     base.shrink(4.f);
     base.supprPetitQuartier(200);
