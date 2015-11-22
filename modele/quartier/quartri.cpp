@@ -326,7 +326,7 @@ std::pair<Vector2D, Vector2D> QuarTri::traiteCote(const Vector2D& pp2, const Vec
             /  \
        pp2 /____\ pp1
     */
-    float height3 = 100;//((pp3 - pp1) / (pp2 - pp1)).getNorm() / (pp2 - pp1).getNorm();
+    float height3 = dot(pp3-pp1,pp2-pp1)/distance(pp2,pp1);//((pp3 - pp1) / (pp2 - pp1)).getNorm() / (pp2 - pp1).getNorm();
     if (height3 <= 2 * MIN_DIM_BAT)
         return std::make_pair(pp1, pp2); // ou exclure la petite bande ?
     auto distribution = make_Unidistrib(MIN_DIM_BAT, height3 - MIN_DIM_BAT);
@@ -523,5 +523,11 @@ Mesh QuarTri::generate()
 
 bool QuarTri::quartierCorrect() const
 {
-    return orientation(get(0),get(1),get(2)) > 0;
+    if(orientation(get(0),get(1),get(2)) <= 0)
+        return false;
+
+    float cote2 = MIN_COTE*MIN_COTE;
+    if(distance2(get(0),get(1)) < cote2 || distance2(get(1),get(2)) < cote2 || distance2(get(2),get(0)) < cote2)
+        return false;
+    return true;
 }

@@ -3,7 +3,8 @@
 TerrainBase::TerrainBase(float longueur, float largeur, BatParameter *par):
         longueur(longueur),  largeur(largeur), _par(par)
 {
-    QuarQuad* quad = new QuarQuad(Vector2D(0,0), Vector2D(0,longueur), Vector2D(largeur, longueur), Vector2D(largeur,0), _par);
+    float long2 = longueur/2, larg2 = largeur/2;
+    QuarQuad* quad = new QuarQuad(Vector2D(-larg2,-long2), Vector2D(-larg2,long2), Vector2D(larg2, long2), Vector2D(larg2,-long2), _par);
     quartiers.push_back(quad);
 }
 
@@ -13,24 +14,26 @@ TerrainBase::~TerrainBase()
         delete quartiers[i];
 }
 
-void TerrainBase::decoupeSimple()
+void TerrainBase::decoupeSimple(float aireMax)
 {
-#ifndef QT_NO_DEBUG
-    int i2 =0;
-#endif
+    #ifndef QT_NO_DEBUG
+        int i2 =0;
+    #endif
     int i = 0;
     while(i < (int)quartiers.size())
     {
         Quartier* quartier = quartiers[i];
         float aire = quartier->area();
-//#ifndef QT_NO_DEBUG
-        std::cout << aire << std::endl;
-        if(aire < 10 && aire > 10000000)
-            std::cout << "trop petit" << std::endl;
-//#endif
-        if(aire < AIRE_QUARTIER_MAX)    {
+        #ifndef QT_NO_DEBUG
+            std::cout << aire << std::endl;
+            if(aire < 10 && aire > 10000000)
+                std::cout << "trop petit" << std::endl;
+        #endif
+        if(aire < aireMax)    {
             i++;
-            std::cout << std::endl << i << std::endl;
+            #ifndef QT_NO_DEBUG
+                std::cout << std::endl << i << std::endl;
+            #endif
         }
         else
         {
@@ -40,26 +43,34 @@ void TerrainBase::decoupeSimple()
             delete quartier;
             quartiers[i] = quar2.first;
             quartiers.push_back(quar2.second);
-#ifndef QT_NO_DEBUG
-            i2++;
-#endif
+            #ifndef QT_NO_DEBUG
+                i2++;
+            #endif
         }
     }
 }
 
 
-void TerrainBase::decoupe()
+void TerrainBase::decoupe(float aireMax)
 {
-    int i2 =0;
+    #ifndef QT_NO_DEBUG
+        int i2 =0;
+    #endif
     int i = 0;
     while(i < (int)quartiers.size())
     {
         Quartier* quartier = quartiers[i];
         float aire = quartier->area();
-        std::cout << aire << std::endl;
-        if(aire < AIRE_QUARTIER_MAX)    {
+        #ifndef QT_NO_DEBUG
+            std::cout << aire << std::endl;
+            if(aire < 10 && aire > 10000000)
+                std::cout << "trop petit" << std::endl;
+        #endif
+        if(aire < aireMax)    {
             i++;
-            std::cout << std::endl;
+            #ifndef QT_NO_DEBUG
+                std::cout << std::endl << i << std::endl;
+            #endif
         }
         else
         {
@@ -69,7 +80,9 @@ void TerrainBase::decoupe()
             delete quartier;
             quartiers[i] = quar2.first;
             quartiers.push_back(quar2.second);
-            i2++;
+            #ifndef QT_NO_DEBUG
+                i2++;
+            #endif
         }
     }
 }
@@ -100,10 +113,8 @@ Mesh TerrainBase::generate()
     if(quartiers.empty())
         return Mesh();
 
-    //quartiers[0]->setPar(_par);
     Mesh m = quartiers[0]->generate();
     for(size_t i = 1;  i < quartiers.size();   i++){
-        //quartiers[i]->setPar(_par);
         m.merge(quartiers[i]->generate());
     }
     return m;

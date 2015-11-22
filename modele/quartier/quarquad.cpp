@@ -320,8 +320,14 @@ Mesh QuarQuad::generate()
 
 bool QuarQuad::quartierCorrect() const
 {
-    return  orientation(get(0),get(1),get(2)) > 0 &&
-            orientation(get(1),get(2),get(3)) > 0 &&
-            orientation(get(2),get(3),get(0)) > 0 &&
-            orientation(get(3),get(0),get(1)) > 0;
+    if(     orientation(get(0),get(1),get(2)) <= 0 ||
+            orientation(get(1),get(2),get(3)) <= 0 ||
+            orientation(get(2),get(3),get(0)) <= 0 ||
+            orientation(get(3),get(0),get(1)) <= 0)
+        return false;
+
+    float cote2 = MIN_COTE*MIN_COTE;
+    if(distance2(get(0),get(1)) < cote2 || distance2(get(1),get(2)) < cote2 || distance2(get(2),get(3)) < cote2 || distance2(get(3),get(0)) < cote2)
+        return false;
+    return true;
 }
