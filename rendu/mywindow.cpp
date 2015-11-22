@@ -367,9 +367,9 @@ void myWindow::paintGL()
         base.decoupeSimple(4000);
         base.shrink(4.f);
         base.supprPetitQuartier(200);
+        _mesh = base.generate();
         //Mesh m1 = base.generate();
         //_mesh = m1;
-        _mesh = base.generate();
 
 /*
         TerrainBase base(2000,2000, &_par);

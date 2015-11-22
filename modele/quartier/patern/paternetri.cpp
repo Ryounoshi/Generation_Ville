@@ -153,12 +153,18 @@ Mesh PaterneTri::paternRebordAngle(int i, const Vector2D& v1, const Vector2D& v2
 
     Vector2D v1o = -v1.vectorProduct();
     float sc2 = (1/dot(v1o, v2))*larg;
+    if(sc2 < larg)
+        sc2 = larg;
 
     p4 = get(i)+v2*sc2;
     p3 = p4+v1*larg;
 
     float sc1 = dot(v1, p3-get(i));
+    if(sc1 < larg)
+        sc1 = larg;
     p2 = get(i)+v1*sc1;
+    if(sc1 == larg)
+        p3 = p2+v1o*larg;
 
     Batiment b = Batiment(Vector3D(XY(get(i))),
                           Vector3D(XY(p2)),
@@ -204,6 +210,7 @@ Mesh PaterneTri::paternRebord(const Vector2D& p1, const Vector2D& p2, const Vect
         {
             p22 = p2-v1*rue;
             p33 = p3-v1*rue;
+
             Batiment b = Batiment(Vector3D(XY(p11)),
                                   Vector3D(XY(p22)),
                                   Vector3D(XY(p33)),

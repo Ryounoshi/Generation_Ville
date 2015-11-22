@@ -9,6 +9,8 @@ Batiment::Batiment(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, c
 
 Mesh Batiment::generate()
 {
+    if(orientation(Vector2D(XY(_p0)),Vector2D(XY(_p1)),Vector2D(XY(_p2))) > 0)
+        return Mesh();
     Rezdechausse rdc(_p0,_p1,_p2,_p3,_hauteur,_par);
     return rdc.generate();
 }
