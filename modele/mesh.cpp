@@ -13,15 +13,22 @@ void Mesh::merge(const Mesh &delta)
 {
     if(&delta != this){
         int taille = vertex.size();
-        vertex.reserve(taille+delta.nbVertex());
+        if(taille > 0)
+        {
+            vertex.reserve(taille+delta.nbVertex());
 
-        for(size_t i=0; i< delta.vertex.size(); i++){
-            vertex.push_back(delta.vertex[i]);
+            for(size_t i=0; i< delta.vertex.size(); i++){
+                vertex.push_back(delta.vertex[i]);
+            }
+
+            face.reserve(this->nbFace()+delta.nbFace());
+            for(size_t i=0; i< delta.face.size(); i++){
+                face.push_back(delta.face[i] + taille );
+            }
         }
-
-        face.reserve(this->nbFace()+delta.nbFace());
-        for(size_t i=0; i< delta.face.size(); i++){
-            face.push_back(delta.face[i] + taille );
+        else{
+            vertex = delta.vertex;
+            face = delta.face;
         }
     }
 }
@@ -323,6 +330,7 @@ Mesh Mesh::createPyramidQuadrangle(const Vector3D& a, const Vector3D& b, const V
 
     return m;
 }
+
 
 void Mesh::addTriangle(const Vector3D& a, const Vector3D& b, const Vector3D& c)
 {

@@ -280,7 +280,7 @@ float QuarTri::perimetre() const
 }
 
 
-constexpr float MIN_DIM_BAT = 10; // si modifié, doit quand même être > 0
+constexpr float MIN_DIM_BAT = 5; // si modifié, doit quand même être > 0
 constexpr float MAX_DIM_BAT = 25;
 
 std::uniform_real_distribution<float> make_Unidistrib(float a, float b)
@@ -510,7 +510,10 @@ std::vector<Vector3D> QuarTri::getPoints3D() const
 
 Mesh QuarTri::generate()
 {
-    //split();
+    PaterneTri pQR = PaterneTri( this->get(0), this->get(1), this->get(2), _par);
+    return pQR.generate();
+    /*
+    split();
     Mesh m;
     std::vector<Vector3D> v = getPoints3D();
     m.addTriangle(v[0],v[1],v[2]);
@@ -518,6 +521,7 @@ Mesh QuarTri::generate()
         m.merge(bat.generate());
 
     return m;
+    */
 }
 
 

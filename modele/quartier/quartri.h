@@ -4,6 +4,7 @@
 #include "quartier.h"
 #include "../batiment/batiment.h"
 #include <random>
+#include "patern/paternetri.h"
 
 class QuarTri : public Quartier, public Triangle
 {

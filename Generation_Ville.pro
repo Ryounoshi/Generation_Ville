@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     modele/quartier/quartier.cpp \
     modele/quartier/quartri.cpp \
     math/noisegenerator.cpp \
-    modele/quartier/patern/paternequad.cpp
+    modele/quartier/patern/paternequad.cpp \
+    modele/quartier/patern/paternetri.cpp
 
 
 
@@ -62,6 +63,7 @@ HEADERS += \
     modele/quartier/quartier.h \
     modele/quartier/quartri.h \
     math/noisegenerator.h \
-    modele/quartier/patern/paternequad.h
+    modele/quartier/patern/paternequad.h \
+    modele/quartier/patern/paternetri.h
 
 
