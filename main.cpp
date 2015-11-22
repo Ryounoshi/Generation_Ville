@@ -45,10 +45,10 @@ int main(int argc, char *argv[])
     PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,10), Vector2D(10,10), Vector2D(10,0), 2.5);
     m1 = p1.generate();
 */
-    /*myWindow glWin;
+    myWindow glWin;
     glWin.show();
-    return app.exec();*/
-
+    return app.exec();
+/*
     BatParameter par(Vector3D(0,0,0));
     par.etageLePlusHaut = 20;
     par.hauteurEtage = 5;
@@ -63,8 +63,8 @@ int main(int argc, char *argv[])
     Mesh m = base.generate();
 
     ObjManager::writeToObj("testTerrain.obj", m.getVertex(), m.getFace());
-
-    return 0;
+*/
+    //return 0;
 }
 
 

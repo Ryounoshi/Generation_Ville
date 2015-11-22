@@ -2,6 +2,7 @@
 #include <QDebug>
 #include "modele/terrainbase.h"
 #include "modele/quartier/quartier.h"
+#include "stdio.h"
 
 int largeur,longueur;
 
@@ -27,8 +28,6 @@ void myWindow::initializeGL()
     _speed =0.1;
     _angle = -50.0;
     _hauteurcam = -2.0;
-    largeur = 50;
-    longueur = 50;
 
     //loadTexture(":/textures/herbe");
     //glEnable(GL_TEXTURE_2D);
@@ -118,10 +117,15 @@ void myWindow::keyPressEvent(QKeyEvent *keyEvent)
         break;
             //zoom
         case Qt::Key_T:
-            _par.hauteurEtage += 0.1;
+            _par.hauteurEtage += 0.5;
+            std::cout << "Hauteur Etage (m) : " << _par.hauteurEtage << std::endl;
+            meshUpToDate = false;
         break;
         case Qt::Key_G:
-            _par.hauteurEtage -= 0.1;
+            _par.hauteurEtage -= 0.5;
+            if(_par.hauteurEtage <1.0)_par.hauteurEtage = 1.0;
+            std::cout << "Hauteur Etage (m) : " << _par.hauteurEtage << std::endl;
+            meshUpToDate = false;
         break;
             //rotation
         case Qt::Key_Left:
@@ -148,19 +152,19 @@ void myWindow::keyPressEvent(QKeyEvent *keyEvent)
         break;
             //position centreville
         case Qt::Key_8:
-            _par._centreVille.y -= 1.0;
+            _par._centreVille.y -= 10.0;
             meshUpToDate = false;
         break;
         case Qt::Key_2:
-            _par._centreVille.y += 1.0;
+            _par._centreVille.y += 10.0;
             meshUpToDate = false;
         break;
         case Qt::Key_4:
-            _par._centreVille.x -= 1.0;
+            _par._centreVille.x -= 10.0;
             meshUpToDate = false;
         break;
         case Qt::Key_6:
-            _par._centreVille.x += 1.0;
+            _par._centreVille.x += 10.0;
             meshUpToDate = false;
         break;
         // hauteur max
@@ -232,7 +236,7 @@ void myWindow::resizeGL(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    perspectiveGL(90.0f, (GLfloat)width/(GLfloat)height, 0.1f, 100.0f);
+    perspectiveGL(90.0f, (GLfloat)width/(GLfloat)height, 0.1f, 800.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -308,18 +312,22 @@ void myWindow::paintGL()
         _par.resetEtageLePlusHaut();
 
         qDebug()<<_mesh.nbFace();
+        largeur = 500; //du terrain
+        longueur = 500;
 
+        int largeurQuartier = 40;
+        int longueurQuartier = 40;
 
         Mesh m1;
         //for(float i=-largeur/2;i<largeur/2;i+=3.5){
             //for(float j=-longueur/2; j<longueur/2; j+=3.5){
-        for(float i=-largeur/2;i<largeur/2;i+=8){
-            for(float j=-longueur/2; j<longueur/2; j+=8){
+        for(float i=-largeur/2;i<largeur/2;i+=largeurQuartier+1){
+            for(float j=-longueur/2; j<longueur/2; j+=longueurQuartier+1){
                 int tmp = (int)rand()%4;
                 tmp = 0;
                 //qDebug()<<tmp;
                 if(tmp == 0){
-                    PaterneQuad p1(Vector2D(i,j), Vector2D(i,j+7), Vector2D(i+7,j+7), Vector2D(i+7,j),&_par);
+                    PaterneQuad p1(Vector2D(i,j), Vector2D(i,j+longueurQuartier), Vector2D(i+largeurQuartier,j+longueurQuartier), Vector2D(i+largeurQuartier,j),&_par);
                      m1.merge(p1.generate());
                     /*Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
                                   Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
@@ -354,9 +362,18 @@ void myWindow::paintGL()
                     m1.merge(test.generate());
                 }
             }
-        }        
-        _mesh = m1;
+        }
+         _mesh = m1;
 
+/*
+        TerrainBase base(2000,2000, &_par);
+        base.decoupeSimple();
+        base.shrink(10.f);
+        base.supprPetitQuartier(1000);
+        Mesh m = base.generate();
+
+        _mesh = m;
+*/
 
         /*
         TerrainBase base(1000,1000);
@@ -392,11 +409,11 @@ void myWindow::paintGL()
     glDisable(GL_LIGHTING);
     float angle = (2*M_PI)/64;
     glColor3f(1.0,0.2,0.2);
-        glLineWidth(2.0f);
+    glLineWidth(4.0f);
     glBegin(GL_LINE_STRIP);
 
     for(float i = 0; i < 2*M_PI ; i+=angle){
-        glVertex3f(cos(i)*20*_par.influenceCentreVille+_par._centreVille.x, sin(i)*20*_par.influenceCentreVille+_par._centreVille.y,2);
+        glVertex3f(cos(i)*200*_par.influenceCentreVille+_par._centreVille.x, sin(i)*200*_par.influenceCentreVille+_par._centreVille.y,10);
     }
     glEnd();
     _draw_text(_par.hauteurEtageLePlusHaut.x,_par.hauteurEtageLePlusHaut.y,_par.hauteurEtageLePlusHaut.z,QString(QString::number(_par.etageLePlusHaut)));

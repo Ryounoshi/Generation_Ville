@@ -29,10 +29,10 @@ Mesh Rezdechausse::generate(){
     Vector3D newp2(_p2.x,_p2.y,_p2.z+_hauteur);
     Vector3D newp3(_p3.x,_p3.y,_p3.z+_hauteur);
     int proba = rand()%100;
-    if(proba < (95) && dist < (20*_par->influenceCentreVille)){
+    if(proba < (95) && dist < (200*_par->influenceCentreVille)){
         if(rand()%100 < 20 && _par->splitPourcent)
         {
-            qDebug()<<_par->splitPourcent;
+            //qDebug()<<_par->splitPourcent;
             if(longueur>largeur*1.8)
             {
                 Vector3D mid1;
@@ -62,7 +62,7 @@ Mesh Rezdechausse::generate(){
                     ourMesh.merge(m1);
                     ourMesh.merge(m2);
                 }else if(randtmp >= 50 && randtmp <75){
-                    qDebug()<<"tutu";
+                    //qDebug()<<"tutu";
                     int twist = rand()%3;
                     Etage etage1(Vector3D(_p0.x,_p0.y,_p0.z+_hauteur),
                                 Vector3D(mid1.x,mid1.y,_p1.z+_hauteur),
@@ -79,7 +79,7 @@ Mesh Rezdechausse::generate(){
                     ourMesh.merge(m1);
                     ourMesh.merge(m2);
                 }else{
-                    qDebug()<<"tutu";
+                    //qDebug()<<"tutu";
                     int twist = rand()%3;
                     Etage etage2(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                                 Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
@@ -126,7 +126,7 @@ Mesh Rezdechausse::generate(){
                     ourMesh.merge(m1);
                     ourMesh.merge(m2);
                 }else if(randtmp >=50 && randtmp <75){
-                    qDebug()<<"tutu";
+                    //qDebug()<<"tutu";
                     int twist = rand()%3;
                     Etage etage1(Vector3D(_p0.x,_p0.y,_p0.z+_hauteur),
                                 Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
@@ -143,7 +143,7 @@ Mesh Rezdechausse::generate(){
                     ourMesh.merge(m1);
                     ourMesh.merge(m2);
                 }else{
-                    qDebug()<<"tutu";
+                    //qDebug()<<"tutu";
                     int twist = rand()%3;
                     Etage etage2(Vector3D(mid1.x,mid1.y,_p0.z+_hauteur),
                                 Vector3D(mid2.x,mid2.y,_p1.z+_hauteur),

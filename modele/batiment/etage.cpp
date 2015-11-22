@@ -33,9 +33,8 @@ Mesh Etage::generate(){
     Vector3D newp2(_p2.x,_p2.y,_p2.z+_hauteur);
     Vector3D newp3(_p3.x,_p3.y,_p3.z+_hauteur);
     int proba = rand()%100;
-    //if(_noEtage > (_par->maxEtage - (dist*_par->influenceCentreVille)/(_par->influenceCentreVille*_par->influenceCentreVille))){
     float bornemax = _par->maxEtage;
-    float tmp = dist / ((_par->influenceCentreVille*20)/_par->maxEtage);
+    float tmp = dist / ((_par->influenceCentreVille*200)/_par->maxEtage);
     bornemax -= tmp;
     if(_noEtage > bornemax){
         Toit toit(newp0,newp1,newp2,newp3, _hauteur, _par);
