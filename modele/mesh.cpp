@@ -240,8 +240,8 @@ Mesh Mesh::createQuadrangle3D(const Vector3D& a, const Vector3D& b, const Vector
     m.addFace(0,4,5);
     m.addFace(1,5,6);
     m.addFace(1,6,2);
-    m.addFace(1,2,0);
-    m.addFace(2,3,0);
+    /////////////////m.addFace(1,2,0);
+    /////////////////m.addFace(2,3,0);
 
     return m;
 }
@@ -304,7 +304,7 @@ Mesh Mesh::createPyramidTriangle(const Vector3D& a, const Vector3D& b, const Vec
     m.addFace(0,3,1);
     m.addFace(1,3,2);
     m.addFace(2,3,0);
-    m.addFace(1,2,0);
+    //////////m.addFace(1,2,0);
 
     return m;
 }
@@ -325,8 +325,8 @@ Mesh Mesh::createPyramidQuadrangle(const Vector3D& a, const Vector3D& b, const V
     m.addFace(1,4,2);
     m.addFace(2,4,3);
     m.addFace(3,4,0);
-    m.addFace(3,0,1);
-    m.addFace(3,1,2);
+    //////////m.addFace(3,0,1);
+    //////////m.addFace(3,1,2);
 
     return m;
 }
