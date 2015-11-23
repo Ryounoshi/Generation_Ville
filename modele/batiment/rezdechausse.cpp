@@ -73,7 +73,7 @@ Mesh Rezdechausse::generate(){
                                Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                                Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
                                Vector3D(mid2.x,mid2.y,_p3.z+_hauteur),
-                               _hauteur,_par);
+                               0,_hauteur,_par);
                     Mesh m1 = etage1.generate();
                     Mesh m2 = toit1.generate();
                     ourMesh.merge(m1);
@@ -90,7 +90,7 @@ Mesh Rezdechausse::generate(){
                                Vector3D(mid1.x,mid1.y,_p1.z+_hauteur),
                                Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
                                Vector3D(_p3.x,_p3.y,_p3.z+_hauteur),
-                               _hauteur,_par);
+                               0,_hauteur,_par);
                     Mesh m2 = etage2.generate();
                     Mesh m1 = toit2.generate();
                     ourMesh.merge(m1);
@@ -137,7 +137,7 @@ Mesh Rezdechausse::generate(){
                                Vector3D(mid2.x,mid2.y,_p1.z+_hauteur),
                                Vector3D(_p2.x,_p2.y,_p2.z+_hauteur),
                                Vector3D(_p3.x,_p3.y,_p3.z+_hauteur),
-                               _hauteur,_par);
+                               0,_hauteur,_par);
                     Mesh m1 = etage1.generate();
                     Mesh m2 = toit1.generate();
                     ourMesh.merge(m1);
@@ -154,7 +154,7 @@ Mesh Rezdechausse::generate(){
                                Vector3D(_p1.x,_p1.y,_p1.z+_hauteur),
                                Vector3D(mid2.x,mid2.y,_p2.z+_hauteur),
                                Vector3D(mid1.x,mid1.y,_p3.z+_hauteur),
-                               _hauteur,_par);
+                               0,_hauteur,_par);
                     Mesh m2 = etage2.generate();
                     Mesh m1 = toit2.generate();
                     ourMesh.merge(m1);
@@ -175,7 +175,7 @@ Mesh Rezdechausse::generate(){
             return ourMesh;
         }
     }else{
-        Toit toit(newp0,newp1,newp2,newp3, _hauteur, _par);
+        Toit toit(newp0,newp1,newp2,newp3, 0,_hauteur, _par);
         ourMesh.merge(toit.generate());
         return ourMesh;
     }

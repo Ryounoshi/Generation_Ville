@@ -208,6 +208,15 @@ void myWindow::keyPressEvent(QKeyEvent *keyEvent)
             ObjManager::writeToObj("ville.obj", _mesh.getVertex(), _mesh.getFace());
         break;
 
+        case Qt::Key_Y:
+            _par.minLargeurBatiment *= 1.1;
+            meshUpToDate = false;
+        break;
+        case Qt::Key_U:
+            _par.minLargeurBatiment *= 0.9;
+            meshUpToDate = false;
+        break;
+
     }
 }
 
@@ -363,11 +372,19 @@ void myWindow::paintGL()
                 }
             }
         }*/
+        /*Batiment test(Vector3D(-3+(rand()%100)*0.001,-3+(rand()%100)*0.001,0),
+                      Vector3D(-3+(rand()%100)*0.001,3+(rand()%100)*0.001,0),
+                      Vector3D(3+(rand()%100)*0.001,3+(rand()%100)*0.001,0),
+                      Vector3D(3+(rand()%100)*0.001,-3+(rand()%100)*0.001,0),
+                      &_par);
+        _mesh = test.generate();*/
+
         TerrainBase base(1000,1000, &_par);
         base.decoupeSimple(4000);
         base.shrink(4.f);
-        base.supprPetitQuartier(200);
+        base.supprPetitQuartier(400);
         _mesh = base.generate();
+
         //Mesh m1 = base.generate();
         //_mesh = m1;
 
@@ -379,8 +396,8 @@ void myWindow::paintGL()
         Mesh m = base.generate();
 
         _mesh = m;
-*/
 
+*/
         /*
         TerrainBase base(1000,1000);
         base.decoupeSimple();

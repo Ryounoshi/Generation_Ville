@@ -5,7 +5,7 @@ using namespace std;
 #include "toit.h"
 #define scaletop 0.9
 #define pToit 90
-#define pReduction 40
+#define pReduction 60
 #define tailleRainure 0.01
 #define rotation 0.05
 
@@ -37,7 +37,7 @@ Mesh Etage::generate(){
     float tmp = dist / ((_par->influenceCentreVille*200)/_par->maxEtage);
     bornemax -= tmp;
     if(_noEtage > bornemax){
-        Toit toit(newp0,newp1,newp2,newp3, _hauteur, _par);
+        Toit toit(newp0,newp1,newp2,newp3,_noEtage ,_hauteur, _par);
         _par->updateEtageLePlusHaut(Vector3D(),_noEtage);
         Mesh m = toit.generate();
         ourMesh.merge(m);
@@ -126,7 +126,7 @@ Mesh Etage::generate(){
         return ourMesh;
     }else{
         _par->updateEtageLePlusHaut(Vector3D(),_noEtage);
-        Toit toit(newp0,newp1,newp2,newp3, _hauteur, _par);
+        Toit toit(newp0,newp1,newp2,newp3,_noEtage ,_hauteur, _par);
         Mesh m = toit.generate();
         ourMesh.merge(m);
         return ourMesh;
