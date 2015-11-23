@@ -24,6 +24,10 @@ private:
     Mesh paternDeuxBatimentDiametre();
     Mesh paternQuartierPlein();
 
+    Mesh remplissageCoin(const int &indicePointCoin, Vector2D &point1Batiment, Vector2D &pointCentre, Vector2D &point3Batiment);
+    Mesh remplissageBord(Vector2D &point1Batiment0, Vector2D &point2Batiment0,
+                         Vector2D &point2Batiment1, Vector2D &point3Batiment1);
+
     float coeffShrinkMax() const;
     float ratioDiametre() const;
 };

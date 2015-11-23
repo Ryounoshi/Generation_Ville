@@ -11,28 +11,25 @@ Mesh PaterneQuad::generate()
     int aleatoire = rand()%100;
 
     //détermination si le quartier est assez grand pour contenir des batiments avec ruelle
-    if(_par->minLargeurBatiment < coeffShrinkMax() && ratioDiametre() < 3 ){
+    if(_par->minLargeurBatiment < coeffShrinkMax() && ratioDiametre() < 4 ){
         if(_par->minLargeurBatiment < coeffShrinkMax()/2 ){
-            if(aleatoire < 29){
+            if(aleatoire < 33){
                 m1.merge(paternQuatreBatiment());
             }
-            else if(aleatoire <= 54){
+            else if(aleatoire <= 66){
                 m1.merge(paternTroisBatiment());
             }
-            else if(aleatoire <= 87){
-                m1.merge(paternDeuxBatimentDiagonale());
-            }
             else{
-                m1.merge(paternQuartierPlein());
+                m1.merge(paternDeuxBatimentDiagonale());
             }
         }
         else{
             if(aleatoire < 40){
                 m1.merge(paternQuatreBatiment());
             }
-            else if(aleatoire < 80){
+            else if(aleatoire < 95){
                 m1.merge(paternTroisBatiment());
-            }            
+            }
             else{
                 m1.merge(paternQuartierPlein());
             }
@@ -85,44 +82,14 @@ Mesh PaterneQuad::paternQuatreBatiment(){
 
     Mesh retour;
 
-    Quadrangle notreQuadrangle = *this;
+    Quadrangle batiments[4];
 
     for(int i=0; i<4; i++){
+        retour.merge(remplissageCoin(i, batiments[i][1], batiments[i][2], batiments[i][3]));
+    }
 
-        // Taille aléatoire
-        float aleatoire = (rand()%100) / 100.0;
-
-        Quadrangle centre = *this;
-        centre.shrink( (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->largeurRuelle) );
-
-        //
-
-        Vector2D shrink = centre[i] - notreQuadrangle[i];
-        Vector2D pIpIm1 = notreQuadrangle[(i-1)%4] - notreQuadrangle[i];
-        Vector2D pIpIp1 = notreQuadrangle[(i+1)%4] - notreQuadrangle[i];
-
-        pIpIm1.normalise(); pIpIp1.normalise();
-
-        float dpIpIm1 = shrink.scalareProduct(pIpIm1);
-        dpIpIm1 = shrink.getNorm()*shrink.getNorm() / (dpIpIm1*2);
-
-        if(dpIpIm1 >= (notreQuadrangle[(i-1)%4] - notreQuadrangle[i]).getNorm()/2)
-            dpIpIm1 = (notreQuadrangle[(i-1)%4] - notreQuadrangle[i]).getNorm()/2 - _par->largeurRuelle/2;
-
-        float dpIpIp1 = shrink.scalareProduct(pIpIp1);
-        dpIpIp1 = shrink.getNorm()*shrink.getNorm() / (dpIpIp1*2);
-
-        if(dpIpIp1 >= (notreQuadrangle[(i+1)%4] - notreQuadrangle[i]).getNorm()/2)
-            dpIpIp1 = (notreQuadrangle[(i+1)%4] - notreQuadrangle[i]).getNorm()/2 - _par->largeurRuelle/2;
-
-        Vector2D p2 = notreQuadrangle[i] + pIpIp1*dpIpIp1;
-        Vector2D p4 = notreQuadrangle[i] + pIpIm1*dpIpIm1;
-        Batiment b = Batiment(Vector3D(notreQuadrangle[i].x, notreQuadrangle[i].y, 0),
-                              Vector3D(p2.x, p2.y, 0),
-                              Vector3D(centre[i].x, centre[i].y, 0),
-                              Vector3D(p4.x, p4.y, 0),
-                              _par);
-        retour.merge( b.generate() );
+    for(int i=0; i<4; i++){
+        retour.merge(remplissageBord(batiments[i][1], batiments[i][2], batiments[(i+1)%4][2], batiments[(i+1)%4][3] ));
     }
 
     return retour;
@@ -133,6 +100,9 @@ Mesh PaterneQuad::paternTroisBatiment(){
     Mesh retour;
 
     Quadrangle centre = *this, notreQuadrangle = *this;
+
+
+    /************ Batiment Principal ********************/
 
     Vector2D p0p3 = notreQuadrangle[3] - notreQuadrangle[0];
     Vector2D p1p2 = notreQuadrangle[2] - notreQuadrangle[1];
@@ -164,68 +134,27 @@ Mesh PaterneQuad::paternTroisBatiment(){
     if(dp1p2 >= (notreQuadrangle[2]-notreQuadrangle[1]).getNorm()/2)
         dp1p2 = (notreQuadrangle[2]-notreQuadrangle[1]).getNorm()/2 - _par->largeurRuelle/2;
 
-    // Taille aléatoire
-    aleatoire = (rand()%100) / 100.0;
-    centre = *this;
-    centre.shrink( (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->largeurRuelle) );
-    //
-
-    float dp2p1 = (centre[2]-notreQuadrangle[2]).scalareProduct(p2p1);
-    dp2p1 = (centre[2]-notreQuadrangle[2]).getNorm()*(centre[2]-notreQuadrangle[2]).getNorm() / (dp2p1*2);
-
-    if(dp2p1 >= (notreQuadrangle[1] - notreQuadrangle[2]).getNorm()/2)
-        dp2p1 = (notreQuadrangle[1] - notreQuadrangle[2]).getNorm()/2 - _par->largeurRuelle/2;
-
-    float dp2p3 = (centre[2]-notreQuadrangle[2]).scalareProduct(p2p3);
-    dp2p3 = (centre[2]-notreQuadrangle[2]).getNorm()*(centre[2]-notreQuadrangle[2]).getNorm() / (dp2p3*2);
-
-    if(dp2p3 >= (notreQuadrangle[3] - notreQuadrangle[2]).getNorm()/2)
-        dp2p3 = (notreQuadrangle[3] - notreQuadrangle[2]).getNorm()/2 - _par->largeurRuelle/2;
-
-    // Taille aléatoire
-    aleatoire = (rand()%100) / 100.0;
-    centre = *this;
-    centre.shrink( (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->largeurRuelle) );
-    //
-
-    float dp3p2 = (centre[3]-notreQuadrangle[3]).scalareProduct(p3p2);
-    dp3p2 = (centre[3]-notreQuadrangle[3]).getNorm()*(centre[3]-notreQuadrangle[3]).getNorm() / (dp3p2*2);
-
-    if(dp3p2 >= (notreQuadrangle[2] - notreQuadrangle[3]).getNorm()/2)
-        dp3p2 = (notreQuadrangle[2] - notreQuadrangle[3]).getNorm()/2 - _par->largeurRuelle/2;
-
-    float dp3p0 = (centre[3]-notreQuadrangle[3]).scalareProduct(p3p0);
-    dp3p0 = (centre[3]-notreQuadrangle[3]).getNorm()*(centre[3]-notreQuadrangle[3]).getNorm() / (dp3p0*2);
-
-    if(dp3p0 >= (notreQuadrangle[0] - notreQuadrangle[3]).getNorm()/2)
-        dp3p0 = (notreQuadrangle[0] - notreQuadrangle[3]).getNorm()/2 - _par->largeurRuelle/2;
-
     Vector2D p3B1 = notreQuadrangle[1] + p1p2*dp1p2;
     Vector2D p4B1 = notreQuadrangle[0] + p0p3*dp0p3;
-    Batiment b = Batiment(Vector3D(notreQuadrangle[0].x, notreQuadrangle[0].y, 0),
-            Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, 0),
-            Vector3D(p3B1.x, p3B1.y, 0),
-            Vector3D(p4B1.x, p4B1.y, 0),
-            _par);
+    Batiment b = Batiment(
+                Vector3D(notreQuadrangle[0].x, notreQuadrangle[0].y, 0),
+                Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, 0),
+                Vector3D(p3B1.x, p3B1.y, 0),
+                Vector3D(p4B1.x, p4B1.y, 0),
+                _par);
     retour.merge( b.generate() );
 
-    Vector2D p2B2 = notreQuadrangle[2] + p2p3*dp2p3;
-    Vector2D p4B2 = notreQuadrangle[2] + p2p1*dp2p1;
-    b = Batiment(Vector3D(notreQuadrangle[2].x, notreQuadrangle[2].y, 0),
-            Vector3D(p2B2.x, p2B2.y, 0),
-            Vector3D(centre[2].x, centre[2].y, 0),
-            Vector3D(p4B2.x, p4B2.y, 0),
-            _par);
-    retour.merge( b.generate() );
 
-    Vector2D p2B3 = notreQuadrangle[3] + p3p0*dp3p0;
-    Vector2D p4B3 = notreQuadrangle[3] + p3p2*dp3p2;
-    b = Batiment(Vector3D(notreQuadrangle[3].x, notreQuadrangle[3].y, 0),
-            Vector3D(p2B3.x, p2B3.y, 0),
-            Vector3D(centre[3].x, centre[3].y, 0),
-            Vector3D(p4B3.x, p4B3.y, 0),
-            _par);
-    retour.merge( b.generate() );
+    //////////////////////////////////////
+
+    Quadrangle batiments[2];
+
+    retour.merge(remplissageCoin(2, batiments[0][1], batiments[0][2], batiments[0][3]));
+    retour.merge(remplissageCoin(3, batiments[1][1], batiments[1][2], batiments[1][3]));
+
+    retour.merge(remplissageBord(p3B1, centre[1], batiments[0][2], batiments[0][3] ));
+    retour.merge(remplissageBord(batiments[0][1], batiments[0][2], batiments[1][2], batiments[1][3] ));
+    retour.merge(remplissageBord(batiments[1][1], batiments[1][2], centre[0], p4B1 ));
 
     return retour;
 }
@@ -238,7 +167,7 @@ Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
 
     // Taille aléatoire
     float aleatoire = (rand()%100) / 100.0;
-    float coeffShrink = (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->largeurRuelle);
+    float coeffShrink = (1-aleatoire)*_par->minLargeurBatiment + aleatoire*(coeffShrinkMax()/2-_par->largeurRuelle);
     //
 
     centre.shrink( coeffShrink );
@@ -327,7 +256,7 @@ Mesh PaterneQuad::paternQuartierPlein()
 
     if( ((*this)[1] - (*this)[0]).getNorm2() >= ((*this)[2] - (*this)[1]).getNorm2() ){
         Vector2D cote1 = ((*this)[1] - (*this)[0]),
-        cote2 = ((*this)[2] - (*this)[3]);
+                cote2 = ((*this)[2] - (*this)[3]);
 
         Vector2D    milieu1 = (*this)[0] + cote1 * (aleatoire1 - ( _par->largeurRuelle / cote1.getNorm() )),
                 milieu2 = (*this)[0] + cote1 * (aleatoire1 + ( _par->largeurRuelle / cote1.getNorm() )),
@@ -352,7 +281,7 @@ Mesh PaterneQuad::paternQuartierPlein()
     }
     else{
         Vector2D cote1 = ((*this)[2] - (*this)[1]),
-        cote2 = ((*this)[3] - (*this)[0]);
+                cote2 = ((*this)[3] - (*this)[0]);
 
         Vector2D    milieu1 = (*this)[1] + cote1 * (0.5 - ( _par->largeurRuelle / cote1.getNorm() )),
                 milieu2 = (*this)[1] + cote1 * (0.5 + ( _par->largeurRuelle / cote1.getNorm() )),
@@ -375,6 +304,94 @@ Mesh PaterneQuad::paternQuartierPlein()
         retour.merge( b.generate() );
     }
 
+    return retour;
+}
+
+Mesh PaterneQuad::remplissageCoin(const int& indicePointCoin, Vector2D& point1Batiment, Vector2D& pointCentre, Vector2D& point3Batiment)
+{
+    /*
+    point1  X----X  point2
+            |    |
+            |    |
+    point0  X----X  point3
+    */
+
+    Quadrangle centreTmp = *this;
+
+    // Taille aléatoire
+    float aleatoire = (rand()%100) / 100.0;
+    centreTmp.shrink( _par->minLargeurBatiment + aleatoire*(coeffShrinkMax()-_par->minLargeurBatiment-_par->largeurRuelle) );
+    //
+
+    pointCentre = centreTmp[indicePointCoin];
+
+    Vector2D shrink = pointCentre - get(indicePointCoin);
+    Vector2D pIpIm1 = get((indicePointCoin-1)%4) - get(indicePointCoin);
+    Vector2D pIpIp1 = get((indicePointCoin+1)%4) - get(indicePointCoin);
+
+    pIpIm1.normalise(); pIpIp1.normalise();
+
+    // disposition des points en losange
+
+    float dpIpIm1 = shrink.scalareProduct(pIpIm1);
+    dpIpIm1 = shrink.getNorm()*shrink.getNorm() / (dpIpIm1*2);
+
+    if(dpIpIm1 >= (get((indicePointCoin-1)%4) - get(indicePointCoin)).getNorm()/2)
+        dpIpIm1 = (get((indicePointCoin-1)%4) - get(indicePointCoin)).getNorm()/2 - _par->largeurRuelle/2;
+
+    float dpIpIp1 = shrink.scalareProduct(pIpIp1);
+    dpIpIp1 = shrink.getNorm()*shrink.getNorm() / (dpIpIp1*2);
+
+    if(dpIpIp1 >= (get((indicePointCoin+1)%4) - get(indicePointCoin)).getNorm()/2)
+        dpIpIp1 = (get((indicePointCoin+1)%4) - get(indicePointCoin)).getNorm()/2 - _par->largeurRuelle/2;
+
+    point1Batiment = get(indicePointCoin) + pIpIp1*dpIpIp1;
+    point3Batiment = get(indicePointCoin) + pIpIm1*dpIpIm1;
+    Batiment b = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, 0),
+                          Vector3D(point1Batiment.x, point1Batiment.y, 0),
+                          Vector3D(pointCentre.x, pointCentre.y, 0),
+                          Vector3D(point3Batiment.x, point3Batiment.y, 0),
+                          _par);
+    return b.generate();
+
+}
+
+Mesh PaterneQuad::remplissageBord(Vector2D &point1Batiment0, Vector2D &point2Batiment0, Vector2D &point2Batiment1, Vector2D &point3Batiment1)
+{
+    Mesh retour;
+
+    float dExterne = distance( point1Batiment0, point3Batiment1);
+    float dInterne = distance( point2Batiment0, point2Batiment1);
+
+    Vector2D vecteurDirectionExt = (point3Batiment1 - point1Batiment0).normalised();
+    Vector2D vecteurDirectionInt = (point2Batiment1 - point2Batiment0).normalised();
+
+    if(dExterne > _par->minLargeurBatiment && dInterne > _par->minLargeurBatiment){
+
+        int nbminBat = dExterne/_par->maxLargeurBatiment;
+        int nbmaxBat = dExterne/_par->minLargeurBatiment;
+        float aleatoire = 0;
+
+        if(nbminBat != nbmaxBat){
+            aleatoire = nbminBat + 1 + (rand()%(nbmaxBat-nbminBat));
+        }
+        else{
+            aleatoire = nbminBat;
+        }
+
+        float largeurBatiment = dExterne / aleatoire;
+
+        for(int i=0; i < aleatoire; i++){
+
+            Vector2D p0 = point1Batiment0 + vecteurDirectionExt*i*largeurBatiment;
+            Vector2D p1 = point1Batiment0 + vecteurDirectionExt*(i+1)*largeurBatiment;
+            Vector2D p2 = point2Batiment0 + vecteurDirectionInt*distance(p1, point1Batiment0)*dInterne/dExterne;
+            Vector2D p3 = point2Batiment0 + vecteurDirectionInt*distance(p0, point1Batiment0)*dInterne/dExterne;
+
+            Batiment m = Batiment( Vector3D(XY(p0)), Vector3D(XY(p1)), Vector3D(XY(p2)), Vector3D(XY(p3)), _par );
+            retour.merge(m.generate());
+        }
+    }
     return retour;
 }
 
