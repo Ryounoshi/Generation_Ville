@@ -67,7 +67,7 @@ void PaterneTri::traiteTrapezeObtusStart(const Vector2D& p1, const Vector2D& p2,
     */
 
     float hp = (to3D(p3 - p2) ^ to3D(p1 - p2)).getNorm() / (p3 - p2).getNorm();
-    float triEndLength = (p4 - p3).scalareProduct(p2 - p3) / (p3 - p2).getNorm(); // longueur du projeté de p4 sur p3-p2
+    float triEndLength = (p4 - p3).scalareProduct(p2 - p3) / (p2 - p3).getNorm(); // longueur du projeté de p4 sur p3-p2
     Vector2D dir_coteTraite = Normalized(p3 - p2);
     Vector2D dir_height = Vector2D(dir_coteTraite.y,-dir_coteTraite.x);
     Vector2D waterMark = p2; // sera p2 ou après triangle
@@ -90,10 +90,10 @@ void PaterneTri::traiteTrapezeObtusStart(const Vector2D& p1, const Vector2D& p2,
         if ((wmark_candBat-p2).getNorm() > (p3-p2).getNorm()-triEndLength) { // on veut que des trapezes
             if (waterMark != p2) {
                 batiments.push_back(Batiment(to3D(waterMark+hp*dir_height), to3D(waterMark), to3D(p3), to3D(p4), _par));
-                break;
+                return;
             } else {
                 batiments.push_back(Batiment(to3D(p1), to3D(p2), to3D(p3), to3D(p4), _par));
-                break;
+                return;
             }
         }
         saveBatTrapeze(waterMark, wmark_candBat, hp, hp, dir_height);
@@ -131,13 +131,17 @@ void PaterneTri::traiteTrapezeObtusEnd(const Vector2D& p1, const Vector2D& p2, c
         if ((wmark_candBat-p2).getNorm() > (p3-p2).getNorm()) { // on veut que des trapezes
             if (waterMark != p2) {
                 batiments.push_back(Batiment(to3D(waterMark+hp*dir_height), to3D(waterMark), to3D(p3), to3D(p4), _par));
-                break;
+                return;
             } else {
                 batiments.push_back(Batiment(to3D(p1), to3D(p2), to3D(p3), to3D(p4), _par));
-                break;
+                return;
             }
         }
-        saveBatTrapeze(waterMark, wmark_candBat, hp, hp, dir_height);
+        if (waterMark == p2) {
+            batiments.push_back(Batiment(to3D(p1), to3D(p2), to3D(wmark_candBat), to3D(wmark_candBat+hp*dir_height), _par));
+        } else {
+            saveBatTrapeze(waterMark, wmark_candBat, hp, hp, dir_height);
+        }
         waterMark = wmark_candBat;
     } while ((waterMark - p3).getNorm() - MIN_DIM_BAT > 0);
 }
@@ -188,7 +192,7 @@ void PaterneTri::traiteTrapeze(const Vector2D& p1, const Vector2D& p2, const Vec
 
     float hp = (to3D(p3 - p2) ^ to3D(p1 - p2)).getNorm() / (p3 - p2).getNorm();
     float triStartLength = (p1 - p2).scalareProduct(p3 - p2) / (p3 - p2).getNorm(); // longueur du projeté de p1 sur p2-p3
-    float triEndLength = (p4 - p3).scalareProduct(p2 - p3) / (p3 - p2).getNorm(); // longueur du projeté de p4 sur p3-p2
+    float triEndLength = (p4 - p3).scalareProduct(p2 - p3) / (p2 - p3).getNorm(); // longueur du projeté de p4 sur p3-p2
     Vector2D dir_coteTraite = Normalized(p3 - p2);
     Vector2D dir_height = Vector2D(dir_coteTraite.y,-dir_coteTraite.x);
     Vector2D waterMark = p2; // sera p2 ou après triangle
@@ -210,13 +214,17 @@ void PaterneTri::traiteTrapeze(const Vector2D& p1, const Vector2D& p2, const Vec
         if ((wmark_candBat-p2).getNorm() > (p3-p2).getNorm()-triEndLength) { // on veut que des trapezes
             if (waterMark != p2) {
                 batiments.push_back(Batiment(to3D(waterMark+hp*dir_height), to3D(waterMark), to3D(p3), to3D(p4), _par));
-                break;
+                return;
             } else {
                 batiments.push_back(Batiment(to3D(p1), to3D(p2), to3D(p3), to3D(p4), _par));
-                break;
+                return;
             }
         }
-        saveBatTrapeze(waterMark, wmark_candBat, hp, hp, dir_height);
+        if (waterMark == p2) {
+            batiments.push_back(Batiment(to3D(p1), to3D(p2), to3D(wmark_candBat), to3D(wmark_candBat+hp*dir_height), _par));
+        } else {
+            saveBatTrapeze(waterMark, wmark_candBat, hp, hp, dir_height);
+        }
         waterMark = wmark_candBat;
     } while ((waterMark - p3).getNorm() - MIN_DIM_BAT > 0);
 
@@ -242,27 +250,27 @@ void PaterneTri::split()
 
     //traite le coté pts[1]-pts[0]
     std::pair<Vector2D, Vector2D> tronq;
-    if (orientation(pts[0], pts[1], pts[2]) < 0)
+    //if (orientation(pts[0], pts[1], pts[2]) < 0)
         tronq = traiteCote(pts[0], pts[1], pts[2]);
-    else
-        tronq = traiteCote(pts[1], pts[0], pts[2]);
+   /* else
+        tronq = traiteCote(pts[1], pts[0], pts[2]);*/
     //tronq.first entre p0 et p2
     //tronq.second entre p1 et p2
 
     //traite le coté "pts[0]-pts[2]"
     Vector2D tmp = tronq.first;
-    if (orientation(tronq.second, pts[2], tmp) < 0)
+    //if (orientation(tronq.second, pts[2], tmp) < 0)
         tronq = traiteCote(tronq.second, pts[2], tmp);
-    else
-        tronq = traiteCote(pts[2], tronq.second, tmp);
+   /* else
+        tronq = traiteCote(pts[2], tronq.second, tmp);*/
     //tronq.first entre tmp et tronq.second précédent
     //tronq.second entre tmp et p2
 
     //traite le coté "pts[2]-pts[1]"
-    if (orientation(tronq.second, tmp, tronq.first) < 0)
+   // if (orientation(tronq.second, tmp, tronq.first) < 0)
         traiteCote(tronq.second, tmp, tronq.first);
-    else
-        traiteCote(tmp, tronq.second, tronq.first);
+    /*else
+        traiteCote(tmp, tronq.second, tronq.first);*/
 }
 
 float PaterneTri::findBatDepth(std::uniform_real_distribution<float> distri_BatDepth, float maxDepth)
@@ -288,7 +296,12 @@ std::pair<Vector2D, Vector2D> PaterneTri::traiteCote(const Vector2D& pp2, const 
     float hp = distribution(generator); // BatDepth max
     Vector2D lambda = pp3 + (pp2 - pp3)*(height3 - hp) / height3; // parallèle à pp2-pp1 et entre pp3 et pp2
     Vector2D mu = pp3 + (pp1 - pp3)*(height3 - hp) / height3; // parallèle à pp2-pp1 et entre pp3 et pp1
-    traiteTrapeze(lambda, pp2, pp1, mu);
+    Vector2D dir_coteTraite = Normalized(pp1-pp2);
+    Vector2D dir_height = Vector2D(dir_coteTraite.y,-dir_coteTraite.x);
+    if ((pp3-pp1).scalareProduct(dir_height) > 0)
+        traiteTrapeze(lambda, pp2, pp1, mu);
+    else
+        traiteTrapeze(mu, pp1, pp2, lambda);
     return std::make_pair(lambda, mu);
 }
 
