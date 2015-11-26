@@ -8,6 +8,10 @@ class TerrainBase
 {
 public:
     TerrainBase(float longueur, float largeur, BatParameter* par);
+    TerrainBase(const Quadrangle& q, BatParameter* par);
+    TerrainBase(const Triangle& q, BatParameter* par);
+
+    TerrainBase(TerrainBase&& base);
     ~TerrainBase();
 
     void decoupeSimple(float aireMax);   //ne fait que des triangles et quadrangle
@@ -21,11 +25,8 @@ public:
     Mesh generate();
 
 protected:
-    float longueur, largeur;
-    std::vector<Quartier*> quartiers;
-
-
     BatParameter* _par;
+    std::vector<Quartier*> quartiers;
 };
 
 #endif // TERRAINBASE_H

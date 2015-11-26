@@ -45,11 +45,11 @@ int main(int argc, char *argv[])
     PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,10), Vector2D(10,10), Vector2D(10,0), 2.5);
     m1 = p1.generate();
 */
-    /*myWindow glWin;
+    myWindow glWin;
     glWin.show();
-    return app.exec();*/
+    return app.exec();
 
-    BatParameter par(Vector3D(0,0,0));
+    /*BatParameter par(Vector3D(0,0,0));
     par.etageLePlusHaut = 20;
     par.hauteurEtage = 5;
     par.influenceCentreVille = 100;
@@ -58,20 +58,32 @@ int main(int argc, char *argv[])
     par.minLargeurBatiment = 6;
     par.maxLargeurBatiment = 10;
 
-    TerrainBase base(1000,1000, &par);
-    base.decoupeSimple(4000);
-    base.shrink(4.f);
-    base.supprPetitQuartier(200);
-    Mesh m = base.generate();
 
+
+    std::vector<TerrainBase> bases;
+    bases.push_back(TerrainBase(Triangle(Vector2D(0,200),Vector2D(200,-200),Vector2D(-200,-200)), &par));
+    bases.push_back(TerrainBase(Quadrangle(Vector2D(0,200),Vector2D(200,400),Vector2D(400,200),Vector2D(200,-200)), &par));
+    bases.push_back(TerrainBase(Quadrangle(Vector2D(200,-200),Vector2D(200,-400),Vector2D(-200,-400),Vector2D(-200,-200)), &par));
+    bases.push_back(TerrainBase(Quadrangle(Vector2D(-200,-200),Vector2D(-400,200),Vector2D(-200,400),Vector2D(0,200)), &par));
+    Mesh _mesh;
+    for(TerrainBase& base : bases)
+    {
+        base.decoupeSimple(4000);
+        base.shrink(2.f);
+        _mesh.merge(base.generate());
+    }
     std::cout << "fin de la création du mesh" << std::endl;
-    ObjManager::writeToObj("testTerrain.obj", m.getVertex(), m.getFace());
+    ObjManager::writeToObj("testTerrain.obj", _mesh.getVertex(), _mesh.getFace());*/
 
     //return 0;
 }
 
 
-
+//TerrainBase base(400,400, &par);
+/*TerrainBase base(Triangle(Vector2D(0,200),Vector2D(200,-200),Vector2D(-200,-200)), &par);
+base.decoupeSimple(4000);
+base.shrink(2.f);
+Mesh m = base.generate();*/
 
 /*
     TerrainBase base(1000,1000);

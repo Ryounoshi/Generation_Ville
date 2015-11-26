@@ -1,11 +1,34 @@
 #include "terrainbase.h"
 
 TerrainBase::TerrainBase(float longueur, float largeur, BatParameter *par):
-        longueur(longueur),  largeur(largeur), _par(par)
+        _par(par)
 {
     float long2 = longueur/2, larg2 = largeur/2;
     QuarQuad* quad = new QuarQuad(Vector2D(-larg2,-long2), Vector2D(-larg2,long2), Vector2D(larg2, long2), Vector2D(larg2,-long2), _par);
     quartiers.push_back(quad);
+}
+
+TerrainBase::TerrainBase(const Quadrangle& q, BatParameter* par):
+        _par(par)
+{
+    QuarQuad* quad = new QuarQuad(q.get(0),q.get(1),q.get(2),q.get(3), _par);
+    quartiers.push_back(quad);
+}
+
+TerrainBase::TerrainBase(const Triangle& q, BatParameter* par):
+        _par(par)
+{
+    QuarTri* tri = new QuarTri(q.get(0),q.get(1),q.get(2), _par);
+    quartiers.push_back(tri);
+}
+
+//faire un std::vector<TerrainBase> appelle le destructeur lors du redimensionnement du vector si ce constructeur n'existe pas
+TerrainBase::TerrainBase(TerrainBase&& base):
+        _par(base._par),    quartiers(base.quartiers)
+{
+    base._par = nullptr;
+    base.quartiers.clear();
+
 }
 
 TerrainBase::~TerrainBase()

@@ -379,14 +379,20 @@ void myWindow::paintGL()
                       &_par);
         _mesh = test.generate();*/
 
-        TerrainBase base(1000,1000, &_par);
-        base.decoupeSimple(4000);
-        base.shrink(4.f);
-        base.supprPetitQuartier(400);
-        _mesh = base.generate();
-
-        //Mesh m1 = base.generate();
-        //_mesh = m1;
+        //TerrainBase base(400,400, &_par);
+        std::vector<TerrainBase> bases;
+        bases.push_back(TerrainBase(Triangle(Vector2D(0,200),Vector2D(200,-200),Vector2D(-200,-200)), &_par));
+        bases.push_back(TerrainBase(Quadrangle(Vector2D(0,200),Vector2D(200,400),Vector2D(400,200),Vector2D(200,-200)), &_par));
+        bases.push_back(TerrainBase(Quadrangle(Vector2D(200,-200),Vector2D(200,-400),Vector2D(-200,-400),Vector2D(-200,-200)), &_par));
+        bases.push_back(TerrainBase(Quadrangle(Vector2D(-200,-200),Vector2D(-400,200),Vector2D(-200,400),Vector2D(0,200)), &_par));
+        Mesh m1;
+        for(TerrainBase& base : bases)
+        {
+            base.decoupeSimple(4000);
+            base.shrink(2.f);
+            m1.merge(base.generate());
+        }
+        _mesh = m1;
 
 /*
         TerrainBase base(2000,2000, &_par);

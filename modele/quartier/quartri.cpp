@@ -48,12 +48,12 @@ std::pair<Quartier*,Quartier*> QuarTri::decoupeSimple()
     abc*=abc*rand();
     bca*=bca*rand();
 
-    float   t0 = (cab+c2)/4,
-            t1 = (c1+c2)/4,
-            t2 = (c1+bca)/4,
-            t3 = (c1+c3)/4,
-            t4 = (abc+c3)/4,
-            t5 = (c2+c3)/4;
+    float   t0 = (cab+c2),
+            t1 = (c1+c2),
+            t2 = (c1+bca),
+            t3 = (c1+c3),
+            t4 = (abc+c3),
+            t5 = (c2+c3);
 
     if(t0>=t1 && t0>=t2 && t0>=t3 && t0>=t4 && t0>=t5)
         type = 0;

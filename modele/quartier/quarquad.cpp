@@ -26,8 +26,8 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupeSimple()
             cd = scd.getNorm(),
             da = sda.getNorm();
     float perim = (ab+bc+cd+da);
-    float   c1 = (ab+cd)/perim,
-            c2 = (bc+da)/perim;
+    float   c1 = 4*(ab+cd)/perim,
+            c2 = 4*(bc+da)/perim;
 
     sab/=ab;
     sbc/=bc;
@@ -38,8 +38,8 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupeSimple()
             abc = 1+dot(sab,sbc),
             bcd = 1+dot(sbc,scd),
             cda = 1+dot(scd,sda);
-    float   a1 = (dab+bcd)/4,
-            a2 = (abc+cda)/4;
+    float   a1 = (dab+bcd),
+            a2 = (abc+cda);
 
     c1*=c1*rand();
     c2*=c2*rand();
