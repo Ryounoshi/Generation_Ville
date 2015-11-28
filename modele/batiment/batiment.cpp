@@ -9,8 +9,8 @@ Batiment::Batiment(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, c
     longueur = distance(p0,p1);
     largeur = distance(p0,p3);
 
-    longueur *= 0.66;
-    largeur *= 0.66;
+    longueur *= 0.8;
+    largeur *= 0.8;
 }
 
 Mesh Batiment::generate()
