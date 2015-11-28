@@ -30,8 +30,10 @@ Mesh Rezdechausse::generate(){
     Vector3D newp3(_p3.x,_p3.y,_p3.z+_hauteur);
     int proba = rand()%100;
     if(proba < (95) && dist < (200*_par->influenceCentreVille)){
+        /*
         if(rand()%100 < 20 && _par->splitPourcent)
         {
+
             //qDebug()<<_par->splitPourcent;
             if(longueur>largeur*1.8)
             {
@@ -174,11 +176,14 @@ Mesh Rezdechausse::generate(){
             ourMesh.merge(etage.generate());
             return ourMesh;
         }
+    */
+        Etage etage(newp0,newp1,newp2,newp3,_hauteur, _par,1,E);
+        ourMesh.merge(etage.generate());
+        return ourMesh;
     }else{
         Toit toit(newp0,newp1,newp2,newp3, 0,_hauteur, _par);
         ourMesh.merge(toit.generate());
         return ourMesh;
     }
-
 }
 

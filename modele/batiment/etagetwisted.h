@@ -1,16 +1,16 @@
-#ifndef ETAGE_H
-#define ETAGE_H
+#ifndef ETAGETWISTED_H
+#define ETAGETWISTED_H
 #include "modele/mesh.h"
 #include "geometrie/vector2d.h"
 #include "geometrie/vector3d.h"
 #include "../interface_ville.h"
 #include "batparameter.h"
-#include "etagetwisted.h"
+#include "toit.h"
 
-class Etage : public Interface_Ville
+class EtageTwisted : public Interface_Ville
 {
 public:
-    Etage(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par, int noEtage, int type);
+    EtageTwisted(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hauteur, BatParameter *par, int noEtage, int type);
     Mesh generate();
 private:
     Mesh ourMesh;
@@ -25,7 +25,6 @@ private:
     int _type;
 
     void twister(Mesh &m);
-    void twistedEtage(void);
     void toit(void);
     void splitedEtage(void);
     void smallerEtage(void);
@@ -33,4 +32,4 @@ private:
     void createMesh(int type);
 };
 
-#endif // ETAGE_H
+#endif // ETAGETWISTED_H

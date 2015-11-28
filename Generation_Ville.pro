@@ -7,6 +7,7 @@ QT += gui
 QT += opengl
 LIBS += -lopengl32 -lglu32
 
+
 SOURCES += main.cpp \
     geometrie/vector2d.cpp \
     geometrie/vector3d.cpp \
@@ -33,7 +34,13 @@ SOURCES += main.cpp \
     modele/quartier/quartri.cpp \
     math/noisegenerator.cpp \
     modele/quartier/patern/paternequad.cpp \
-    modele/quartier/patern/paternetri.cpp
+    modele/quartier/patern/paternetri.cpp \
+    modele/batiment/etagesplited.cpp \
+    modele/batiment/etagetwisted.cpp \
+    modele/batiment/rezdechaussehexa.cpp \
+    modele/batiment/etagehexa.cpp \
+    modele/batiment/toithexa.cpp \
+    modele/batiment/etagehexatwisted.cpp
 
 
 
@@ -64,6 +71,12 @@ HEADERS += \
     modele/quartier/quartri.h \
     math/noisegenerator.h \
     modele/quartier/patern/paternequad.h \
-    modele/quartier/patern/paternetri.h
+    modele/quartier/patern/paternetri.h \
+    modele/batiment/etagesplited.h \
+    modele/batiment/etagetwisted.h \
+    modele/batiment/rezdechaussehexa.h \
+    modele/batiment/etagehexa.h \
+    modele/batiment/toithexa.h \
+    modele/batiment/etagehexatwisted.h
 
 
