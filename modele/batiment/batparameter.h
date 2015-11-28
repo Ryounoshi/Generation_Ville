@@ -8,6 +8,16 @@
 #define DEFAULT_HAUTEUR_ETAGE 3
 
 
+//types d'étage
+#define E 0     //etage normal
+#define ES 1    //etage Splité
+#define ET 2    //etage twisté
+#define ER 3    //etage réduit
+#define ERS 4    //etage réduit smooth
+
+//types de toit
+
+
 class BatParameter
 {
 public:

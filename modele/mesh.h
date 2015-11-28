@@ -67,7 +67,13 @@ public :
      */
     static Mesh createQuadrangle3D(const Vector3D& a, const Vector3D& b, const Vector3D& c, const Vector3D& d, const float& height);
 
+    static Mesh createQuadrangle3DTwisted(const Vector3D& a, const Vector3D& b, const Vector3D& c, const Vector3D& d, const Vector3D &a2, const Vector3D &b2, const Vector3D &c2, const Vector3D &d2, const float& height);
+
+    static Mesh createHexaangle3D(const Vector3D& a, const Vector3D& b, const Vector3D& c, const Vector3D& d,const Vector3D& e, const Vector3D& f,  const float &height);
+
     static Mesh createBox(const Vector3D& a, const Vector3D& b);
+
+    static Mesh createHexaangleTwisted(const Vector3D& a, const Vector3D& b, const Vector3D& c, const Vector3D& d, const Vector3D& e, const Vector3D& f, const Vector3D &a2, const Vector3D &b2, const Vector3D &c2, const Vector3D &d2, const Vector3D &e2, const Vector3D &f2, const float &height);
 
     //static Mesh createCube(const Vector3D& a, const Vector3D& b);
 

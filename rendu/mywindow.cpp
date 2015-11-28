@@ -321,31 +321,39 @@ void myWindow::paintGL()
         _par.resetEtageLePlusHaut();
 
         qDebug()<<_mesh.nbFace();
-        largeur = 500; //du terrain
-        longueur = 500;
+        largeur = 40; //du terrain
+        longueur = 40;
 
-        /*int largeurQuartier = 40;
-        int longueurQuartier = 40;
-
+        int largeurQuartier = 10;
+        int longueurQuartier = 10;
+/*
+        float angle = 2*3.14159265359 / 6;
+        _mesh = Mesh::createHexaangle3D(Vector3D(cos(0),sin(0),0),
+                                        Vector3D(cos(angle),sin(angle),0),
+                                        Vector3D(cos(2*angle),sin(2*angle),0),
+                                        Vector3D(cos(3*angle),sin(3*angle),0),
+                                        Vector3D(cos(4*angle),sin(4*angle),0),
+                                        Vector3D(cos(5*angle),sin(5*angle),0),1.0);
+*/
+/*
         Mesh m1;
-        //for(float i=-largeur/2;i<largeur/2;i+=3.5){
-            //for(float j=-longueur/2; j<longueur/2; j+=3.5){
-        for(float i=-largeur/2;i<largeur/2;i+=largeurQuartier+1){
-            for(float j=-longueur/2; j<longueur/2; j+=longueurQuartier+1){
+        for(float i=-largeur/2;i<largeur/2;i+=3.1){
+            for(float j=-longueur/2; j<longueur/2; j+=3.1){
+        //for(float i=-largeur/2;i<largeur/2;i+=largeurQuartier+1){
+            //for(float j=-longueur/2; j<longueur/2; j+=longueurQuartier+1){
                 int tmp = (int)rand()%4;
-                tmp = 0;
+                //tmp = 0;
                 //qDebug()<<tmp;
                 if(tmp == 0){
-                    PaterneQuad p1(Vector2D(i,j), Vector2D(i,j+longueurQuartier), Vector2D(i+largeurQuartier,j+longueurQuartier), Vector2D(i+largeurQuartier,j),&_par);
-                     m1.merge(p1.generate());*/
-                    /*Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
+                    //PaterneQuad p1(Vector2D(i,j), Vector2D(i,j+longueurQuartier), Vector2D(i+largeurQuartier,j+longueurQuartier), Vector2D(i+largeurQuartier,j),&_par);
+                     //m1.merge(p1.generate());
+                    Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
                                   Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
                                   Vector3D(i+1+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
                                   Vector3D(i+1+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  0.2,
                                   &_par);
-                    m1.merge(test.generate());*/
-                /*}else if(tmp == 1){
+                    m1.merge(test.generate());
+                }else if(tmp == 1){
                     float offset = (rand()%21)*0.1;
                     Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
                                   Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
@@ -371,7 +379,8 @@ void myWindow::paintGL()
                     m1.merge(test.generate());
                 }
             }
-        }*/
+        }
+        _mesh = m1;*/
         /*Batiment test(Vector3D(-3+(rand()%100)*0.001,-3+(rand()%100)*0.001,0),
                       Vector3D(-3+(rand()%100)*0.001,3+(rand()%100)*0.001,0),
                       Vector3D(3+(rand()%100)*0.001,3+(rand()%100)*0.001,0),
@@ -386,7 +395,7 @@ void myWindow::paintGL()
         _mesh = base.generate();
 
         //Mesh m1 = base.generate();
-        //_mesh = m1;
+
 
 /*
         TerrainBase base(2000,2000, &_par);

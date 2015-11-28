@@ -246,6 +246,125 @@ Mesh Mesh::createQuadrangle3D(const Vector3D& a, const Vector3D& b, const Vector
     return m;
 }
 
+Mesh Mesh::createHexaangle3D(const Vector3D& a, const Vector3D& b, const Vector3D& c, const Vector3D& d,const Vector3D& e, const Vector3D& f,const float &height)
+{
+    Mesh m;
+    m.vertex.push_back(a);
+    m.vertex.push_back(b);
+    m.vertex.push_back(c);
+    m.vertex.push_back(d);
+    m.vertex.push_back(e);
+    m.vertex.push_back(f);
+    Vector3D trans(0,0,height);
+    m.vertex.push_back(a+trans);
+    m.vertex.push_back(b+trans);
+    m.vertex.push_back(c+trans);
+    m.vertex.push_back(d+trans);
+    m.vertex.push_back(e+trans);
+    m.vertex.push_back(f+trans);
+
+    m.addFace(0,1,7);
+    m.addFace(7,6,0);
+    m.addFace(1,2,8);
+    m.addFace(8,7,1);
+    m.addFace(2,3,9);
+    m.addFace(9,8,2);
+    m.addFace(3,4,10);
+    m.addFace(10,9,3);
+    m.addFace(4,5,11);
+    m.addFace(11,10,4);
+    m.addFace(5,0,6);
+    m.addFace(6,11,5);
+
+    m.addFace(0,1,2);
+    m.addFace(0,2,3);
+    m.addFace(0,3,4);
+    m.addFace(0,4,5);
+
+    m.addFace(6,7,8);
+    m.addFace(6,8,9);
+    m.addFace(6,9,10);
+    m.addFace(6,10,11);
+
+    return m;
+}
+
+Mesh Mesh::createHexaangleTwisted(const Vector3D& a, const Vector3D& b, const Vector3D& c, const Vector3D& d,const Vector3D& e, const Vector3D& f,const Vector3D& a2, const Vector3D& b2, const Vector3D& c2, const Vector3D& d2,const Vector3D& e2, const Vector3D& f2,const float &height)
+{
+    Mesh m;
+    m.vertex.push_back(a);
+    m.vertex.push_back(b);
+    m.vertex.push_back(c);
+    m.vertex.push_back(d);
+    m.vertex.push_back(e);
+    m.vertex.push_back(f);
+    Vector3D trans(0,0,height);
+    m.vertex.push_back(a2+trans);
+    m.vertex.push_back(b2+trans);
+    m.vertex.push_back(c2+trans);
+    m.vertex.push_back(d2+trans);
+    m.vertex.push_back(e2+trans);
+    m.vertex.push_back(f2+trans);
+
+    m.addFace(0,1,7);
+    m.addFace(7,6,0);
+    m.addFace(1,2,8);
+    m.addFace(8,7,1);
+    m.addFace(2,3,9);
+    m.addFace(9,8,2);
+    m.addFace(3,4,10);
+    m.addFace(10,9,3);
+    m.addFace(4,5,11);
+    m.addFace(11,10,4);
+    m.addFace(5,0,6);
+    m.addFace(6,11,5);
+
+    m.addFace(0,1,2);
+    m.addFace(0,2,3);
+    m.addFace(0,3,4);
+    m.addFace(0,4,5);
+
+    m.addFace(6,7,8);
+    m.addFace(6,8,9);
+    m.addFace(6,9,10);
+    m.addFace(6,10,11);
+
+    return m;
+}
+
+Mesh Mesh::createQuadrangle3DTwisted(const Vector3D& a, const Vector3D& b, const Vector3D& c, const Vector3D& d,
+                                     const Vector3D& a2,const Vector3D& b2,const Vector3D& c2,const Vector3D& d2,
+                                     const float &height)
+{
+    Mesh m;
+    m.vertex.push_back(a);
+    m.vertex.push_back(b);
+    m.vertex.push_back(c);
+    m.vertex.push_back(d);
+    Vector3D trans(0,0,height);
+    m.vertex.push_back(a2+trans);
+    m.vertex.push_back(b2+trans);
+    m.vertex.push_back(c2+trans);
+    m.vertex.push_back(d2+trans);
+
+    m.addFace(2,6,3);
+    m.addFace(6,7,3);
+    m.addFace(3,4,0);
+    m.addFace(3,7,4);
+    m.addFace(5,4,6);
+    m.addFace(6,4,7);
+    m.addFace(1,0,5);
+    m.addFace(0,4,5);
+    m.addFace(1,6,2);
+    m.addFace(1,5,6);
+    m.addFace(1,2,0);
+    m.addFace(2,3,0);
+
+    return m;
+}
+
+
+
 Mesh Mesh::createBox(const Vector3D& a, const Vector3D& b)
 {
     float height = b.z - a.z;

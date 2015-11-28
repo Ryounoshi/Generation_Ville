@@ -13,6 +13,8 @@ private:
     Vector3D _p0,_p1,_p2,_p3;
     float _hauteur; //hauteur du bloque
     BatParameter *_par;
+    float longueur,largeur;
+    Mesh ourMesh;
 };
 
 #endif // BATIMENT_H
