@@ -41,12 +41,12 @@ std::pair<Quartier*,Quartier*> QuarTri::decoupeSimple()
             abc = 1+dot(sab,sbc),
             bca = 1+dot(sbc,sca);
 
-    c1*=c1*rand();
-    c2*=c2*rand();
-    c3*=c3*rand();
-    cab*=cab*rand();
-    abc*=abc*rand();
-    bca*=bca*rand();
+    c1*=c1*c1*rand();
+    c2*=c2*c2*rand();
+    c3*=c3*c3*rand();
+    cab*=cab*cab*rand();
+    abc*=abc*abc*rand();
+    bca*=bca*bca*rand();
 
     float   t0 = (cab+c2),
             t1 = (c1+c2),

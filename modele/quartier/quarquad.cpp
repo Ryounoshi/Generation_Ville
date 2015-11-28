@@ -41,10 +41,10 @@ std::pair<Quartier*,Quartier*> QuarQuad::decoupeSimple()
     float   a1 = (dab+bcd),
             a2 = (abc+cda);
 
-    c1*=c1*rand();
-    c2*=c2*rand();
-    a1*=a1*rand();
-    a2*=a2*rand();
+    c1*=c1*c1*rand();
+    c2*=c2*c2*rand();
+    a1*=a1*a1*rand();
+    a2*=a2*a2*rand();
 
     if(a1>=a2 && a1>=c1 && a1>=c2)
         type = 0;
