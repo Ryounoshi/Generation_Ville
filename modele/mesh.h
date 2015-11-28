@@ -16,7 +16,7 @@ class Mesh{
 
 protected:
     std::vector<Vector3D> vertex;
-    std::vector<Vector3D> normalsPoints;
+    std::vector<Vector3D> normalsPoints;    //non utilisé
     std::vector<unsigned int> face;
 
 public :

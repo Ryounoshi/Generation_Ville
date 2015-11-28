@@ -385,6 +385,10 @@ void myWindow::paintGL()
         bases.push_back(TerrainBase(Quadrangle(Vector2D(0,200),Vector2D(200,400),Vector2D(400,200),Vector2D(200,-200)), &_par));
         bases.push_back(TerrainBase(Quadrangle(Vector2D(200,-200),Vector2D(200,-400),Vector2D(-200,-400),Vector2D(-200,-200)), &_par));
         bases.push_back(TerrainBase(Quadrangle(Vector2D(-200,-200),Vector2D(-400,200),Vector2D(-200,400),Vector2D(0,200)), &_par));
+
+        bases.push_back(TerrainBase(Triangle(Vector2D(250,-200),Vector2D(500,200),Vector2D(500,-200)), &_par));
+        bases.push_back(TerrainBase(Quadrangle(Vector2D(250,-200),Vector2D(500,-200),Vector2D(450,-350),Vector2D(250,-400)), &_par));
+
         Mesh m1;
         for(TerrainBase& base : bases)
         {
