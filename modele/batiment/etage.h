@@ -22,6 +22,10 @@ private:
     int _twisted; //0: non twisté   1: twisté vers la droite    2: twisté vers la gauche
 
     void twister(Mesh &m);
+    void toit(void);
+    void splitedEtage(void);
+    void smallerEtage(void);
+    void sameEtage(void);
 };
 
 #endif // ETAGE_H

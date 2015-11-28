@@ -1,5 +1,10 @@
 #include <iostream>
 
+#include <GL/glew.h>
+
+#include <GLFW/glfw3.h>
+#include <GL/gl.h>
+
 #include "geometrie/Triangle.h"
 #include "geometrie/quadrangle.h"
 #include "geometrie/vector2d.h"
@@ -45,10 +50,11 @@ int main(int argc, char *argv[])
     PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,10), Vector2D(10,10), Vector2D(10,0), 2.5);
     m1 = p1.generate();
 */
+    /*
     myWindow glWin;
     glWin.show();
     return app.exec();
-
+*/
     /*BatParameter par(Vector3D(0,0,0));
     par.etageLePlusHaut = 20;
     par.hauteurEtage = 5;

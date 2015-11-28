@@ -7,6 +7,9 @@ QT += gui
 QT += opengl
 LIBS += -lopengl32 -lglu32
 
+INCLUDEPATH += C:\Developpement\glew-1.13.0\include
+INCLUDEPATH += C:\Developpement\glfw-3.1.2.bin.WIN64\include
+
 SOURCES += main.cpp \
     geometrie/vector2d.cpp \
     geometrie/vector3d.cpp \
