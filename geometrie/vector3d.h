@@ -71,6 +71,7 @@ public:
     friend Vector3D operator- (const Vector3D&, float);
     friend Vector3D operator- (float, const Vector3D&);
 
+	friend Vector3D operator^ (const Vector3D&, const Vector3D&);
     friend Vector3D operator* (const Vector3D&, const Vector3D&);
     friend Vector3D operator* (const Vector3D&, float);
     friend Vector3D operator* (float, const Vector3D&);
@@ -141,6 +142,9 @@ inline Vector3D operator- (float a, const Vector3D& v){
     return Vector3D(a-v.x, a-v.y, a-v.z);
 }
 
+inline Vector3D operator^ (const Vector3D& u, const Vector3D& v){
+    return Vector3D(u.y*v.z - u.z*v.y , -(u.x*v.z - u.z*v.x) , u.x*v.y - u.y*v.x);
+}
 inline Vector3D operator* (const Vector3D& u, const Vector3D& v){
     return Vector3D(u.x*v.x, u.y*v.y, u.z*v.z);
 }
