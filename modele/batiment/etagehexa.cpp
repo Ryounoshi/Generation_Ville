@@ -43,8 +43,8 @@ Mesh EtageHexa::generate(){
         if((longueur>largeur*1.6 || largeur>longueur*1.6)){ //si le batiment n'est pas carré on fait un etage identique
             //twistedEtage();
             sameEtage();
-        }else{  //sinon 70% de chance de faire un etage twisté
-            if(rand()%100<70){
+        }else{  //sinon 50% de chance de faire un etage twisté
+            if(rand()%100<50){
                 twistedEtage();
             }else{
                 //twistedEtage();
@@ -60,7 +60,6 @@ Mesh EtageHexa::generate(){
         return ourMesh;
     }
 }
-
 
 void EtageHexa::toit(void){
     Vector3D offset(0,0,_hauteur);
