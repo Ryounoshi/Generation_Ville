@@ -364,7 +364,6 @@ Mesh Mesh::createQuadrangle3DTwisted(const Vector3D& a, const Vector3D& b, const
 }
 
 
-
 Mesh Mesh::createBox(const Vector3D& a, const Vector3D& b)
 {
     float height = b.z - a.z;

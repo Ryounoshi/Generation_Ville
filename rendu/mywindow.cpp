@@ -438,6 +438,7 @@ void myWindow::paintGL()
                           p2,
                           p3,
                           p4,
+                          50.0f,
                           &_par);
 
             Mesh m1;

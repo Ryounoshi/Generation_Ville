@@ -94,7 +94,7 @@ Mesh PaterneTri::paternAngleTotal(const Triangle& centre, int i, const Vector2D&
                           Vector3D(XY((get(i)+v1*sc1))),
                           Vector3D(XY(centre[i])),
                           Vector3D(XY((get(i)+v2*sc2))),
-                          _par);
+                          50,_par);
     return b.generate();
 }
 
@@ -118,7 +118,7 @@ Mesh PaterneTri::paternAngleCarre2(const Triangle& centre, int i, const Vector2D
                           Vector3D(XY((get(i)+v1*sc1))),
                           Vector3D(XY(centre[i])),
                           Vector3D(XY((get(i)+v2*sc2))),
-                          _par);
+                          50,_par);
     return b.generate();
 }
 
@@ -143,7 +143,7 @@ Mesh PaterneTri::paternAngleCarre(int i, const Vector2D& v1, const Vector2D& v2)
                           Vector3D(XY((get(i)+v1*sc1))),
                           Vector3D(XY(p)),
                           Vector3D(XY((get(i)+v2*sc2))),
-                          _par);
+                          50,_par);
     return b.generate();
 }
 
@@ -170,7 +170,7 @@ Mesh PaterneTri::paternRebordAngle(int i, const Vector2D& v1, const Vector2D& v2
                           Vector3D(XY(p2)),
                           Vector3D(XY(p3)),
                           Vector3D(XY(p4)),
-                          _par);
+                          50,_par);
     return b.generate();
 }
 
@@ -199,7 +199,7 @@ Mesh PaterneTri::paternRebord(const Vector2D& p1, const Vector2D& p2, const Vect
                               Vector3D(XY(p22)),
                               Vector3D(XY(p33)),
                               Vector3D(XY(p44)),
-                              _par);
+                              50,_par);
         return b.generate();
     }
     else
@@ -215,7 +215,7 @@ Mesh PaterneTri::paternRebord(const Vector2D& p1, const Vector2D& p2, const Vect
                                   Vector3D(XY(p22)),
                                   Vector3D(XY(p33)),
                                   Vector3D(XY(p44)),
-                                  _par);
+                                  50,_par);
             return b.generate();
         }
 
@@ -223,7 +223,7 @@ Mesh PaterneTri::paternRebord(const Vector2D& p1, const Vector2D& p2, const Vect
                               Vector3D(XY(p22)),
                               Vector3D(XY(p33)),
                               Vector3D(XY(p44)),
-                              _par);
+                              50,_par);
         retour = b.generate();
         retour.merge(paternRebord(p22, p2, p3, p33, v1));
         return retour;
