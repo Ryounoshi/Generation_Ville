@@ -41,11 +41,13 @@ Mesh EtageHexa::generate(){
         return ourMesh;
     }else if(proba<=pReduction){
         if((longueur>largeur*1.6 || largeur>longueur*1.6)){ //si le batiment n'est pas carré on fait un etage identique
+            //twistedEtage();
             sameEtage();
-        }else{  //sinon 50% de chance de faire un etage twisté
-            if(rand()%100<50){
+        }else{  //sinon 70% de chance de faire un etage twisté
+            if(rand()%100<70){
                 twistedEtage();
             }else{
+                //twistedEtage();
                 sameEtage();
             }
         }

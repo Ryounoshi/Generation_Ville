@@ -324,6 +324,26 @@ void myWindow::paintGL()
         largeur = 500; //du terrain
         longueur = 500;
 
+/*
+        float lar,lon;
+        lar = 10.0;
+        lon = 10.0+rand()%10;
+
+        Vector3D p1(-lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
+        Vector3D p2(-lar-7.5+rand()%15,lon-7.5+rand()%15,0);
+        Vector3D p3(lar-7.5+rand()%15,lon-7.5+rand()%15,0);
+        Vector3D p4(lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
+
+        Batiment test(p1,
+                      p2,
+                      p3,
+                      p4,
+                      &_par);
+
+        Mesh m1;
+        m1.merge(test.generate());
+        _mesh = m1;
+*/
         /*int largeurQuartier = 40;
         int longueurQuartier = 40;
 

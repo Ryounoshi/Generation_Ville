@@ -18,7 +18,7 @@ Mesh ToitHexa::generate(){
 
 void ToitHexa::createMesh(int type){
     Vector3D gravity = (_p0 + _p1 + _p2 + _p3 +_p4 + _p5)/6;
-    if(_noEtage>10){
+    if(_noEtage>=6){
         //qDebug()<<"toto";
         float largeurBordure = 0.1;
         Vector3D p0bis = _p0 + (_p3-_p0)*largeurBordure;
