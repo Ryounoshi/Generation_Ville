@@ -62,7 +62,6 @@ void PaterneQuad::faireTrotoir(Mesh& m){
     this->shrink(_par->largeurTrotoir);
 
     Quadrangle centre = *this;
-    centre.shrink(_par->largeurTrotoir);
 
     for(int i=0; i<4; i++){
         m.addTriangle( Vector3D( XY( notreQuadrangle[i] ), _par->hauteurTrotoir),
@@ -70,8 +69,8 @@ void PaterneQuad::faireTrotoir(Mesh& m){
                        Vector3D( XY( notreQuadrangle[(i-1)%4] ), _par->hauteurTrotoir) );
 
         m.addTriangle( Vector3D( XY( notreQuadrangle[(i-1)%4] ), _par->hauteurTrotoir),
-                       Vector3D( XY( notreQuadrangle[i] ), 0),
-                       Vector3D( XY( notreQuadrangle[(i-1)%4] ), 0) );
+                Vector3D( XY( notreQuadrangle[i] ), 0),
+                Vector3D( XY( notreQuadrangle[(i-1)%4] ), 0) );
     }
 
     for(int i=0; i<4; i++){
@@ -118,6 +117,8 @@ Mesh PaterneQuad::paternQuatreBatiment(){
 
     return retour;
 }
+
+/*
 
 Mesh PaterneQuad::paternTroisBatiment(){
 
@@ -194,7 +195,7 @@ Mesh PaterneQuad::paternDeuxBatimentDiagonale(){
             _par);
     */
 
-    /*
+/*
 
     Batiment b = Batiment( Vector3D( XY( ( (*this)[0] + p0p1*_par->largeurRuelle/2 ) ), 0),
             Vector3D( XY( batimentsCoin[1][3] ), 0),
@@ -275,7 +276,6 @@ void PaterneQuad::determinationBatimentCoin(const int &indicePointCoin, Vector2D
 
     pIpIm1.normalise(); pIpIp1.normalise();
 
-    // disposition des points en losange
 
     float dpIpIm1 = shrink.scalareProduct(pIpIm1);
 
@@ -315,18 +315,68 @@ Mesh PaterneQuad::remplissageCoin(const int& indicePointCoin, Vector2D& point1Ba
     point3Batiment = get(indicePointCoin) + pIpIm1*dpIpIm1;
 
 
+    Batiment b;
+
     if( angleEntreVecteur( (*this)[(indicePointCoin-1)%4]-(*this)[indicePointCoin],
-                           (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) < 75 ||
-            angleEntreVecteur( (*this)[(indicePointCoin-1)%4]-(*this)[indicePointCoin],
-                               (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) > 135 ){
+                           (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) < 75 ){
+
+        float a = (point3Batiment - point1Batiment).getNorm();
+        float b = (point3Batiment - (*this)[indicePointCoin] ).getNorm();
+        float h = ( (point3Batiment + (point3Batiment - point1Batiment).normalised()*a/2)
+                    - (*this)[indicePointCoin] ).getNorm();
+
+        float dMinCoinBatPointLargeur = _par->minLargeurBatiment*b/a;
+
+        float dMinCoinBatPointHauteur = _par->minLargeurBatiment*b/h;
+        dMinCoinBatPointHauteur = b - dMinCoinBatPointHauteur;
+
+        if(dMinCoinBatPointLargeur < dMinCoinBatPointHauteur){
+
+            float dCoinBatPoint = ( dMinCoinBatPointLargeur + dMinCoinBatPointHauteur )/2.0 ;
+            float dCoinBatSeg = a/2 - (dCoinBatPoint*a/b)/2;
+
+            Vector2D p0B = (*this)[indicePointCoin] + (point1Batiment - (*this)[indicePointCoin]).normalised()*dCoinBatPoint ;
+            Vector2D p1B = point1Batiment + (point3Batiment - point1Batiment).normalised()*dCoinBatSeg ;
+            Vector2D p2B = point3Batiment + (point1Batiment - point3Batiment).normalised()*dCoinBatSeg;
+            Vector2D p3B = (*this)[indicePointCoin] + (point3Batiment - (*this)[indicePointCoin]).normalised()*dCoinBatPoint;
+
+            b = Batiment(Vector3D( XY(p0B), _par->hauteurTrotoir),
+                         Vector3D( XY(p1B), _par->hauteurTrotoir),
+                         Vector3D( XY(p2B), _par->hauteurTrotoir),
+                         Vector3D( XY(p3B), _par->hauteurTrotoir),
+                         _par);
+
+            return b.generate();
+
+        }
+        else{
+            return Mesh();
+        }
+
+    }
+    else if( angleEntreVecteur( (*this)[(indicePointCoin-1)%4]-(*this)[indicePointCoin],
+                                (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) < 105 ){
+
+        b = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, _par->hauteurTrotoir),
+                     Vector3D(point1Batiment.x, point1Batiment.y, _par->hauteurTrotoir),
+                     Vector3D(pointCentre.x, pointCentre.y, _par->hauteurTrotoir),
+                     Vector3D(point3Batiment.x, point3Batiment.y, _par->hauteurTrotoir),
+                     _par);
+
+    }
+    else if(angleEntreVecteur( (*this)[(indicePointCoin-1)%4]-(*this)[indicePointCoin],
+                               (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) > 135){
+
+        b = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, _par->hauteurTrotoir),
+                              Vector3D(point1Batiment.x, point1Batiment.y, _par->hauteurTrotoir),
+                              Vector3D(pointCentre.x, pointCentre.y, _par->hauteurTrotoir),
+                              Vector3D(point3Batiment.x, point3Batiment.y, _par->hauteurTrotoir),
+                              _par);
+    }
+    else{
         return Mesh();
     }
 
-    Batiment b = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, _par->hauteurTrotoir),
-                          Vector3D(point1Batiment.x, point1Batiment.y, _par->hauteurTrotoir),
-                          Vector3D(pointCentre.x, pointCentre.y, _par->hauteurTrotoir),
-                          Vector3D(point3Batiment.x, point3Batiment.y, _par->hauteurTrotoir),
-                          _par);
     return b.generate();
 
 }
@@ -348,18 +398,18 @@ Mesh PaterneQuad::remplissageBord(Vector2D &point1Batiment0, Vector2D &point2Bat
         float aleatoire = 0;
 
         if(nbminBat != nbmaxBat){
-            aleatoire = nbminBat + 1 + (rand()%(nbmaxBat-nbminBat));
+            aleatoire = nbminBat + (rand()%(nbmaxBat-nbminBat));
         }
         else{
             aleatoire = nbminBat;
         }
 
-        float largeurBatiment = dExterne / aleatoire;
+        float largeurBatiment = (dExterne / aleatoire) - _par->largeurRuelle;
 
         for(int i=0; i < aleatoire; i++){
 
-            Vector2D p0 = point1Batiment0 + vecteurDirectionExt*i*largeurBatiment;
-            Vector2D p1 = point1Batiment0 + vecteurDirectionExt*(i+1)*largeurBatiment;
+            Vector2D p0 = point1Batiment0 + vecteurDirectionExt*(i*largeurBatiment + (i+1)*_par->largeurRuelle);
+            Vector2D p1 = point1Batiment0 + vecteurDirectionExt*(i+1)*(largeurBatiment+_par->largeurRuelle);
             Vector2D p2 = point2Batiment0 + vecteurDirectionInt*distance(p1, point1Batiment0)*dInterne/dExterne;
             Vector2D p3 = point2Batiment0 + vecteurDirectionInt*distance(p0, point1Batiment0)*dInterne/dExterne;
 
