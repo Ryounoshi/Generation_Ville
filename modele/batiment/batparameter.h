@@ -13,6 +13,7 @@
 #define ES 1    //etage Splité
 #define ET 2    //etage twisté
 #define ER 3    //etage réduit
+#define ER2 5    //etage réduit 2
 #define ERS 4    //etage réduit smooth
 
 //types de toit

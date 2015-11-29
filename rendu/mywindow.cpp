@@ -260,7 +260,7 @@ void myWindow::paintGL()
     _fx += _speed;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glPolygonMode( GL_FRONT, GL_FILL );
 
     glLightiv(GL_LIGHT0,GL_POSITION,LightPos);
     glLightiv(GL_LIGHT1,GL_POSITION,Light2Pos);

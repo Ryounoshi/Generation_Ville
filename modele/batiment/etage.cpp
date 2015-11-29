@@ -35,7 +35,7 @@ Mesh Etage::generate(){
         toit();
         return ourMesh;
     }else if(proba<=pReduction){
-        if((longueur>largeur*1.2 || largeur>longueur*1.2)){ //si le batiment n'est pas carré on fait un etage identique
+        if((longueur>largeur*1.1 || largeur>longueur*1.1)){ //si le batiment n'est pas carré on fait un etage identique
             sameEtage();
         }else{  //sinon 20% de chance de faire un etage twisté
             if(rand()%100<20){
@@ -45,14 +45,6 @@ Mesh Etage::generate(){
             }
         }
         return ourMesh;
-        /*
-        if((longueur>largeur*1.5 || largeur>longueur*1.5) && ((rand()%100 < _par->splitPourcent) && !_splited)){
-            splitedEtage();
-            return ourMesh;
-        }else{
-            sameEtage();
-            return ourMesh;
-        }*/
     }else if(proba>pReduction && proba<=pToit){ //on fait un etage plus petit
         smallerEtage();
         return ourMesh;
@@ -78,9 +70,14 @@ void Etage::twistedEtage(void){
 
 void Etage::smallerEtage(void){
     Vector3D offset(0,0,_hauteur);
-    if(rand()%10 < 11 && _type != ERS){
-        Etage etage(_p0Top+offset,_p1Top+offset,_p2Top+offset,_p3Top+offset,_hauteur, _par,_noEtage+1,ER);
-        ourMesh.merge(etage.generate());
+    if(rand()%10 < 6 && _type != ERS){
+        if(rand()%2){
+            Etage etage(_p0Top+offset,_p1Top+offset,_p2Top+offset,_p3Top+offset,_hauteur, _par,_noEtage+1,ER2);
+            ourMesh.merge(etage.generate());
+        }else{
+            Etage etage(_p0Top+offset,_p1Top+offset,_p2Top+offset,_p3Top+offset,_hauteur, _par,_noEtage+1,ER);
+            ourMesh.merge(etage.generate());
+        }
     }else{
         Etage etage(_p0Top+offset,_p1Top+offset,_p2Top+offset,_p3Top+offset,_hauteur, _par,_noEtage+1,ERS);
         ourMesh.merge(etage.generate());
@@ -95,7 +92,7 @@ void Etage::sameEtage(void){
 
 void Etage::createMesh(int type){
 
-    if(type == ER){
+    if(type == ER){        
         float scale = 0.9;
         Vector3D gravite = (_p0 + _p1 + _p2 + _p3)/4;
 
@@ -122,6 +119,18 @@ void Etage::createMesh(int type){
         _p1Top = _p1;
         _p2Top = _p2;
         _p3Top = _p3;
+
+    }else if(type == ER2){
+        float scale = 0.8;
+        Vector3D lon = (_p1 - _p0);
+        Vector3D lon2 = (_p2 - _p3);
+        _p1 = _p0 + lon*scale;
+        _p2 = _p3 + lon2*scale;
+        _p0Top = _p0;
+        _p1Top = _p1;
+        _p2Top = _p2;
+        _p3Top = _p3;
+
     }
     if(type == ERS){
         float scale = 0.9;
