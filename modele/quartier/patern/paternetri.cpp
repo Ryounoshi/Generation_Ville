@@ -14,8 +14,31 @@ Mesh PaterneTri::generate()
 
 
 void PaterneTri::faireTrotoir(Mesh& m){
+    Triangle notreQuadrangle = *this;
+    this->shrink(_par->largeurTrotoir);
+    Triangle centre = *this;
+    //centre.shrink(_par->largeurTrotoir);
 
-    Triangle centre = *this, bords = *this;
+    for(int i=0; i<3; i++){
+        m.addTriangle( Vector3D( XY( notreQuadrangle[i] ), _par->hauteurTrotoir),
+                       Vector3D( XY( notreQuadrangle[i] ), 0),
+                       Vector3D( XY( notreQuadrangle[i-1] ), _par->hauteurTrotoir) );
+
+        m.addTriangle( Vector3D( XY( notreQuadrangle[i-1] ), _par->hauteurTrotoir),
+                       Vector3D( XY( notreQuadrangle[i] ), 0),
+                       Vector3D( XY( notreQuadrangle[i-1] ), 0) );
+    }
+
+    for(int i=0; i<3; i++){
+        m.addTriangle( Vector3D( XY( notreQuadrangle[i] ), _par->hauteurTrotoir),
+                       Vector3D( XY( notreQuadrangle[i-1] ), _par->hauteurTrotoir),
+                Vector3D( XY( centre[i] ), _par->hauteurTrotoir) );
+
+        m.addTriangle( Vector3D( XY( centre[i] ), _par->hauteurTrotoir),
+                       Vector3D( XY( notreQuadrangle[i-1] ), _par->hauteurTrotoir),
+                Vector3D( XY( centre[i-1] ), _par->hauteurTrotoir) );
+    }
+    /*Triangle centre = *this, bords = *this;
     centre.shrink(_par->largeurTrotoir);
 
     for(int i=0; i<3; i++){
@@ -28,7 +51,8 @@ void PaterneTri::faireTrotoir(Mesh& m){
                         Vector3D(XY(centre[i-1])) );
     }
 
-    this->shrink(_par->largeurTrotoir);
+    this->shrink(_par->largeurTrotoir);*/
+
 }
 
 void PaterneTri::faireSol(Mesh &m){

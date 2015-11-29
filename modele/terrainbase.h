@@ -24,6 +24,8 @@ public:
 
     Mesh generate();
 
+    std::vector<Vector2D> getPoints() const;
+
 protected:
     BatParameter* _par;
     std::vector<Quartier*> quartiers;

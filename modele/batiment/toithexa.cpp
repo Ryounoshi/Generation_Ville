@@ -4,7 +4,7 @@
 using namespace std;
 
 ToitHexa::ToitHexa(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, const Vector3D &p4, const Vector3D &p5, int noEtage, float hauteur, BatParameter *par):
-    _p0(p0),_p1(p1),_p2(p2),_p3(p3),_p4(p4),_p5(p5),_noEtage(noEtage),_hauteur(hauteur),_par(par)
+    _p0(p0),_p1(p1),_p2(p2),_p3(p3),_p4(p4),_p5(p5),_hauteur(hauteur),_noEtage(noEtage),_par(par)
 {
     longueur = distance(p0,p1);
     largeur = distance(p0,p3);
@@ -28,13 +28,13 @@ void ToitHexa::createMesh(int type){
         Vector3D p4bis = _p4 + (_p1-_p4)*largeurBordure;
         Vector3D p5bis = _p5 + (_p2-_p5)*largeurBordure;
 
-        ourMesh = Mesh::createQuadrangle3D(_p0,_p1,p1bis,p0bis,_hauteur/3);
-        ourMesh.merge(Mesh::createQuadrangle3D(_p5,_p0,p0bis,p5bis,_hauteur/3));
+        ourMesh = Mesh::createQuadrangle3D(_p0,p0bis,p1bis,_p1,_hauteur/3);
+        ourMesh.merge(Mesh::createQuadrangle3D(_p5,p5bis,p0bis,_p0,_hauteur/3));
         if(!rand()%2){
-            ourMesh.merge(Mesh::createQuadrangle3D(_p1,_p2,p2bis,p1bis,_hauteur/3));
-            ourMesh.merge(Mesh::createQuadrangle3D(_p4,_p5,p5bis,p4bis,_hauteur/3));
-            ourMesh.merge(Mesh::createQuadrangle3D(_p2,_p3,p3bis,p2bis,_hauteur/3));
-            ourMesh.merge(Mesh::createQuadrangle3D(_p3,_p4,p4bis,p3bis,_hauteur/3));
+            ourMesh.merge(Mesh::createQuadrangle3D(_p1,p1bis,p2bis,_p2,_hauteur/3));
+            ourMesh.merge(Mesh::createQuadrangle3D(_p2,p2bis,p3bis,_p3,_hauteur/3));
+            ourMesh.merge(Mesh::createQuadrangle3D(_p3,p3bis,p4bis,_p4,_hauteur/3));
+            ourMesh.merge(Mesh::createQuadrangle3D(_p4,p4bis,p5bis,_p5,_hauteur/3));
         }else{
             Vector3D offset(0,0,_hauteur/1.0);
             Vector3D p32 = _p3;
@@ -51,10 +51,10 @@ void ToitHexa::createMesh(int type){
             Vector3D p22bis = p2bis;
             p22 += offset/2.0;
             p22bis += offset/2.0;
-            ourMesh.merge(Mesh::createQuadrangle3DTwisted(_p2,_p3,p3bis,p2bis,p22,p32,p32bis,p22bis,_hauteur/3));
-            ourMesh.merge(Mesh::createQuadrangle3DTwisted(_p3,_p4,p4bis,p3bis,p32,p42,p42bis,p32bis,_hauteur/3));
-            ourMesh.merge(Mesh::createQuadrangle3DTwisted(_p1,_p2,p2bis,p1bis,_p1,p22,p22bis,p1bis,_hauteur/3));
-            ourMesh.merge(Mesh::createQuadrangle3DTwisted(_p4,_p5,p5bis,p4bis,p42,_p5,p5bis,p42bis,_hauteur/3));
+            ourMesh.merge(Mesh::createQuadrangle3DTwisted(_p2,p2bis,p3bis,_p3,p22,p22bis,p32bis,p32,_hauteur/3));
+            ourMesh.merge(Mesh::createQuadrangle3DTwisted(_p3,p3bis,p4bis,_p4,p32,p32bis,p42bis,p42,_hauteur/3));
+            ourMesh.merge(Mesh::createQuadrangle3DTwisted(_p1,p1bis,p2bis,_p2,_p1,p1bis,p22bis,p22,_hauteur/3));
+            ourMesh.merge(Mesh::createQuadrangle3DTwisted(_p4,p4bis,p5bis,_p5,p42,p42bis,p5bis,_p5,_hauteur/3));
 
             ourMesh.merge(Mesh::createHexaangleTwisted(p0bis,p1bis,p2bis,p3bis,p4bis,p5bis,
                                                        p0bis,p1bis,p22bis,p32bis,p42bis,p5bis,_hauteur/100.0));

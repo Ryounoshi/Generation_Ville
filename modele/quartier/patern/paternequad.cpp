@@ -133,7 +133,7 @@ Mesh PaterneQuad::paternTroisBatiment(){
     retour.merge(remplissageCoin(3, batiments[3][1], batiments[3][2], batiments[3][3]));
 
     Batiment b(Vector3D( XY((*this)[0]), 0), Vector3D( XY((*this)[1]), 0),
-            Vector3D( XY(batiments[1][1]), 0), Vector3D( XY(batiments[0][3]), 0), _par);
+            Vector3D( XY(batiments[1][1]), 0), Vector3D( XY(batiments[0][3]), 0),50, _par);
     retour.merge(b.generate());
 
     retour.merge(remplissageBord(batiments[1][1], batiments[1][2], batiments[2][2], batiments[2][3] ));
@@ -315,7 +315,9 @@ Mesh PaterneQuad::remplissageCoin(const int& indicePointCoin, Vector2D& point1Ba
     point3Batiment = get(indicePointCoin) + pIpIm1*dpIpIm1;
 
 
-    Batiment b;
+    Batiment bat = Batiment(Vector3D( 0,0,0), Vector3D( 0,0,0),
+                          Vector3D( 0,0,0), Vector3D( 0,0,0),
+                          _par );
 
     if( angleEntreVecteur( (*this)[(indicePointCoin-1)%4]-(*this)[indicePointCoin],
                            (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) < 75 ){
@@ -340,13 +342,11 @@ Mesh PaterneQuad::remplissageCoin(const int& indicePointCoin, Vector2D& point1Ba
             Vector2D p2B = point3Batiment + (point1Batiment - point3Batiment).normalised()*dCoinBatSeg;
             Vector2D p3B = (*this)[indicePointCoin] + (point3Batiment - (*this)[indicePointCoin]).normalised()*dCoinBatPoint;
 
-            b = Batiment(Vector3D( XY(p0B), _par->hauteurTrotoir),
+            bat = Batiment(Vector3D( XY(p0B), _par->hauteurTrotoir),
                          Vector3D( XY(p1B), _par->hauteurTrotoir),
                          Vector3D( XY(p2B), _par->hauteurTrotoir),
                          Vector3D( XY(p3B), _par->hauteurTrotoir),
                          _par);
-
-            return b.generate();
 
         }
         else{
@@ -357,7 +357,7 @@ Mesh PaterneQuad::remplissageCoin(const int& indicePointCoin, Vector2D& point1Ba
     else if( angleEntreVecteur( (*this)[(indicePointCoin-1)%4]-(*this)[indicePointCoin],
                                 (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) < 105 ){
 
-        b = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, _par->hauteurTrotoir),
+        bat = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, _par->hauteurTrotoir),
                      Vector3D(point1Batiment.x, point1Batiment.y, _par->hauteurTrotoir),
                      Vector3D(pointCentre.x, pointCentre.y, _par->hauteurTrotoir),
                      Vector3D(point3Batiment.x, point3Batiment.y, _par->hauteurTrotoir),
@@ -367,17 +367,17 @@ Mesh PaterneQuad::remplissageCoin(const int& indicePointCoin, Vector2D& point1Ba
     else if(angleEntreVecteur( (*this)[(indicePointCoin-1)%4]-(*this)[indicePointCoin],
                                (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) > 135){
 
-        b = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, _par->hauteurTrotoir),
+        bat = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, _par->hauteurTrotoir),
                               Vector3D(point1Batiment.x, point1Batiment.y, _par->hauteurTrotoir),
                               Vector3D(pointCentre.x, pointCentre.y, _par->hauteurTrotoir),
                               Vector3D(point3Batiment.x, point3Batiment.y, _par->hauteurTrotoir),
-                              _par);
+                              _par, 0);
     }
     else{
         return Mesh();
     }
 
-    return b.generate();
+    return bat.generate();
 
 }
 
