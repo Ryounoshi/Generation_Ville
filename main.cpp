@@ -40,25 +40,22 @@ int main(int argc, char *argv[])
     }
     ObjManager::writeToObj("test1.obj", m1.getvertex(), m1.getface());
     */
-    /*
-    Mesh m1;
-    PaterneQuadResidence p1(Vector2D(0,0), Vector2D(0,10), Vector2D(10,10), Vector2D(10,0), 2.5);
-    m1 = p1.generate();
-*/
+
+
+
     myWindow glWin;
     glWin.show();
     return app.exec();
 
-    /*BatParameter par(Vector3D(0,0,0));
+    /*
+    BatParameter par(Vector3D(0,0,0));
     par.etageLePlusHaut = 20;
-    par.hauteurEtage = 5;
+    par.hauteurEtage = 3;
     par.influenceCentreVille = 100;
-    par.largeurTrotoir = 3;
+    par.largeurTrotoir = 2;
     par.largeurRuelle = 2;
     par.minLargeurBatiment = 6;
-    par.maxLargeurBatiment = 10;
-
-
+    par.maxLargeurBatiment = 15;
 
     std::vector<TerrainBase> bases;
     bases.push_back(TerrainBase(Triangle(Vector2D(0,200),Vector2D(200,-200),Vector2D(-200,-200)), &par));
@@ -72,10 +69,11 @@ int main(int argc, char *argv[])
         base.shrink(2.f);
         _mesh.merge(base.generate());
     }
-    std::cout << "fin de la création du mesh" << std::endl;
-    ObjManager::writeToObj("testTerrain.obj", _mesh.getVertex(), _mesh.getFace());*/
 
-    //return 0;
+    std::cout << "fin de la création du mesh" << std::endl;    
+    ObjManager::writeToObj("testTerrain.obj", _mesh.getVertex(), _mesh.getFace());
+
+    //return 0;*/
 }
 
 

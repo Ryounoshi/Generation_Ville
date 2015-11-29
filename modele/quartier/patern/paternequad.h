@@ -15,6 +15,9 @@ public:
     Mesh generate();
 
 private:
+
+    float _profondeurBatiment;
+
     void faireTrotoir(Mesh &m);
     void faireSol(Mesh &m);
 
@@ -22,14 +25,16 @@ private:
     Mesh paternTroisBatiment();
     Mesh paternDeuxBatimentDiagonale();
     Mesh paternDeuxBatimentDiametre();
-    Mesh paternQuartierPlein();
 
+    void determinationBatimentCoin(const int &indicePointCoin, Vector2D &point1Batiment, Vector2D &pointCentre, Vector2D &point3Batiment);
     Mesh remplissageCoin(const int &indicePointCoin, Vector2D &point1Batiment, Vector2D &pointCentre, Vector2D &point3Batiment);
     Mesh remplissageBord(Vector2D &point1Batiment0, Vector2D &point2Batiment0,
                          Vector2D &point2Batiment1, Vector2D &point3Batiment1);
 
     float coeffShrinkMax() const;
     float ratioDiametre() const;
+
+    float angleEntreVecteur(const Vector2D& v1, const Vector2D& v2) const;
 };
 
 #endif // PATERNEQUADRESIDENCE_H
