@@ -58,33 +58,44 @@ Mesh PaterneQuad::generate()
 
 void PaterneQuad::faireTrotoir(Mesh& m){
 
-    Quadrangle centre = *this, notreQuadrangle = *this;
+    Quadrangle notreQuadrangle = *this;
+    this->shrink(_par->largeurTrotoir);
+
+    Quadrangle centre = *this;
     centre.shrink(_par->largeurTrotoir);
 
     for(int i=0; i<4; i++){
-        m.addTriangle( Vector3D(notreQuadrangle[i].x, notreQuadrangle[i].y, 0),
-                       Vector3D(notreQuadrangle[(i-1)%4].x, notreQuadrangle[(i-1)%4].y, 0),
-                Vector3D(centre[i].x, centre[i].y, 0) );
+        m.addTriangle( Vector3D( XY( notreQuadrangle[i] ), _par->hauteurTrotoir),
+                       Vector3D( XY( notreQuadrangle[i] ), 0),
+                       Vector3D( XY( notreQuadrangle[(i-1)%4] ), _par->hauteurTrotoir) );
 
-        m.addTriangle( Vector3D(centre[i].x, centre[i].y, 0),
-                       Vector3D(notreQuadrangle[(i-1)%4].x, notreQuadrangle[(i-1)%4].y, 0),
-                Vector3D(centre[(i-1)%4].x, centre[(i-1)%4].y, 0) );
+        m.addTriangle( Vector3D( XY( notreQuadrangle[(i-1)%4] ), _par->hauteurTrotoir),
+                       Vector3D( XY( notreQuadrangle[i] ), 0),
+                       Vector3D( XY( notreQuadrangle[(i-1)%4] ), 0) );
     }
 
-    this->shrink(_par->largeurTrotoir);
+    for(int i=0; i<4; i++){
+        m.addTriangle( Vector3D( XY( notreQuadrangle[i] ), _par->hauteurTrotoir),
+                       Vector3D( XY( notreQuadrangle[(i-1)%4] ), _par->hauteurTrotoir),
+                Vector3D( XY( centre[i] ), _par->hauteurTrotoir) );
+
+        m.addTriangle( Vector3D( XY( centre[i] ), _par->hauteurTrotoir),
+                       Vector3D( XY( notreQuadrangle[(i-1)%4] ), _par->hauteurTrotoir),
+                Vector3D( XY( centre[(i-1)%4] ), _par->hauteurTrotoir) );
+    }
 }
 
 void PaterneQuad::faireSol(Mesh &m){
 
     Quadrangle notreQuadrangle = *this;
 
-    m.addTriangle( Vector3D(notreQuadrangle[0].x, notreQuadrangle[0].y, 0),
-            Vector3D(notreQuadrangle[3].x, notreQuadrangle[3].y, 0),
-            Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, 0) );
+    m.addTriangle( Vector3D(notreQuadrangle[0].x, notreQuadrangle[0].y, _par->hauteurTrotoir),
+            Vector3D(notreQuadrangle[3].x, notreQuadrangle[3].y, _par->hauteurTrotoir),
+            Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, _par->hauteurTrotoir) );
 
-    m.addTriangle( Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, 0),
-            Vector3D(notreQuadrangle[3].x, notreQuadrangle[3].y, 0),
-            Vector3D(notreQuadrangle[2].x, notreQuadrangle[2].y, 0) );
+    m.addTriangle( Vector3D(notreQuadrangle[1].x, notreQuadrangle[1].y, _par->hauteurTrotoir),
+            Vector3D(notreQuadrangle[3].x, notreQuadrangle[3].y, _par->hauteurTrotoir),
+            Vector3D(notreQuadrangle[2].x, notreQuadrangle[2].y, _par->hauteurTrotoir) );
 }
 
 //***********************//
@@ -311,10 +322,10 @@ Mesh PaterneQuad::remplissageCoin(const int& indicePointCoin, Vector2D& point1Ba
         return Mesh();
     }
 
-    Batiment b = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, 0),
-                          Vector3D(point1Batiment.x, point1Batiment.y, 0),
-                          Vector3D(pointCentre.x, pointCentre.y, 0),
-                          Vector3D(point3Batiment.x, point3Batiment.y, 0),
+    Batiment b = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, _par->hauteurTrotoir),
+                          Vector3D(point1Batiment.x, point1Batiment.y, _par->hauteurTrotoir),
+                          Vector3D(pointCentre.x, pointCentre.y, _par->hauteurTrotoir),
+                          Vector3D(point3Batiment.x, point3Batiment.y, _par->hauteurTrotoir),
                           _par);
     return b.generate();
 
@@ -352,7 +363,11 @@ Mesh PaterneQuad::remplissageBord(Vector2D &point1Batiment0, Vector2D &point2Bat
             Vector2D p2 = point2Batiment0 + vecteurDirectionInt*distance(p1, point1Batiment0)*dInterne/dExterne;
             Vector2D p3 = point2Batiment0 + vecteurDirectionInt*distance(p0, point1Batiment0)*dInterne/dExterne;
 
-            Batiment m = Batiment( Vector3D(XY(p0)), Vector3D(XY(p1)), Vector3D(XY(p2)), Vector3D(XY(p3)), _par );
+            Batiment m = Batiment( Vector3D(XY(p0), _par->hauteurTrotoir),
+                                   Vector3D(XY(p1), _par->hauteurTrotoir),
+                                   Vector3D(XY(p2), _par->hauteurTrotoir),
+                                   Vector3D(XY(p3), _par->hauteurTrotoir),
+                                   _par );
             retour.merge(m.generate());
         }
     }
