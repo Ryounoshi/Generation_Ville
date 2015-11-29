@@ -16,11 +16,11 @@ Mesh PaterneQuad::generate()
     Quadrangle batimentsCoin[4];
 
     for(int i=0; i<4; i++){
-        retour.merge(remplissageCoin(i, batimentsCoin[i][1], batimentsCoin[i][2], batimentsCoin[i][3] ));
+        m1.merge(remplissageCoin(i, batimentsCoin[i][1], batimentsCoin[i][2], batimentsCoin[i][3] ));
     }
 
     for(int i=0; i<4; i++){
-        retour.merge(remplissageBord(batimentsCoin[i][1], batimentsCoin[i][2], batimentsCoin[(i+1)%4][2], batimentsCoin[(i+1)%4][3] ));
+        m1.merge(remplissageBord(batimentsCoin[i][1], batimentsCoin[i][2], batimentsCoin[(i+1)%4][2], batimentsCoin[(i+1)%4][3] ));
     }
 
 
