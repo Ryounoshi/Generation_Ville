@@ -1,5 +1,6 @@
 #include "etagehexa.h"
 #include "toithexa.h"
+#include "etagehexatwisted.h"
 #include <iostream>
 #include <QDebug>
 using namespace std;
@@ -40,12 +41,14 @@ Mesh EtageHexa::generate(){
         return ourMesh;
     }else if(proba<=pReduction){
         if((longueur>largeur*1.2 || largeur>longueur*1.2)){ //si le batiment n'est pas carré on fait un etage identique
-            sameEtage();
+            twistedEtage();
+            //sameEtage();
         }else{  //sinon 20% de chance de faire un etage twisté
             if(rand()%100<20){
                 twistedEtage();
             }else{
-                sameEtage();
+                twistedEtage();
+                //sameEtage();
             }
         }
         return ourMesh;
@@ -77,7 +80,7 @@ void EtageHexa::toit(void){
 
 void EtageHexa::twistedEtage(void){
     Vector3D offset(0,0,_hauteur);
-    EtageTwisted etage(_p0Top+offset,_p1Top+offset,_p2Top+offset,_p3Top+offset,_hauteur, _par,_noEtage+1,E);
+    EtageHexaTwisted etage(_p0Top+offset,_p1Top+offset,_p2Top+offset,_p3Top+offset,_p4Top+offset,_p5Top+offset,_hauteur, _par,_noEtage+1,E);
     ourMesh.merge(etage.generate());
 }
 

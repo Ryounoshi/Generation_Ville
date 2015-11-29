@@ -39,7 +39,9 @@ void ToitHexa::createMesh(int type){
         hauteurToit.z += _hauteur*6;
         _par->updateEtageLePlusHaut(hauteurToit);
         if(rand()%100 <10){
-            Mesh antenne = Mesh::createPyramidQuadrangle(Vector3D(-0.3,-0.3,0),Vector3D(-0.3,0.3,0),Vector3D(0.3,0.3,0),Vector3D(0.3,-0.3,0),_hauteur*5);
+            float largeurantenne = 0.3;
+            if(largeurantenne > longueur/3.0)largeurantenne=longueur/3.0;
+            Mesh antenne = Mesh::createPyramidQuadrangle(Vector3D(-largeurantenne,-largeurantenne,0),Vector3D(-largeurantenne,largeurantenne,0),Vector3D(largeurantenne,largeurantenne,0),Vector3D(largeurantenne,-largeurantenne,0),_hauteur*5);
             antenne.translation(gravity.x,gravity.y,_p0.z);
             ourMesh.merge(antenne);
         }
