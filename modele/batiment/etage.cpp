@@ -39,7 +39,8 @@ Mesh Etage::generate(){
             sameEtage();
         }else{  //sinon 20% de chance de faire un etage twisté
             if(rand()%100<20){
-                twistedEtage();
+                sameEtage();
+                //twistedEtage();
             }else{
                 sameEtage();
             }

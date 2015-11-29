@@ -5,6 +5,7 @@
 #include "stdio.h"
 
 int largeur,longueur;
+bool townmode;
 
 myWindow::myWindow(QWidget *parent)
     : myGLWidget(60, parent, "Génération ville")
@@ -28,7 +29,7 @@ void myWindow::initializeGL()
     _speed =0.1;
     _angle = -50.0;
     _hauteurcam = -2.0;
-
+    townmode = true;
     //loadTexture(":/textures/herbe");
     //glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
@@ -90,6 +91,10 @@ void myWindow::keyReleaseEvent(QKeyEvent *keyEvent){
         break;
         case Qt::Key_A:
             _demonter = false;
+        break;
+        case Qt::Key_V:
+            townmode = !townmode;
+            meshUpToDate = false;
         break;
     }
 }
@@ -400,23 +405,46 @@ void myWindow::paintGL()
         _mesh = test.generate();*/
 
         //TerrainBase base(400,400, &_par);
-        std::vector<TerrainBase> bases;
-        bases.push_back(TerrainBase(Triangle(Vector2D(0,200),Vector2D(200,-200),Vector2D(-200,-200)), &_par));
-        bases.push_back(TerrainBase(Quadrangle(Vector2D(0,200),Vector2D(200,400),Vector2D(400,200),Vector2D(200,-200)), &_par));
-        bases.push_back(TerrainBase(Quadrangle(Vector2D(200,-200),Vector2D(200,-400),Vector2D(-200,-400),Vector2D(-200,-200)), &_par));
-        bases.push_back(TerrainBase(Quadrangle(Vector2D(-200,-200),Vector2D(-400,200),Vector2D(-200,400),Vector2D(0,200)), &_par));
 
-        bases.push_back(TerrainBase(Triangle(Vector2D(250,-200),Vector2D(500,200),Vector2D(500,-200)), &_par));
-        bases.push_back(TerrainBase(Quadrangle(Vector2D(250,-200),Vector2D(500,-200),Vector2D(450,-350),Vector2D(250,-400)), &_par));
+        if(townmode){
+            std::vector<TerrainBase> bases;
+            bases.push_back(TerrainBase(Triangle(Vector2D(0,200),Vector2D(200,-200),Vector2D(-200,-200)), &_par));
+            bases.push_back(TerrainBase(Quadrangle(Vector2D(0,200),Vector2D(200,400),Vector2D(400,200),Vector2D(200,-200)), &_par));
+            bases.push_back(TerrainBase(Quadrangle(Vector2D(200,-200),Vector2D(200,-400),Vector2D(-200,-400),Vector2D(-200,-200)), &_par));
+            bases.push_back(TerrainBase(Quadrangle(Vector2D(-200,-200),Vector2D(-400,200),Vector2D(-200,400),Vector2D(0,200)), &_par));
 
-        Mesh m1;
-        for(TerrainBase& base : bases)
-        {
-            base.decoupeSimple(4000);
-            base.shrink(2.f);
-            m1.merge(base.generate());
+            bases.push_back(TerrainBase(Triangle(Vector2D(250,-200),Vector2D(500,200),Vector2D(500,-200)), &_par));
+            bases.push_back(TerrainBase(Quadrangle(Vector2D(250,-200),Vector2D(500,-200),Vector2D(450,-350),Vector2D(250,-400)), &_par));
+
+            Mesh m1;
+            for(TerrainBase& base : bases)
+            {
+                base.decoupeSimple(4000);
+                base.shrink(2.f);
+                m1.merge(base.generate());
+            }
+            _mesh = m1;
+        }else{
+            float lar,lon;
+            lar = 10.0;
+            lon = 10.0+rand()%10;
+
+            Vector3D p1(-lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
+            Vector3D p2(-lar-7.5+rand()%15,lon-7.5+rand()%15,0);
+            Vector3D p3(lar-7.5+rand()%15,lon-7.5+rand()%15,0);
+            Vector3D p4(lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
+
+            Batiment test(p1,
+                          p2,
+                          p3,
+                          p4,
+                          &_par);
+
+            Mesh m1;
+            m1.merge(test.generate());
+            _mesh = m1;
         }
-        _mesh = m1;
+
 
 /*
         TerrainBase base(2000,2000, &_par);
