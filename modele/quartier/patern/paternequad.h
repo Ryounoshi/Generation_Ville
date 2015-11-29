@@ -21,10 +21,12 @@ private:
     void faireTrotoir(Mesh &m);
     void faireSol(Mesh &m);
 
+    /*
     Mesh paternQuatreBatiment();
     Mesh paternTroisBatiment();
     Mesh paternDeuxBatimentDiagonale();
     Mesh paternDeuxBatimentDiametre();
+    */
 
     void determinationBatimentCoin(const int &indicePointCoin, Vector2D &point1Batiment, Vector2D &pointCentre, Vector2D &point3Batiment);
     Mesh remplissageCoin(const int &indicePointCoin, Vector2D &point1Batiment, Vector2D &pointCentre, Vector2D &point3Batiment);

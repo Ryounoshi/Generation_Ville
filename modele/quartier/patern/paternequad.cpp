@@ -100,7 +100,7 @@ void PaterneQuad::faireSol(Mesh &m){
 //***********************//
 //****** Paterns ********//
 //***********************//
-
+/*
 Mesh PaterneQuad::paternQuatreBatiment(){
 
     Mesh retour;
@@ -365,7 +365,7 @@ Mesh PaterneQuad::remplissageCoin(const int& indicePointCoin, Vector2D& point1Ba
 
     }
     else if(angleEntreVecteur( (*this)[(indicePointCoin-1)%4]-(*this)[indicePointCoin],
-                               (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) > 135){
+                               (*this)[(indicePointCoin+1)%4]-(*this)[indicePointCoin]) < 120){
 
         bat = Batiment(Vector3D(get(indicePointCoin).x, get(indicePointCoin).y, _par->hauteurTrotoir),
                               Vector3D(point1Batiment.x, point1Batiment.y, _par->hauteurTrotoir),
@@ -404,12 +404,12 @@ Mesh PaterneQuad::remplissageBord(Vector2D &point1Batiment0, Vector2D &point2Bat
             aleatoire = nbminBat;
         }
 
-        float largeurBatiment = (dExterne / aleatoire) - _par->largeurRuelle;
+        float largeurBatiment = (dExterne / aleatoire ) - _par->largeurRuelle*(1 + 1/aleatoire);
 
         for(int i=0; i < aleatoire; i++){
 
             Vector2D p0 = point1Batiment0 + vecteurDirectionExt*(i*largeurBatiment + (i+1)*_par->largeurRuelle);
-            Vector2D p1 = point1Batiment0 + vecteurDirectionExt*(i+1)*(largeurBatiment+_par->largeurRuelle);
+            Vector2D p1 = p0 + vecteurDirectionExt*largeurBatiment;
             Vector2D p2 = point2Batiment0 + vecteurDirectionInt*distance(p1, point1Batiment0)*dInterne/dExterne;
             Vector2D p3 = point2Batiment0 + vecteurDirectionInt*distance(p0, point1Batiment0)*dInterne/dExterne;
 
