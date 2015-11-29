@@ -5,6 +5,7 @@
 #include "stdio.h"
 
 int largeur,longueur;
+bool townmode;
 
 myWindow::myWindow(QWidget *parent)
     : myGLWidget(60, parent, "Génération ville")
@@ -28,7 +29,7 @@ void myWindow::initializeGL()
     _speed =0.1;
     _angle = -50.0;
     _hauteurcam = -2.0;
-
+    townmode = true;
     //loadTexture(":/textures/herbe");
     //glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
@@ -91,6 +92,10 @@ void myWindow::keyReleaseEvent(QKeyEvent *keyEvent){
         break;
         case Qt::Key_A:
             _demonter = false;
+        break;
+        case Qt::Key_V:
+            townmode = !townmode;
+            meshUpToDate = false;
         break;
     }
 }
@@ -261,7 +266,7 @@ void myWindow::paintGL()
     _fx += _speed;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glPolygonMode( GL_FRONT, GL_FILL );
 
     glLightiv(GL_LIGHT0,GL_POSITION,LightPos);
     glLightiv(GL_LIGHT1,GL_POSITION,Light2Pos);
@@ -325,6 +330,26 @@ void myWindow::paintGL()
         largeur = 500; //du terrain
         longueur = 500;
 
+/*
+        float lar,lon;
+        lar = 10.0;
+        lon = 10.0+rand()%10;
+
+        Vector3D p1(-lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
+        Vector3D p2(-lar-7.5+rand()%15,lon-7.5+rand()%15,0);
+        Vector3D p3(lar-7.5+rand()%15,lon-7.5+rand()%15,0);
+        Vector3D p4(lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
+
+        Batiment test(p1,
+                      p2,
+                      p3,
+                      p4,
+                      &_par);
+
+        Mesh m1;
+        m1.merge(test.generate());
+        _mesh = m1;
+*/
         /*int largeurQuartier = 40;
         int longueurQuartier = 40;
 
@@ -381,29 +406,52 @@ void myWindow::paintGL()
         _mesh = test.generate();*/
 
         //TerrainBase base(400,400, &_par);
-        std::vector<TerrainBase> bases;
-        bases.push_back(TerrainBase(Triangle(Vector2D(0,200),Vector2D(200,-200),Vector2D(-200,-200)), &_par));
-        bases.push_back(TerrainBase(Quadrangle(Vector2D(0,200),Vector2D(200,400),Vector2D(400,200),Vector2D(200,-200)), &_par));
-        bases.push_back(TerrainBase(Quadrangle(Vector2D(200,-200),Vector2D(200,-400),Vector2D(-200,-400),Vector2D(-200,-200)), &_par));
-        bases.push_back(TerrainBase(Quadrangle(Vector2D(-200,-200),Vector2D(-400,200),Vector2D(-200,400),Vector2D(0,200)), &_par));
-
-        bases.push_back(TerrainBase(Triangle(Vector2D(250,-200),Vector2D(500,200),Vector2D(500,-200)), &_par));
-        bases.push_back(TerrainBase(Quadrangle(Vector2D(250,-200),Vector2D(500,-200),Vector2D(450,-350),Vector2D(250,-400)), &_par));
-
-        Mesh m1;
-        for(TerrainBase& base : bases)
-        {
-            std::vector<Vector2D> points = base.getPoints();
-            m1.addTriangle(Vector3D(XY(points[0]), -0.5), Vector3D(XY(points[2]), -0.5), Vector3D(XY(points[1]), -0.5));
-            if(points.size() == 4)
-                m1.addTriangle(Vector3D(XY(points[0]), -0.5), Vector3D(XY(points[3]), -0.5), Vector3D(XY(points[2]), -0.5));
-            base.decoupeSimple(4000);
-            base.shrink(2.f);
 
 
-            m1.merge(base.generate());
+        if(townmode){
+            std::vector<TerrainBase> bases;
+            bases.push_back(TerrainBase(Triangle(Vector2D(0,200),Vector2D(200,-200),Vector2D(-200,-200)), &_par));
+            bases.push_back(TerrainBase(Quadrangle(Vector2D(0,200),Vector2D(200,400),Vector2D(400,200),Vector2D(200,-200)), &_par));
+            bases.push_back(TerrainBase(Quadrangle(Vector2D(200,-200),Vector2D(200,-400),Vector2D(-200,-400),Vector2D(-200,-200)), &_par));
+            bases.push_back(TerrainBase(Quadrangle(Vector2D(-200,-200),Vector2D(-400,200),Vector2D(-200,400),Vector2D(0,200)), &_par));
+
+            bases.push_back(TerrainBase(Triangle(Vector2D(250,-200),Vector2D(500,200),Vector2D(500,-200)), &_par));
+            bases.push_back(TerrainBase(Quadrangle(Vector2D(250,-200),Vector2D(500,-200),Vector2D(450,-350),Vector2D(250,-400)), &_par));
+
+            Mesh m1;
+            for(TerrainBase& base : bases)
+            {
+                std::vector<Vector2D> points = base.getPoints();
+                m1.addTriangle(Vector3D(XY(points[0]), 0), Vector3D(XY(points[2]), 0), Vector3D(XY(points[1]), 0));
+                if(points.size() == 4)
+                    m1.addTriangle(Vector3D(XY(points[0]), 0), Vector3D(XY(points[3]), 0), Vector3D(XY(points[2]), 0));
+
+                base.decoupeSimple(4000);
+                base.shrink(2.f);
+                m1.merge(base.generate());
+            }
+            _mesh = m1;
+        }else{
+            float lar,lon;
+            lar = 10.0;
+            lon = 10.0+rand()%10;
+
+            Vector3D p1(-lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
+            Vector3D p2(-lar-7.5+rand()%15,lon-7.5+rand()%15,0);
+            Vector3D p3(lar-7.5+rand()%15,lon-7.5+rand()%15,0);
+            Vector3D p4(lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
+
+            Batiment test(p1,
+                          p2,
+                          p3,
+                          p4,
+                          &_par);
+
+            Mesh m1;
+            m1.merge(test.generate());
+            _mesh = m1;
         }
-        _mesh = m1;
+
 
 /*
         TerrainBase base(2000,2000, &_par);

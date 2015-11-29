@@ -6,13 +6,14 @@
 #define DEFAULT_LARGEUR_TROTOIR 1
 #define DEFAULT_LARGEUR_RUELLE 1
 #define DEFAULT_HAUTEUR_ETAGE 3
-
+#define DEFAULT_HAUTEUR_TROTOIR 0.3
 
 //types d'étage
 #define E 0     //etage normal
 #define ES 1    //etage Splité
 #define ET 2    //etage twisté
 #define ER 3    //etage réduit
+#define ER2 5    //etage réduit 2
 #define ERS 4    //etage réduit smooth
 
 //types de toit
@@ -30,6 +31,7 @@ public:
 
     float largeurTrotoir = DEFAULT_LARGEUR_TROTOIR;    
     float largeurRuelle = DEFAULT_LARGEUR_RUELLE;
+    float hauteurTrotoir = DEFAULT_HAUTEUR_TROTOIR;
 
     float hauteurEtage = DEFAULT_HAUTEUR_ETAGE;
     float minLargeurBatiment = hauteurEtage*3;

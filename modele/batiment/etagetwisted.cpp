@@ -1,7 +1,7 @@
 #include "etagetwisted.h"
 #define scaletop 0.9
 #define pToit 90
-#define pReduction 60
+#define pReduction 70
 #define tailleRainure 0.05
 #define rotation 0.05
 
@@ -47,11 +47,14 @@ Mesh EtageTwisted::generate(){
         toit();
         return ourMesh;
     }else if(proba<=pReduction){
-        smallerEtage();
-        //sameEtage();
+        sameEtage();
         return ourMesh;
     }else if(proba>pReduction && proba<=pToit){ //on fait un etage plus petit
-        smallerEtage();
+        if(largeur > 2.0 && longueur > 2.0){
+            smallerEtage();
+        }else{
+            sameEtage();
+        }
         return ourMesh;
     }else{
         toit();
@@ -61,34 +64,22 @@ Mesh EtageTwisted::generate(){
 
 
 void EtageTwisted::toit(void){
-    Vector3D newp0(_p0Top.x,_p0Top.y,_p0Top.z+_hauteur);
-    Vector3D newp1(_p1Top.x,_p1Top.y,_p1Top.z+_hauteur);
-    Vector3D newp2(_p2Top.x,_p2Top.y,_p2Top.z+_hauteur);
-    Vector3D newp3(_p3Top.x,_p3Top.y,_p3Top.z+_hauteur);
-
-    Toit toit(newp0,newp1,newp2,newp3,_noEtage ,_hauteur, _par);
+    Vector3D offset(0,0,_hauteur);
+    Toit toit(_p0Top+offset,_p1Top+offset,_p2Top+offset,_p3Top+offset,_noEtage ,_hauteur, _par);
     _par->updateEtageLePlusHaut(Vector3D(),_noEtage);
     Mesh m = toit.generate();
     ourMesh.merge(m);
 }
 
 void EtageTwisted::smallerEtage(void){
-    Vector3D newp0(_p0Top.x,_p0Top.y,_p0Top.z+_hauteur);
-    Vector3D newp1(_p1Top.x,_p1Top.y,_p1Top.z+_hauteur);
-    Vector3D newp2(_p2Top.x,_p2Top.y,_p2Top.z+_hauteur);
-    Vector3D newp3(_p3Top.x,_p3Top.y,_p3Top.z+_hauteur);
-
-    EtageTwisted etage(newp0,newp1,newp2,newp3,_hauteur, _par,_noEtage+1,ER);
+    Vector3D offset(0,0,_hauteur);
+    EtageTwisted etage(_p0Top+offset,_p1Top+offset,_p2Top+offset,_p3Top+offset,_hauteur, _par,_noEtage+1,ER);
     ourMesh.merge(etage.generate());
 }
 
 void EtageTwisted::sameEtage(void){
-    Vector3D newp0(_p0Top.x,_p0Top.y,_p0Top.z+_hauteur);
-    Vector3D newp1(_p1Top.x,_p1Top.y,_p1Top.z+_hauteur);
-    Vector3D newp2(_p2Top.x,_p2Top.y,_p2Top.z+_hauteur);
-    Vector3D newp3(_p3Top.x,_p3Top.y,_p3Top.z+_hauteur);
-
-    EtageTwisted etage(newp0,newp1,newp2,newp3,_hauteur, _par,_noEtage+1,E);
+    Vector3D offset(0,0,_hauteur);
+    EtageTwisted etage(_p0Top+offset,_p1Top+offset,_p2Top+offset,_p3Top+offset,_hauteur, _par,_noEtage+1,E);
     ourMesh.merge(etage.generate());
 }
 

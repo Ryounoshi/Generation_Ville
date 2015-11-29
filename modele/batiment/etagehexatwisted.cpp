@@ -1,7 +1,7 @@
 #include "etagehexatwisted.h"
 #define scaletop 0.9
 #define pToit 90
-#define pReduction 60
+#define pReduction 70
 #define tailleRainure 0.05
 #define rotation 0.05
 
@@ -54,12 +54,12 @@ Mesh EtageHexaTwisted::generate(){
     if(_noEtage > bornemax){
         toit();
         return ourMesh;
-    }else if(proba<=pReduction){
-        smallerEtage();
-        //sameEtage();
-        return ourMesh;
-    }else if(proba>pReduction && proba<=pToit){ //on fait un etage plus petit
-        smallerEtage();
+    }else if(proba<=pToit){
+        if(largeur > 2.0 && longueur > 2.0){
+            smallerEtage();
+        }else{
+            sameEtage();
+        }
         return ourMesh;
     }else{
         toit();
@@ -90,12 +90,8 @@ void EtageHexaTwisted::sameEtage(void){
 
 void EtageHexaTwisted::createMesh(int type){
     if(type == ER){
-        float scale;
-        if(rand()%100 < 90){
-            scale = 0.9;
-        }else{
-            scale = 0.66;
-        }
+        float scale = 0.9;
+
         Vector3D gravite = (_p0Top + _p1Top + _p2Top + _p3Top + _p4Top + _p5Top)/6;
         _p0Top -= gravite;
         _p1Top -= gravite;

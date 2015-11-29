@@ -1,5 +1,6 @@
 #include "rezdechaussehexa.h"
 #include "toit.h"
+#include "toithexa.h"
 #include <qdebug.h>
 #include <iostream>
 using namespace std;
@@ -34,7 +35,7 @@ Mesh RezdechausseHexa::generate(){
         ourMesh.merge(etage.generate());
         return ourMesh;
     }else{
-        Toit toit(_p0+offset,_p1+offset,_p2+offset,_p3+offset, 0,_hauteur, _par);
+        ToitHexa toit(_p0+offset,_p1+offset,_p2+offset,_p3+offset,_p4+offset,_p5+offset, 0,_hauteur, _par);
         ourMesh.merge(toit.generate());
         return ourMesh;
     }
