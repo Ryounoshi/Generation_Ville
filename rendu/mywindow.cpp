@@ -39,6 +39,7 @@ void myWindow::initializeGL()
     glClearColor(24.0f/255.0f, 94.0f/255.0f, 139.0f/255.0f, 0.0f);
     glClearDepth(1.0f);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
     glDepthFunc(GL_LEQUAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
@@ -392,8 +393,14 @@ void myWindow::paintGL()
         Mesh m1;
         for(TerrainBase& base : bases)
         {
+            std::vector<Vector2D> points = base.getPoints();
+            m1.addTriangle(Vector3D(XY(points[0]), -0.5), Vector3D(XY(points[2]), -0.5), Vector3D(XY(points[1]), -0.5));
+            if(points.size() == 4)
+                m1.addTriangle(Vector3D(XY(points[0]), -0.5), Vector3D(XY(points[3]), -0.5), Vector3D(XY(points[2]), -0.5));
             base.decoupeSimple(4000);
             base.shrink(2.f);
+
+
             m1.merge(base.generate());
         }
         _mesh = m1;

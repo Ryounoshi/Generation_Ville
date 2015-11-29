@@ -142,3 +142,46 @@ Mesh TerrainBase::generate()
     }
     return m;
 }
+
+/**retourne les sommets de tous les quartiers du terrain.
+utilisé avant le découpage pour avoir la periphérie du terrain et pouvoir faire le support de route sur toute la surface*/
+std::vector<Vector2D> TerrainBase::getPoints() const
+{
+    std::vector<Vector2D> points;
+    points.reserve(quartiers.size()*4);
+    for(const Quartier* q: quartiers)
+    {
+        std::vector<Vector2D> p2 = q->getPoints();
+        for(Vector2D p: p2)
+            points.push_back(p);
+    }
+    return points;
+}
+
+/**crée le mesh vertical de tous les trottoirs des quartiers.
+à utiliser après la découpe et le shrink*/
+/*Mesh TerrainBase::meshTrottoir(float hauteur)
+{
+    int ref = 0;
+    Mesh m;
+    m.vertex.reserve(quartiers.size()*8);   //2points*4arêtesVerticalesMax
+    m.face.reserve(quartiers.size()*24);    //3ref*2faces*4côtésMax
+    for(const Quartier* q: quartiers)
+    {
+        std::vector<Vector2D> points = q->getPoints();
+        const int nbP = points.size();
+        int ref2 = 0;
+        for(const Vector2D& p: points)
+        {
+            m.addVertex(Vector3D(XY(p),hauteur));
+            m.addVertex(Vector3D(XY(p),0));
+
+            m.addFace(ref+ref2, ref+ref2+1, ref+(ref2+2)%nbP);
+            m.addFace(reg+ref2, ref+(ref2+2)%nbP, ref+(ref2+3)%nbP);
+
+            ref2+=2;
+        }
+        ref+=nbP;
+    }
+    return Mesh(pointsRes, faces);
+}*/
