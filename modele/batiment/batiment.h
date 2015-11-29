@@ -7,7 +7,7 @@
 class Batiment : public Interface_Ville
 {
 public:
-    Batiment(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, BatParameter *par);
+    Batiment(const Vector3D& p0, const Vector3D& p1, const Vector3D& p2, const Vector3D& p3, float hexaPourcent, BatParameter *par);
     Mesh generate();
 private:
     Vector3D _p0,_p1,_p2,_p3;
@@ -15,6 +15,7 @@ private:
     BatParameter *_par;
     float longueur,largeur;
     Mesh ourMesh;
+    float _hexaPourcent;
 };
 
 #endif // BATIMENT_H

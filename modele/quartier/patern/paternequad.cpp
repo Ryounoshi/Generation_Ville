@@ -132,7 +132,7 @@ Mesh PaterneQuad::paternTroisBatiment(){
     retour.merge(remplissageCoin(3, batiments[3][1], batiments[3][2], batiments[3][3]));
 
     Batiment b(Vector3D( XY((*this)[0]), 0), Vector3D( XY((*this)[1]), 0),
-            Vector3D( XY(batiments[1][1]), 0), Vector3D( XY(batiments[0][3]), 0), _par);
+            Vector3D( XY(batiments[1][1]), 0), Vector3D( XY(batiments[0][3]), 0),50, _par);
     retour.merge(b.generate());
 
     retour.merge(remplissageBord(batiments[1][1], batiments[1][2], batiments[2][2], batiments[2][3] ));
@@ -326,7 +326,7 @@ Mesh PaterneQuad::remplissageCoin(const int& indicePointCoin, Vector2D& point1Ba
                           Vector3D(point1Batiment.x, point1Batiment.y, _par->hauteurTrotoir),
                           Vector3D(pointCentre.x, pointCentre.y, _par->hauteurTrotoir),
                           Vector3D(point3Batiment.x, point3Batiment.y, _par->hauteurTrotoir),
-                          _par);
+                          50.0,_par);
     return b.generate();
 
 }
@@ -367,7 +367,7 @@ Mesh PaterneQuad::remplissageBord(Vector2D &point1Batiment0, Vector2D &point2Bat
                                    Vector3D(XY(p1), _par->hauteurTrotoir),
                                    Vector3D(XY(p2), _par->hauteurTrotoir),
                                    Vector3D(XY(p3), _par->hauteurTrotoir),
-                                   _par );
+                                   50.0,_par );
             retour.merge(m.generate());
         }
     }
