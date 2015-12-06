@@ -4,7 +4,6 @@
 #include "modele/quartier/quartier.h"
 #include "stdio.h"
 
-int largeur,longueur;
 bool townmode;
 
 myWindow::myWindow(QWidget *parent)
@@ -30,8 +29,6 @@ void myWindow::initializeGL()
     _angle = -50.0;
     _hauteurcam = -2.0;
     townmode = true;
-    //loadTexture(":/textures/herbe");
-    //glEnable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
@@ -198,17 +195,6 @@ void myWindow::keyPressEvent(QKeyEvent *keyEvent)
             _par.maxEtage = DEFAULT_MAX_ETAGE;
             meshUpToDate = false;
         break;
-        // taille de la map
-        case Qt::Key_W:
-            largeur -= 10;
-            longueur -=10;
-            meshUpToDate = false;
-        break;
-        case Qt::Key_X:
-            largeur += 10;
-            longueur +=10;
-            meshUpToDate = false;
-        break;
         //sauver mesh
         case Qt::Key_B:
             ObjManager::writeToObj("ville.obj", _mesh.getVertex(), _mesh.getFace());
@@ -327,86 +313,6 @@ void myWindow::paintGL()
         _par.resetEtageLePlusHaut();
 
         qDebug()<<_mesh.nbFace();
-        largeur = 500; //du terrain
-        longueur = 500;
-
-/*
-        float lar,lon;
-        lar = 10.0;
-        lon = 10.0+rand()%10;
-
-        Vector3D p1(-lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
-        Vector3D p2(-lar-7.5+rand()%15,lon-7.5+rand()%15,0);
-        Vector3D p3(lar-7.5+rand()%15,lon-7.5+rand()%15,0);
-        Vector3D p4(lar-7.5+rand()%15,-lon-7.5+rand()%15,0);
-
-        Batiment test(p1,
-                      p2,
-                      p3,
-                      p4,
-                      &_par);
-
-        Mesh m1;
-        m1.merge(test.generate());
-        _mesh = m1;
-*/
-        /*int largeurQuartier = 40;
-        int longueurQuartier = 40;
-
-        Mesh m1;
-        //for(float i=-largeur/2;i<largeur/2;i+=3.5){
-            //for(float j=-longueur/2; j<longueur/2; j+=3.5){
-        for(float i=-largeur/2;i<largeur/2;i+=largeurQuartier+1){
-            for(float j=-longueur/2; j<longueur/2; j+=longueurQuartier+1){
-                int tmp = (int)rand()%4;
-                tmp = 0;
-                //qDebug()<<tmp;
-                if(tmp == 0){
-                    PaterneQuad p1(Vector2D(i,j), Vector2D(i,j+longueurQuartier), Vector2D(i+largeurQuartier,j+longueurQuartier), Vector2D(i+largeurQuartier,j),&_par);
-                     m1.merge(p1.generate());*/
-                    /*Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  0.2,
-                                  &_par);
-                    m1.merge(test.generate());*/
-                /*}else if(tmp == 1){
-                    float offset = (rand()%21)*0.1;
-                    Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  Vector3D(i+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+offset+(rand()%100)*0.001,j+1+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+offset+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  &_par);
-                    m1.merge(test.generate());
-                }else if(tmp == 2){
-                    float offset = (rand()%21)*0.1;
-                    Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  Vector3D(i+(rand()%100)*0.001,j+1+offset+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+(rand()%100)*0.001,j+1+offset+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  &_par);
-                    m1.merge(test.generate());
-                }else{
-                    float offset = (rand()%21)*0.1;
-                    Batiment test(Vector3D(i+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  Vector3D(i+(rand()%100)*0.001,j+1+offset+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+offset+(rand()%100)*0.001,j+1+offset+(rand()%100)*0.001,0),
-                                  Vector3D(i+1+offset+(rand()%100)*0.001,j+(rand()%100)*0.001,0),
-                                  &_par);
-                    m1.merge(test.generate());
-                }
-            }
-        }*/
-        /*Batiment test(Vector3D(-3+(rand()%100)*0.001,-3+(rand()%100)*0.001,0),
-                      Vector3D(-3+(rand()%100)*0.001,3+(rand()%100)*0.001,0),
-                      Vector3D(3+(rand()%100)*0.001,3+(rand()%100)*0.001,0),
-                      Vector3D(3+(rand()%100)*0.001,-3+(rand()%100)*0.001,0),
-                      &_par);
-        _mesh = test.generate();*/
-
-        //TerrainBase base(400,400, &_par);
-
 
         if(townmode){
             std::vector<TerrainBase> bases;
@@ -452,23 +358,6 @@ void myWindow::paintGL()
             _mesh = m1;
         }
 
-
-/*
-        TerrainBase base(2000,2000, &_par);
-        base.decoupeSimple();
-        base.shrink(10.f);
-        base.supprPetitQuartier(1000);
-        Mesh m = base.generate();
-
-        _mesh = m;
-
-*/
-        /*
-        TerrainBase base(1000,1000);
-        base.decoupeSimple();
-        for(Quartier* q : base.quartiers){
-
-        }*/
         meshUpToDate = true;
         frame->update_values();
     }
